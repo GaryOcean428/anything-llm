@@ -1,0 +1,1 @@
+web: SERVER_PORT=$PORT node server/index.js

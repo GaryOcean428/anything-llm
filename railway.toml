@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+
+[build.env]
+NODE_ENV = "production"
+
+[deploy]
+startCommand = "SERVER_PORT=$PORT node server/index.js"
+healthcheckPath = "/api/ping"
+healthcheckTimeout = 30
+
+[variables]
+NODE_ENV = "production"
