@@ -7,8 +7,12 @@ This file contains notes for deploying AnythingLLM on Railway.
 The `railway.toml` file has been configured to:
 
 1. Generate Prisma client before starting the server
-2. Apply database migrations 
-3. Start the server with the correct port mapping
+2. Apply database migrations
+3. Install server dependencies during a pre-deploy step
+4. Start the server with the correct port mapping
+
+> **Note**
+> Dependencies are installed during the pre-deploy step. Avoid running `npm install` again in the start command to prevent timeouts.
 
 ## Required Environment Variables
 

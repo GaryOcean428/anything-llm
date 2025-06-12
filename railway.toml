@@ -5,7 +5,8 @@ builder = "nixpacks"
 NODE_ENV = "production"
 
 [deploy]
-startCommand = "cd server && npm install --omit=dev && npx prisma generate --schema=./prisma/schema.prisma && npx prisma migrate deploy --schema=./prisma/schema.prisma && SERVER_PORT=$PORT node index.js"
+preDeployCommand = "cd server && npm install --omit=dev"
+startCommand = "cd server && npx prisma generate --schema=./prisma/schema.prisma && npx prisma migrate deploy --schema=./prisma/schema.prisma && SERVER_PORT=$PORT node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 30
 
