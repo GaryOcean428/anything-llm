@@ -13,13 +13,21 @@ The `railway.toml` file has been configured to:
 
 > **Note**
 
-> Dependencies are installed during the pre-deploy step using `npm install --omit=dev --legacy-peer-deps`. Avoid adding `npm install` to the start command to prevent timeouts.
+1. Create a Railway **Volume** named `storage`.
+2. Mount the volume to `/workspace/server/storage`.
+3. Set the `STORAGE_DIR` variable to `/workspace/server/storage`.
+4. Deploy the service; `anythingllm.db` will be created automatically on first run.
 
-## Required Environment Variables
+The collector can be deployed as a separate Railway service.
 
-For Railway deployment, you'll need to set these environment variables in your Railway dashboard:
+1. Create a new service in the Railway dashboard and select "Import from repository".
+2. Set the **Root Directory** to `collector`.
+3. Use `NODE_ENV=production node index.js` as the start command.
+4. Add any required environment variables (e.g. `JWT_SECRET`) the same as the main server.
 
-### Essential Variables
+Example `railway.toml` section:
+
+startCommand = "NODE_ENV=production node index.js"
 - `NODE_ENV=production` (set automatically)
 - `STORAGE_DIR` - Path for persistent storage (recommend using Railway volumes)
 - `JWT_SECRET` - Random string at least 12 chars (for authentication)
