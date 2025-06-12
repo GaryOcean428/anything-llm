@@ -92,7 +92,7 @@ async function getCustomModels(provider = "", apiKey = null, basePath = null) {
 async function openAiModels(apiKey = null) {
   const { OpenAI: OpenAIApi } = require("openai");
   const openai = new OpenAIApi({
-    apiKey: apiKey || process.env.OPEN_AI_KEY,
+    apiKey: apiKey || process.env.OPENAI_API_KEY,
   });
   const allModels = await openai.models
     .list()
@@ -190,7 +190,7 @@ async function openAiModels(apiKey = null) {
 
   // Api Key was successful so lets save it for future uses
   if ((gpts.length > 0 || customModels.length > 0) && !!apiKey)
-    process.env.OPEN_AI_KEY = apiKey;
+    process.env.OPENAI_API_KEY = apiKey;
   return { models: [...gpts, ...customModels], error: null };
 }
 
