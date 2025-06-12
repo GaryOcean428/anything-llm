@@ -31,6 +31,5 @@ healthcheckPath = "/api/ping"
 healthcheckTimeout = 120
 restartPolicy = "on-failure"
 
-# Ensure PostgreSQL connection environment is available
 [deploy.env]
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
