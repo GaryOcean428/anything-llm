@@ -12,13 +12,22 @@ The `railway.toml` file has been configured to:
 4. Start the server with the correct port mapping
 
 > **Note**
-> Dependencies are installed during the pre-deploy step. Avoid running `npm install` again in the start command to prevent timeouts.
 
-## Required Environment Variables
+1. Create a Railway **Volume** named `storage`.
+2. Mount the volume to `/workspace/server/storage`.
+3. Set the `STORAGE_DIR` variable to `/workspace/server/storage`.
+4. Deploy the service; `anythingllm.db` will be created automatically on first run.
 
-For Railway deployment, you'll need to set these environment variables in your Railway dashboard:
+The collector can be deployed as a separate Railway service.
 
-### Essential Variables
+1. Create a new service in the Railway dashboard and select "Import from repository".
+2. Set the **Root Directory** to `collector`.
+3. Use `NODE_ENV=production node index.js` as the start command.
+4. Add any required environment variables (e.g. `JWT_SECRET`) the same as the main server.
+
+Example `railway.toml` section:
+
+startCommand = "NODE_ENV=production node index.js"
 - `NODE_ENV=production` (set automatically)
 - `STORAGE_DIR` - Path for persistent storage (recommend using Railway volumes)
 - `JWT_SECRET` - Random string at least 12 chars (for authentication)
@@ -37,6 +46,10 @@ For PostgreSQL:
 - Railway will provide `DATABASE_URL` automatically
 
 Note: SQLite requires the `server/storage/` directory to exist and be writable.
+When deploying with SQLite:
+1. Create a Railway volume and mount it to `server/storage`.
+2. Ensure `STORAGE_DIR` is set to `/workspace/server/storage` or your mount path.
+3. The database file `anythingllm.db` will be created automatically on first run.
 
 ### LLM Provider (choose one)
 - OpenAI: `LLM_PROVIDER=openai`, `OPEN_AI_KEY=your-key`
@@ -55,7 +68,15 @@ Currently, Railway is configured to run only the main server. For full functiona
 - **Server**: Handles API requests and web interface
 - **Collector**: Processes document uploads and text extraction
 
-The collector can be deployed as a separate Railway service with startCommand: `cd collector && npm install && npm start`
+The collector can be deployed as a separate Railway service. Example `railway.toml` section:
+
+```toml
+[services.collector]
+root = "collector"
+preDeployCommand = "npm install --omit=dev --legacy-peer-deps"
+startCommand = "node index.js"
+healthcheckPath = "/"
+```
 
 ## Health Check
 

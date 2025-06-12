@@ -166,7 +166,10 @@ Mintplex Labs & the community maintain a number of deployment methods, scripts, 
 [or set up a production AnythingLLM instance without Docker →](./BARE_METAL.md)
 
 > **Railway Deployments**
-> The `railway.toml` file installs dependencies during the pre-deploy phase.
+> See `RAILWAY.md` for instructions on adding the collector as a second service and persisting the SQLite database.
+
+> The `railway.toml` file installs server dependencies during a pre-deploy step using `npm install --omit=dev --legacy-peer-deps`.
+
 > Avoid adding `npm install` to the start command to prevent startup timeouts.
 
 ## How to setup for development
