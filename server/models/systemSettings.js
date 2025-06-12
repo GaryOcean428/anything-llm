@@ -233,7 +233,7 @@ const SystemSettings = {
 
       // --------------------------------------------------------
       // Whisper (Audio transcription) Selection Settings & Configs
-      // - Currently the only 3rd party is OpenAI, so is OPEN_AI_KEY is set
+      // - Currently the only 3rd party is OpenAI, so is OPENAI_API_KEY is set
       // - then it can be shared.
       // --------------------------------------------------------
       WhisperProvider: process.env.WHISPER_PROVIDER || "local",
@@ -245,7 +245,7 @@ const SystemSettings = {
       // - Currently the only 3rd party is OpenAI or the native browser-built in
       // --------------------------------------------------------
       TextToSpeechProvider: process.env.TTS_PROVIDER || "native",
-      TTSOpenAIKey: !!process.env.TTS_OPEN_AI_KEY,
+      TTSOpenAIKey: !!process.env.TTS_OPENAI_API_KEY,
       TTSOpenAIVoiceModel: process.env.TTS_OPEN_AI_VOICE_MODEL,
 
       // Eleven Labs TTS
@@ -440,7 +440,7 @@ const SystemSettings = {
   llmPreferenceKeys: function () {
     return {
       // OpenAI Keys
-      OpenAiKey: !!process.env.OPEN_AI_KEY,
+      OpenAiKey: !!process.env.OPENAI_API_KEY,
       OpenAiModelPref: process.env.OPEN_MODEL_PREF || "gpt-4o",
 
       // Azure + OpenAI Keys
