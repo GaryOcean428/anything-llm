@@ -7,8 +7,12 @@ This file contains notes for deploying AnythingLLM on Railway.
 The `railway.toml` file has been configured to:
 
 1. Generate Prisma client before starting the server
-2. Apply database migrations 
-3. Start the server with the correct port mapping
+2. Apply database migrations
+3. Install server dependencies during a pre-deploy step
+4. Start the server with the correct port mapping
+
+> **Note**
+> Dependencies are installed during the pre-deploy step using `npm install --omit=dev --legacy-peer-deps`. Avoid adding `npm install` to the start command to prevent timeouts.
 
 ## Required Environment Variables
 
@@ -33,6 +37,10 @@ For PostgreSQL:
 - Railway will provide `DATABASE_URL` automatically
 
 Note: SQLite requires the `server/storage/` directory to exist and be writable.
+When deploying with SQLite:
+1. Create a Railway volume and mount it to `server/storage`.
+2. Ensure `STORAGE_DIR` is set to `/workspace/server/storage` or your mount path.
+3. The database file `anythingllm.db` will be created automatically on first run.
 
 ### LLM Provider (choose one)
 - OpenAI: `LLM_PROVIDER=openai`, `OPEN_AI_KEY=your-key`
@@ -51,7 +59,15 @@ Currently, Railway is configured to run only the main server. For full functiona
 - **Server**: Handles API requests and web interface
 - **Collector**: Processes document uploads and text extraction
 
-The collector can be deployed as a separate Railway service with startCommand: `cd collector && npm install && npm start`
+The collector can be deployed as a separate Railway service. Example `railway.toml` section:
+
+```toml
+[services.collector]
+root = "collector"
+preDeployCommand = "npm install --omit=dev --legacy-peer-deps"
+startCommand = "node index.js"
+healthcheckPath = "/"
+```
 
 ## Health Check
 
