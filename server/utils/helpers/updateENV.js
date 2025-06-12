@@ -11,7 +11,7 @@ const KEY_MAPPING = {
   },
   // OpenAI Settings
   OpenAiKey: {
-    envKey: "OPEN_AI_KEY",
+    envKey: "OPENAI_API_KEY",
     checks: [isNotEmpty, validOpenAIKey],
   },
   OpenAiModelPref: {
@@ -572,7 +572,7 @@ const KEY_MAPPING = {
 
   // TTS OpenAI
   TTSOpenAIKey: {
-    envKey: "TTS_OPEN_AI_KEY",
+    envKey: "TTS_OPENAI_API_KEY",
     checks: [validOpenAIKey],
   },
   TTSOpenAIVoiceModel: {

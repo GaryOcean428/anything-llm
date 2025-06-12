@@ -74,7 +74,7 @@ class AgentHandler {
   checkSetup() {
     switch (this.provider) {
       case "openai":
-        if (!process.env.OPEN_AI_KEY)
+        if (!process.env.OPENAI_API_KEY)
           throw new Error("OpenAI API key must be provided to use agents.");
         break;
       case "anthropic":

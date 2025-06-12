@@ -52,7 +52,7 @@ class Provider {
       // Cloud models
       case "openai":
         return new ChatOpenAI({
-          apiKey: process.env.OPEN_AI_KEY,
+          apiKey: process.env.OPENAI_API_KEY,
           ...config,
         });
       case "anthropic":

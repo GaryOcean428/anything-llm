@@ -52,7 +52,7 @@ When deploying with SQLite:
 3. The database file `anythingllm.db` will be created automatically on first run.
 
 ### LLM Provider (choose one)
-- OpenAI: `LLM_PROVIDER=openai`, `OPEN_AI_KEY=your-key`
+- OpenAI: `LLM_PROVIDER=openai`, `OPENAI_API_KEY=your-key`
 - Anthropic: `LLM_PROVIDER=anthropic`, `ANTHROPIC_API_KEY=your-key`
 - Gemini: `LLM_PROVIDER=gemini`, `GEMINI_API_KEY=your-key`
 - etc.

@@ -62,9 +62,9 @@ const Agent = {
 };
 
 async function runAIbitat(socket) {
-  if (!process.env.OPEN_AI_KEY)
+  if (!process.env.OPENAI_API_KEY)
     throw new Error(
-      "This example requires a valid OPEN_AI_KEY in the env.development file"
+      "This example requires a valid OPENAI_API_KEY in the env.development file"
     );
   console.log(chalk.blue("Booting AIbitat class & starting agent(s)"));
   const aibitat = new AIbitat({

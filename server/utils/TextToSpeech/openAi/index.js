@@ -1,10 +1,10 @@
 class OpenAiTTS {
   constructor() {
-    if (!process.env.TTS_OPEN_AI_KEY)
+    if (!process.env.TTS_OPENAI_API_KEY)
       throw new Error("No OpenAI API key was set.");
     const { OpenAI: OpenAIApi } = require("openai");
     this.openai = new OpenAIApi({
-      apiKey: process.env.TTS_OPEN_AI_KEY,
+      apiKey: process.env.TTS_OPENAI_API_KEY,
     });
     this.voice = process.env.TTS_OPEN_AI_VOICE_MODEL ?? "alloy";
   }

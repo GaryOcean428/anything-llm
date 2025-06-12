@@ -10,11 +10,11 @@ const {
 
 class OpenAiLLM {
   constructor(embedder = null, modelPreference = null) {
-    if (!process.env.OPEN_AI_KEY) throw new Error("No OpenAI API key was set.");
+    if (!process.env.OPENAI_API_KEY) throw new Error("No OpenAI API key was set.");
     const { OpenAI: OpenAIApi } = require("openai");
 
     this.openai = new OpenAIApi({
-      apiKey: process.env.OPEN_AI_KEY,
+      apiKey: process.env.OPENAI_API_KEY,
     });
     this.model = modelPreference || process.env.OPEN_MODEL_PREF || "gpt-4o";
     this.limits = {
