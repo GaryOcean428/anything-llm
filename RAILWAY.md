@@ -12,6 +12,7 @@ The `railway.toml` file has been configured to:
 4. Start the server with the correct port mapping
 
 > **Note**
+
 > Dependencies are installed during the pre-deploy step using `npm install --omit=dev --legacy-peer-deps`. Avoid adding `npm install` to the start command to prevent timeouts.
 
 ## Required Environment Variables
