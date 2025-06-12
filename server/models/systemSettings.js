@@ -233,7 +233,7 @@ const SystemSettings = {
 
       // --------------------------------------------------------
       // Whisper (Audio transcription) Selection Settings & Configs
-      // - Currently the only 3rd party is OpenAI, so is OPEN_AI_KEY is set
+      // - Currently the only 3rd party is OpenAI, so if OPENAI_API_KEY is set
       // - then it can be shared.
       // --------------------------------------------------------
       WhisperProvider: process.env.WHISPER_PROVIDER || "local",
@@ -245,8 +245,8 @@ const SystemSettings = {
       // - Currently the only 3rd party is OpenAI or the native browser-built in
       // --------------------------------------------------------
       TextToSpeechProvider: process.env.TTS_PROVIDER || "native",
-      TTSOpenAIKey: !!process.env.TTS_OPEN_AI_KEY,
-      TTSOpenAIVoiceModel: process.env.TTS_OPEN_AI_VOICE_MODEL,
+      TTSOpenAIKey: !!(process.env.TTS_OPENAI_API_KEY || process.env.TTS_OPEN_AI_KEY),
+      TTSOpenAIVoiceModel: process.env.TTS_OPENAI_VOICE_MODEL || process.env.TTS_OPEN_AI_VOICE_MODEL,
 
       // Eleven Labs TTS
       TTSElevenLabsKey: !!process.env.TTS_ELEVEN_LABS_KEY,
@@ -255,10 +255,10 @@ const SystemSettings = {
       TTSPiperTTSVoiceModel:
         process.env.TTS_PIPER_VOICE_MODEL ?? "en_US-hfc_female-medium",
       // OpenAI Generic TTS
-      TTSOpenAICompatibleKey: !!process.env.TTS_OPEN_AI_COMPATIBLE_KEY,
+      TTSOpenAICompatibleKey: !!(process.env.TTS_OPENAI_COMPATIBLE_KEY || process.env.TTS_OPEN_AI_COMPATIBLE_KEY),
       TTSOpenAICompatibleVoiceModel:
-        process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL,
-      TTSOpenAICompatibleEndpoint: process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT,
+        process.env.TTS_OPENAI_COMPATIBLE_VOICE_MODEL || process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL,
+      TTSOpenAICompatibleEndpoint: process.env.TTS_OPENAI_COMPATIBLE_ENDPOINT || process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT,
 
       // --------------------------------------------------------
       // Agent Settings & Configs
@@ -440,7 +440,7 @@ const SystemSettings = {
   llmPreferenceKeys: function () {
     return {
       // OpenAI Keys
-      OpenAiKey: !!process.env.OPEN_AI_KEY,
+      OpenAiKey: !!(process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY),
       OpenAiModelPref: process.env.OPEN_MODEL_PREF || "gpt-4o",
 
       // Azure + OpenAI Keys

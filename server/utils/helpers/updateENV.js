@@ -4,6 +4,22 @@ const {
 } = require("../AiProviders/bedrock/utils");
 const { resetAllVectorStores } = require("../vectorStore/resetAllVectorStores");
 
+// Helper function for backwards compatibility with deprecated environment variables
+function getEnvWithDeprecationWarning(newKey, oldKey) {
+  const newValue = process.env[newKey];
+  const oldValue = process.env[oldKey];
+  
+  if (oldValue && !newValue) {
+    console.warn(
+      `[DEPRECATION WARNING] Environment variable "${oldKey}" is deprecated. ` +
+      `Please use "${newKey}" instead. Support for "${oldKey}" will be removed in a future release.`
+    );
+    return oldValue;
+  }
+  
+  return newValue;
+}
+
 const KEY_MAPPING = {
   LLMProvider: {
     envKey: "LLM_PROVIDER",
@@ -11,7 +27,7 @@ const KEY_MAPPING = {
   },
   // OpenAI Settings
   OpenAiKey: {
-    envKey: "OPEN_AI_KEY",
+    envKey: "OPENAI_API_KEY",
     checks: [isNotEmpty, validOpenAIKey],
   },
   OpenAiModelPref: {
@@ -572,11 +588,11 @@ const KEY_MAPPING = {
 
   // TTS OpenAI
   TTSOpenAIKey: {
-    envKey: "TTS_OPEN_AI_KEY",
+    envKey: "TTS_OPENAI_API_KEY",
     checks: [validOpenAIKey],
   },
   TTSOpenAIVoiceModel: {
-    envKey: "TTS_OPEN_AI_VOICE_MODEL",
+    envKey: "TTS_OPENAI_VOICE_MODEL",
     checks: [],
   },
 
@@ -598,15 +614,15 @@ const KEY_MAPPING = {
 
   // OpenAI Generic TTS
   TTSOpenAICompatibleKey: {
-    envKey: "TTS_OPEN_AI_COMPATIBLE_KEY",
+    envKey: "TTS_OPENAI_COMPATIBLE_KEY",
     checks: [],
   },
   TTSOpenAICompatibleVoiceModel: {
-    envKey: "TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL",
+    envKey: "TTS_OPENAI_COMPATIBLE_VOICE_MODEL",
     checks: [isNotEmpty],
   },
   TTSOpenAICompatibleEndpoint: {
-    envKey: "TTS_OPEN_AI_COMPATIBLE_ENDPOINT",
+    envKey: "TTS_OPENAI_COMPATIBLE_ENDPOINT",
     checks: [isValidURL],
   },
 

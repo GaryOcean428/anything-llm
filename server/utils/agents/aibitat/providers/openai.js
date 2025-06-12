@@ -40,9 +40,18 @@ class OpenAIProvider extends Provider {
   };
 
   constructor(config = {}) {
+    // Handle API key with backwards compatibility
+    const defaultApiKey = process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY;
+    if (!process.env.OPENAI_API_KEY && process.env.OPEN_AI_KEY) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'OPEN_AI_KEY' is deprecated. " +
+        "Please use 'OPENAI_API_KEY' instead. Support for 'OPEN_AI_KEY' will be removed in a future release."
+      );
+    }
+    
     const {
       options = {
-        apiKey: process.env.OPEN_AI_KEY,
+        apiKey: defaultApiKey,
         maxRetries: 3,
       },
       model = "gpt-4o",

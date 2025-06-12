@@ -35,9 +35,9 @@ const aibitat = new AIbitat({
   .channel("content-team", ["researcher", "copywriter", "pm"]);
 
 async function main() {
-  if (!process.env.OPEN_AI_KEY)
+  if (!process.env.OPENAI_API_KEY)
     throw new Error(
-      "This example requires a valid OPEN_AI_KEY in the env.development file"
+      "This example requires a valid OPENAI_API_KEY in the env.development file"
     );
   await aibitat.start({
     from: "pm",

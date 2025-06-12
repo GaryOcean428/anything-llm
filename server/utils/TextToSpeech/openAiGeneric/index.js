@@ -1,24 +1,50 @@
 class GenericOpenAiTTS {
   constructor() {
-    if (!process.env.TTS_OPEN_AI_COMPATIBLE_KEY)
+    // Handle API key with backwards compatibility
+    const apiKey = process.env.TTS_OPENAI_COMPATIBLE_KEY || process.env.TTS_OPEN_AI_COMPATIBLE_KEY;
+    if (!apiKey) {
       this.#log(
         "No OpenAI compatible API key was set. You might need to set this to use your OpenAI compatible TTS service."
       );
-    if (!process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL)
+    } else if (!process.env.TTS_OPENAI_COMPATIBLE_KEY && process.env.TTS_OPEN_AI_COMPATIBLE_KEY) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'TTS_OPEN_AI_COMPATIBLE_KEY' is deprecated. " +
+        "Please use 'TTS_OPENAI_COMPATIBLE_KEY' instead. Support for 'TTS_OPEN_AI_COMPATIBLE_KEY' will be removed in a future release."
+      );
+    }
+    
+    // Handle voice model with backwards compatibility
+    const voiceModel = process.env.TTS_OPENAI_COMPATIBLE_VOICE_MODEL || process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL;
+    if (!voiceModel) {
       this.#log(
         "No OpenAI compatible voice model was set. We will use the default voice model 'alloy'. This may not exist for your selected endpoint."
       );
-    if (!process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT)
+    } else if (!process.env.TTS_OPENAI_COMPATIBLE_VOICE_MODEL && process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL' is deprecated. " +
+        "Please use 'TTS_OPENAI_COMPATIBLE_VOICE_MODEL' instead. Support for 'TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL' will be removed in a future release."
+      );
+    }
+    
+    // Handle endpoint with backwards compatibility
+    const endpoint = process.env.TTS_OPENAI_COMPATIBLE_ENDPOINT || process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT;
+    if (!endpoint) {
       throw new Error(
         "No OpenAI compatible endpoint was set. Please set this to use your OpenAI compatible TTS service."
       );
+    } else if (!process.env.TTS_OPENAI_COMPATIBLE_ENDPOINT && process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'TTS_OPEN_AI_COMPATIBLE_ENDPOINT' is deprecated. " +
+        "Please use 'TTS_OPENAI_COMPATIBLE_ENDPOINT' instead. Support for 'TTS_OPEN_AI_COMPATIBLE_ENDPOINT' will be removed in a future release."
+      );
+    }
 
     const { OpenAI: OpenAIApi } = require("openai");
     this.openai = new OpenAIApi({
-      apiKey: process.env.TTS_OPEN_AI_COMPATIBLE_KEY || null,
-      baseURL: process.env.TTS_OPEN_AI_COMPATIBLE_ENDPOINT,
+      apiKey: apiKey || null,
+      baseURL: endpoint,
     });
-    this.voice = process.env.TTS_OPEN_AI_COMPATIBLE_VOICE_MODEL ?? "alloy";
+    this.voice = voiceModel ?? "alloy";
   }
 
   #log(text, ...args) {

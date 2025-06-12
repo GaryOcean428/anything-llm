@@ -10,11 +10,22 @@ const {
 
 class OpenAiLLM {
   constructor(embedder = null, modelPreference = null) {
-    if (!process.env.OPEN_AI_KEY) throw new Error("No OpenAI API key was set.");
+    // Check for new environment variable first, then fallback to old one with deprecation warning
+    const apiKey = process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY;
+    if (!apiKey) throw new Error("No OpenAI API key was set.");
+    
+    // Show deprecation warning if using old environment variable
+    if (!process.env.OPENAI_API_KEY && process.env.OPEN_AI_KEY) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'OPEN_AI_KEY' is deprecated. " +
+        "Please use 'OPENAI_API_KEY' instead. Support for 'OPEN_AI_KEY' will be removed in a future release."
+      );
+    }
+    
     const { OpenAI: OpenAIApi } = require("openai");
 
     this.openai = new OpenAIApi({
-      apiKey: process.env.OPEN_AI_KEY,
+      apiKey: apiKey,
     });
     this.model = modelPreference || process.env.OPEN_MODEL_PREF || "gpt-4o";
     this.limits = {

@@ -1,12 +1,32 @@
 class OpenAiTTS {
   constructor() {
-    if (!process.env.TTS_OPEN_AI_KEY)
+    // Check for new environment variable first, then fallback to old one with deprecation warning
+    const apiKey = process.env.TTS_OPENAI_API_KEY || process.env.TTS_OPEN_AI_KEY;
+    if (!apiKey)
       throw new Error("No OpenAI API key was set.");
+      
+    // Show deprecation warning if using old environment variable
+    if (!process.env.TTS_OPENAI_API_KEY && process.env.TTS_OPEN_AI_KEY) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'TTS_OPEN_AI_KEY' is deprecated. " +
+        "Please use 'TTS_OPENAI_API_KEY' instead. Support for 'TTS_OPEN_AI_KEY' will be removed in a future release."
+      );
+    }
+    
     const { OpenAI: OpenAIApi } = require("openai");
     this.openai = new OpenAIApi({
-      apiKey: process.env.TTS_OPEN_AI_KEY,
+      apiKey: apiKey,
     });
-    this.voice = process.env.TTS_OPEN_AI_VOICE_MODEL ?? "alloy";
+    
+    // Handle voice model with backwards compatibility
+    const voiceModel = process.env.TTS_OPENAI_VOICE_MODEL || process.env.TTS_OPEN_AI_VOICE_MODEL;
+    if (!process.env.TTS_OPENAI_VOICE_MODEL && process.env.TTS_OPEN_AI_VOICE_MODEL) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'TTS_OPEN_AI_VOICE_MODEL' is deprecated. " +
+        "Please use 'TTS_OPENAI_VOICE_MODEL' instead. Support for 'TTS_OPEN_AI_VOICE_MODEL' will be removed in a future release."
+      );
+    }
+    this.voice = voiceModel ?? "alloy";
   }
 
   async ttsBuffer(textInput) {

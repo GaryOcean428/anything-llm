@@ -74,8 +74,16 @@ class AgentHandler {
   checkSetup() {
     switch (this.provider) {
       case "openai":
-        if (!process.env.OPEN_AI_KEY)
+        const openAiKey = process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY;
+        if (!openAiKey) {
           throw new Error("OpenAI API key must be provided to use agents.");
+        }
+        if (!process.env.OPENAI_API_KEY && process.env.OPEN_AI_KEY) {
+          console.warn(
+            "[DEPRECATION WARNING] Environment variable 'OPEN_AI_KEY' is deprecated. " +
+            "Please use 'OPENAI_API_KEY' instead. Support for 'OPEN_AI_KEY' will be removed in a future release."
+          );
+        }
         break;
       case "anthropic":
         if (!process.env.ANTHROPIC_API_KEY)

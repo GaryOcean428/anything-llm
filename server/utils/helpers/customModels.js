@@ -91,8 +91,18 @@ async function getCustomModels(provider = "", apiKey = null, basePath = null) {
 
 async function openAiModels(apiKey = null) {
   const { OpenAI: OpenAIApi } = require("openai");
+  const currentApiKey = apiKey || process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY;
+  
+  // Show deprecation warning if using old environment variable
+  if (!process.env.OPENAI_API_KEY && process.env.OPEN_AI_KEY && !apiKey) {
+    console.warn(
+      "[DEPRECATION WARNING] Environment variable 'OPEN_AI_KEY' is deprecated. " +
+      "Please use 'OPENAI_API_KEY' instead. Support for 'OPEN_AI_KEY' will be removed in a future release."
+    );
+  }
+  
   const openai = new OpenAIApi({
-    apiKey: apiKey || process.env.OPEN_AI_KEY,
+    apiKey: currentApiKey,
   });
   const allModels = await openai.models
     .list()
@@ -190,7 +200,7 @@ async function openAiModels(apiKey = null) {
 
   // Api Key was successful so lets save it for future uses
   if ((gpts.length > 0 || customModels.length > 0) && !!apiKey)
-    process.env.OPEN_AI_KEY = apiKey;
+    process.env.OPENAI_API_KEY = apiKey;
   return { models: [...gpts, ...customModels], error: null };
 }
 

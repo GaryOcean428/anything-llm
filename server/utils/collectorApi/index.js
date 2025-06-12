@@ -29,10 +29,19 @@ class CollectorApi {
    * @returns {CollectorOptions}
    */
   #attachOptions() {
+    // Handle OpenAI key with backwards compatibility
+    const openAiKey = process.env.OPENAI_API_KEY || process.env.OPEN_AI_KEY;
+    if (!process.env.OPENAI_API_KEY && process.env.OPEN_AI_KEY) {
+      console.warn(
+        "[DEPRECATION WARNING] Environment variable 'OPEN_AI_KEY' is deprecated. " +
+        "Please use 'OPENAI_API_KEY' instead. Support for 'OPEN_AI_KEY' will be removed in a future release."
+      );
+    }
+    
     return {
       whisperProvider: process.env.WHISPER_PROVIDER || "local",
       WhisperModelPref: process.env.WHISPER_MODEL_PREF,
-      openAiKey: process.env.OPEN_AI_KEY || null,
+      openAiKey: openAiKey || null,
       ocr: {
         langList: process.env.TARGET_OCR_LANG || "eng",
       },
