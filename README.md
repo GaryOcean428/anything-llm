@@ -174,6 +174,15 @@ Mintplex Labs & the community maintain a number of deployment methods, scripts, 
 
 ## How to setup for development
 
+> **🚨 Environment Variable Migration Notice**  
+> **OpenAI API Key Environment Variables Updated:** We've migrated environment variable names for better consistency with OpenAI's conventions:
+> - `OPEN_AI_KEY` → `OPENAI_API_KEY`
+> - `TTS_OPEN_AI_KEY` → `TTS_OPENAI_API_KEY`  
+> - `TTS_OPEN_AI_VOICE_MODEL` → `TTS_OPENAI_VOICE_MODEL`
+> - `TTS_OPEN_AI_COMPATIBLE_*` → `TTS_OPENAI_COMPATIBLE_*`
+> 
+> The old variable names still work with deprecation warnings, but please update your configuration to use the new names. Support for old names will be removed in a future release.
+
 - `yarn setup` To fill in the required `.env` files you'll need in each of the application sections (from root of repo).
   - Go fill those out before proceeding. Ensure `server/.env.development` is filled or else things won't work right.
 - `yarn dev:server` To boot the server locally (from root of repo).
