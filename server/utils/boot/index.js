@@ -26,12 +26,10 @@ function bootSSL(app, port = 3001) {
     const server = https.createServer(credentials, app);
 
     server
-      .listen(port, async () => {
-        await setupTelemetry();
-        new CommunicationKey(true);
-        new EncryptionManager();
-        new BackgroundService().boot();
+      .listen(port, () => {
         console.log(`Primary server in HTTPS mode listening on port ${port}`);
+        // Initialize services asynchronously without blocking the server
+        initializeServicesAsync();
       })
       .on("error", catchSigTerms);
 
@@ -55,16 +53,27 @@ function bootHTTP(app, port = 3001) {
   if (!app) throw new Error('No "app" defined - crashing!');
 
   app
-    .listen(port, async () => {
-      await setupTelemetry();
-      new CommunicationKey(true);
-      new EncryptionManager();
-      new BackgroundService().boot();
+    .listen(port, () => {
       console.log(`Primary server in HTTP mode listening on port ${port}`);
+      // Initialize services asynchronously without blocking the server
+      initializeServicesAsync();
     })
     .on("error", catchSigTerms);
 
   return { app, server: null };
+}
+
+async function initializeServicesAsync() {
+  try {
+    await setupTelemetry();
+    new CommunicationKey(true);
+    new EncryptionManager();
+    new BackgroundService().boot();
+    console.log(`Server initialization completed successfully`);
+  } catch (error) {
+    console.error(`Server initialization failed but server remains operational:`, error);
+    // Don't crash the server if initialization fails
+  }
 }
 
 function catchSigTerms() {

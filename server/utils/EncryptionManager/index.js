@@ -10,15 +10,24 @@ class EncryptionManager {
   #encryptionSalt;
 
   constructor({ key = null, salt = null } = {}) {
-    this.#loadOrCreateKeySalt(key, salt);
-    this.key = crypto.scryptSync(this.#encryptionKey, this.#encryptionSalt, 32);
-    this.algorithm = "aes-256-cbc";
-    this.separator = ":";
+    try {
+      this.#loadOrCreateKeySalt(key, salt);
+      this.key = crypto.scryptSync(this.#encryptionKey, this.#encryptionSalt, 32);
+      this.algorithm = "aes-256-cbc";
+      this.separator = ":";
 
-    // Used to send key to collector process to be able to decrypt data since they do not share ENVs
-    // this value should use the CommunicationKey.encrypt process before sending anywhere outside the
-    // server process so it is never sent in its raw format.
-    this.xPayload = this.key.toString("base64");
+      // Used to send key to collector process to be able to decrypt data since they do not share ENVs
+      // this value should use the CommunicationKey.encrypt process before sending anywhere outside the
+      // server process so it is never sent in its raw format.
+      this.xPayload = this.key.toString("base64");
+    } catch (error) {
+      console.error(`\x1b[31m[EncryptionManager]\x1b[0m Failed to initialize encryption:`, error.message);
+      // Set fallback values to prevent crashes
+      this.key = Buffer.alloc(32);
+      this.algorithm = "aes-256-cbc";
+      this.separator = ":";
+      this.xPayload = this.key.toString("base64");
+    }
   }
 
   log(text, ...args) {
@@ -39,7 +48,14 @@ class EncryptionManager {
       this.log("Self-assigning key & salt for encrypting arbitrary data.");
       process.env[this.#keyENV] = crypto.randomBytes(32).toString("hex");
       process.env[this.#saltENV] = crypto.randomBytes(32).toString("hex");
-      if (process.env.NODE_ENV === "production") dumpENV();
+      if (process.env.NODE_ENV === "production") {
+        try {
+          dumpENV();
+        } catch (error) {
+          console.error(`\x1b[31m[EncryptionManager]\x1b[0m Failed to dump ENV:`, error.message);
+          // Continue without crashing
+        }
+      }
     } else
       this.log("Loaded existing key & salt for encrypting arbitrary data.");
 
