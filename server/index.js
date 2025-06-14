@@ -1,10 +1,12 @@
 // Load environment variables
-const envResult = process.env.NODE_ENV === "development"
-  ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
-  : require("dotenv").config();
+const envResult =
+  process.env.NODE_ENV === "development"
+    ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
+    : require("dotenv").config();
 
-console.log(`[STARTUP] Environment: ${process.env.NODE_ENV || 'production'}`);
-console.log(`[STARTUP] Server Port: ${process.env.SERVER_PORT || 3001}`);
+console.log(`[STARTUP] Environment: ${process.env.NODE_ENV || "production"}`);
+const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
+console.log(`[STARTUP] Server Port: ${PORT}`);
 console.log(`[STARTUP] HTTPS Enabled: ${!!process.env.ENABLE_HTTPS}`);
 
 require("./utils/logger")();
@@ -48,7 +50,7 @@ app.use(
 );
 
 if (!!process.env.ENABLE_HTTPS) {
-  bootSSL(app, process.env.SERVER_PORT || 3001);
+  bootSSL(app, PORT);
 } else {
   require("@mintplex-labs/express-ws").default(app); // load WebSockets in non-SSL mode.
 }
@@ -142,4 +144,4 @@ app.all("*", function (_, response) {
 // In non-https mode we need to boot at the end since the server has not yet
 // started and is `.listen`ing.
 console.log("[STARTUP] Starting server...");
-if (!process.env.ENABLE_HTTPS) bootHTTP(app, process.env.SERVER_PORT || 3001);
+if (!process.env.ENABLE_HTTPS) bootHTTP(app, PORT);

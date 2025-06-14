@@ -13,7 +13,11 @@ const setupTelemetry = require("../telemetry");
 // Update .env keys with the correct values and boot. These are temporary and not real SSL certs - only use for local.
 // Test with https://localhost:3001/api/ping
 // build and copy frontend to server/public with correct API_BASE and start server in prod model and all should be ok
-function bootSSL(app, port = 3001) {
+function bootSSL(
+  app,
+  port = 3001,
+  host = process.env.SERVER_HOST || process.env.HOST || "0.0.0.0"
+) {
   try {
     console.log(
       `\x1b[33m[SSL BOOT ENABLED]\x1b[0m Loading the certificate and key for HTTPS mode...`
@@ -26,9 +30,13 @@ function bootSSL(app, port = 3001) {
     const server = https.createServer(credentials, app);
 
     server
-      .listen(port, "0.0.0.0", () => {
-        console.log(`Primary server in HTTPS mode listening on 0.0.0.0:${port}`);
-        console.log(`Health check endpoint available at https://localhost:${port}/api/ping`);
+      .listen(port, host, () => {
+        console.log(
+          `Primary server in HTTPS mode listening on ${host}:${port}`
+        );
+        console.log(
+          `Health check endpoint available at https://localhost:${port}/api/ping`
+        );
         // Initialize services asynchronously without blocking the server
         initializeServicesAsync();
       })
@@ -53,13 +61,19 @@ function bootSSL(app, port = 3001) {
   }
 }
 
-function bootHTTP(app, port = 3001) {
+function bootHTTP(
+  app,
+  port = 3001,
+  host = process.env.SERVER_HOST || process.env.HOST || "0.0.0.0"
+) {
   if (!app) throw new Error('No "app" defined - crashing!');
 
   app
-    .listen(port, "0.0.0.0", () => {
-      console.log(`Primary server in HTTP mode listening on 0.0.0.0:${port}`);
-      console.log(`Health check endpoint available at http://localhost:${port}/api/ping`);
+    .listen(port, host, () => {
+      console.log(`Primary server in HTTP mode listening on ${host}:${port}`);
+      console.log(
+        `Health check endpoint available at http://localhost:${port}/api/ping`
+      );
       // Initialize services asynchronously without blocking the server
       initializeServicesAsync();
     })
@@ -77,19 +91,28 @@ async function initializeServicesAsync() {
     try {
       new CommunicationKey(true);
     } catch (error) {
-      console.error(`\x1b[31m[CommunicationKey]\x1b[0m Failed to initialize communication key:`, error.message);
+      console.error(
+        `\x1b[31m[CommunicationKey]\x1b[0m Failed to initialize communication key:`,
+        error.message
+      );
       // Continue without crashing if communication key fails
     }
     new EncryptionManager();
     try {
       await new BackgroundService().boot();
     } catch (error) {
-      console.error(`\x1b[31m[BackgroundService]\x1b[0m Failed to start background service:`, error.message);
+      console.error(
+        `\x1b[31m[BackgroundService]\x1b[0m Failed to start background service:`,
+        error.message
+      );
       // Continue without crashing if background service fails
     }
     console.log(`Server initialization completed successfully`);
   } catch (error) {
-    console.error(`Server initialization failed but server remains operational:`, error);
+    console.error(
+      `Server initialization failed but server remains operational:`,
+      error
+    );
     // Don't crash the server if initialization fails
   }
 }
