@@ -1,6 +1,11 @@
-process.env.NODE_ENV === "development"
+// Load environment variables
+const envResult = process.env.NODE_ENV === "development"
   ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
   : require("dotenv").config();
+
+console.log(`[STARTUP] Environment: ${process.env.NODE_ENV || 'production'}`);
+console.log(`[STARTUP] Server Port: ${process.env.SERVER_PORT || 3001}`);
+console.log(`[STARTUP] HTTPS Enabled: ${!!process.env.ENABLE_HTTPS}`);
 
 require("./utils/logger")();
 const express = require("express");
@@ -49,7 +54,9 @@ if (!!process.env.ENABLE_HTTPS) {
 }
 
 app.use("/api", apiRouter);
+console.log("[STARTUP] Registering API endpoints...");
 systemEndpoints(apiRouter);
+console.log("[STARTUP] System endpoints registered (includes /api/ping)");
 extensionEndpoints(apiRouter);
 workspaceEndpoints(apiRouter);
 workspaceThreadEndpoints(apiRouter);
@@ -65,6 +72,7 @@ developerEndpoints(app, apiRouter);
 communityHubEndpoints(apiRouter);
 agentFlowEndpoints(apiRouter);
 mcpServersEndpoints(apiRouter);
+console.log("[STARTUP] All API endpoints registered");
 
 // Externally facing embedder endpoints
 embeddedEndpoints(apiRouter);
@@ -133,4 +141,5 @@ app.all("*", function (_, response) {
 
 // In non-https mode we need to boot at the end since the server has not yet
 // started and is `.listen`ing.
+console.log("[STARTUP] Starting server...");
 if (!process.env.ENABLE_HTTPS) bootHTTP(app, process.env.SERVER_PORT || 3001);

@@ -26,12 +26,16 @@ function bootSSL(app, port = 3001) {
     const server = https.createServer(credentials, app);
 
     server
-      .listen(port, () => {
-        console.log(`Primary server in HTTPS mode listening on port ${port}`);
+      .listen(port, "0.0.0.0", () => {
+        console.log(`Primary server in HTTPS mode listening on 0.0.0.0:${port}`);
+        console.log(`Health check endpoint available at https://localhost:${port}/api/ping`);
         // Initialize services asynchronously without blocking the server
         initializeServicesAsync();
       })
-      .on("error", catchSigTerms);
+      .on("error", (error) => {
+        console.error(`HTTPS server failed to start on port ${port}:`, error);
+        catchSigTerms();
+      });
 
     require("@mintplex-labs/express-ws").default(app, server);
     return { app, server };
@@ -53,12 +57,16 @@ function bootHTTP(app, port = 3001) {
   if (!app) throw new Error('No "app" defined - crashing!');
 
   app
-    .listen(port, () => {
-      console.log(`Primary server in HTTP mode listening on port ${port}`);
+    .listen(port, "0.0.0.0", () => {
+      console.log(`Primary server in HTTP mode listening on 0.0.0.0:${port}`);
+      console.log(`Health check endpoint available at http://localhost:${port}/api/ping`);
       // Initialize services asynchronously without blocking the server
       initializeServicesAsync();
     })
-    .on("error", catchSigTerms);
+    .on("error", (error) => {
+      console.error(`Server failed to start on port ${port}:`, error);
+      catchSigTerms();
+    });
 
   return { app, server: null };
 }
