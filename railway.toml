@@ -1,22 +1,11 @@
 [build]
 builder = "nixpacks"
 
-[build.env]
-NODE_ENV = "production"
-
 [deploy]
 root = "server"
-preDeployCommand = """
-npm install --legacy-peer-deps &&
-echo "=== DATABASE CONNECTIVITY VALIDATION ===" &&
-echo "DATABASE_URL configured: ${DATABASE_URL:0:20}..." &&
-echo "PostgreSQL host: $PGHOST" &&
-echo "PostgreSQL database: $PGDATABASE"
-"""
-startCommand = "echo '=== POSTGRESQL STARTUP SEQUENCE ===' && echo 'Validating database connection...' && timeout 30 npx prisma db ping && echo '✓ Database connection verified' && echo 'Generating Prisma client...' && npx prisma generate && echo '✓ Prisma client generated' && echo 'Applying database migrations...' && npx prisma migrate deploy && echo '✓ Database migrations completed' && echo 'Starting AnythingLLM server...' && SERVER_PORT=$PORT node index.js"
+startCommand = "npx prisma generate && npx prisma migrate deploy && node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 120
-restartPolicy = "on-failure"
 
 [deploy.env]
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
