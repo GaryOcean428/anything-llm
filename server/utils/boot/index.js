@@ -26,12 +26,10 @@ function bootSSL(app, port = 3001) {
     const server = https.createServer(credentials, app);
 
     server
-      .listen(port, async () => {
-        await setupTelemetry();
-        new CommunicationKey(true);
-        new EncryptionManager();
-        new BackgroundService().boot();
+      .listen(port, () => {
         console.log(`Primary server in HTTPS mode listening on port ${port}`);
+        // Initialize services asynchronously without blocking the server
+        initializeServicesAsync();
       })
       .on("error", catchSigTerms);
 
@@ -55,16 +53,37 @@ function bootHTTP(app, port = 3001) {
   if (!app) throw new Error('No "app" defined - crashing!');
 
   app
-    .listen(port, async () => {
-      await setupTelemetry();
-      new CommunicationKey(true);
-      new EncryptionManager();
-      new BackgroundService().boot();
+    .listen(port, () => {
       console.log(`Primary server in HTTP mode listening on port ${port}`);
+      // Initialize services asynchronously without blocking the server
+      initializeServicesAsync();
     })
     .on("error", catchSigTerms);
 
   return { app, server: null };
+}
+
+async function initializeServicesAsync() {
+  try {
+    await setupTelemetry();
+    try {
+      new CommunicationKey(true);
+    } catch (error) {
+      console.error(`\x1b[31m[CommunicationKey]\x1b[0m Failed to initialize communication key:`, error.message);
+      // Continue without crashing if communication key fails
+    }
+    new EncryptionManager();
+    try {
+      await new BackgroundService().boot();
+    } catch (error) {
+      console.error(`\x1b[31m[BackgroundService]\x1b[0m Failed to start background service:`, error.message);
+      // Continue without crashing if background service fails
+    }
+    console.log(`Server initialization completed successfully`);
+  } catch (error) {
+    console.error(`Server initialization failed but server remains operational:`, error);
+    // Don't crash the server if initialization fails
+  }
 }
 
 function catchSigTerms() {
