@@ -63,7 +63,12 @@ function systemEndpoints(app) {
   if (!app) return;
 
   app.get("/ping", (_, response) => {
-    response.status(200).json({ online: true });
+    try {
+      response.status(200).json({ online: true, timestamp: new Date().toISOString() });
+    } catch (error) {
+      console.error("Health check endpoint error:", error);
+      response.status(500).json({ online: false, error: error.message });
+    }
   });
 
   app.get("/migrate", async (_, response) => {
