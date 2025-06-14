@@ -1,34 +1,11 @@
 [build]
 builder = "nixpacks"
 
-[build.env]
-NODE_ENV = "production"
-
 [deploy]
 root = "server"
-# FIXED: Simplified preDeployCommand to avoid hanging
-preDeployCommand = """
-echo "=== PRE-DEPLOY VALIDATION ===" &&
-echo "DATABASE_URL configured: ${DATABASE_URL:0:20}..." &&
-echo "Environment: $NODE_ENV"
-"""
-# FIXED: Simplified startCommand with proper PORT usage
-startCommand = """
-echo '=== ANYTHINGLLM STARTUP SEQUENCE ===' &&
-echo 'Database URL: ${DATABASE_URL:0:30}...' &&
-echo 'Starting on PORT: $PORT' &&
-echo 'Generating Prisma client...' &&
-npx prisma generate &&
-echo '✓ Prisma client generated' &&
-echo 'Running database migrations...' &&
-npx prisma migrate deploy &&
-echo '✓ Database migrations completed' &&
-echo 'Starting AnythingLLM server...' &&
-node index.js
-"""
+startCommand = "npx prisma generate && npx prisma migrate deploy && node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 120
-restartPolicy = "on-failure"
 
 [deploy.env]
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
