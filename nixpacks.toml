@@ -1,0 +1,7 @@
+providers = ["node"]
+
+[phases.setup]
+nixPkgs = ["nodejs_18", "yarn"]
+
+[phases.build]
+cmds = ["echo '[RAILWAY] Build starting...' && cd server && yarn install --production"]

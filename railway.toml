@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "echo '[RAILWAY] Build starting...' && cd server && yarn install --production"
+buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && cd server && yarn install --production"
 
 [deploy]
 root = "server"
