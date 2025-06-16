@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "echo '[RAILWAY] Build starting...' && cd server && npm install --omit=dev --legacy-peer-deps"
+buildCommand = "echo '[RAILWAY] Build starting...' && cd server && yarn install --production"
 
 [deploy]
 root = "server"

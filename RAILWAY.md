@@ -73,7 +73,7 @@ The collector can be deployed as a separate Railway service. Example `railway.to
 ```toml
 [services.collector]
 root = "collector"
-preDeployCommand = "npm install --omit=dev --legacy-peer-deps"
+preDeployCommand = "yarn install --production"
 startCommand = "node index.js"
 healthcheckPath = "/"
 ```
