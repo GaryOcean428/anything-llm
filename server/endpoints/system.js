@@ -58,6 +58,7 @@ const { simpleSSOEnabled } = require("../utils/middleware/simpleSSOEnabled");
 const { TemporaryAuthToken } = require("../models/temporaryAuthToken");
 const { SystemPromptVariables } = require("../models/systemPromptVariables");
 const { VALID_COMMANDS } = require("../utils/chats");
+const { getServerStatus } = require("../utils/boot");
 
 function systemEndpoints(app) {
   if (!app) return;
@@ -65,7 +66,6 @@ function systemEndpoints(app) {
   app.get("/ping", (_, response) => {
     try {
       // Get server status from boot module
-      const { getServerStatus } = require("../utils/boot");
       const serverStatus = getServerStatus();
       
       // Ensure we can access basic server functionality
