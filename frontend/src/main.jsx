@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import App from "@/App.jsx";
 import "@/index.css";
+
 // Enable Strict Mode locally to surface potential issues without affecting production
 const isDevelopment = process.env.NODE_ENV === "development";
 const REACTWRAP = isDevelopment ? React.StrictMode : React.Fragment;
