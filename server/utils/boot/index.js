@@ -4,6 +4,18 @@ const { EncryptionManager } = require("../EncryptionManager");
 const { CommunicationKey } = require("../comKey");
 const setupTelemetry = require("../telemetry");
 
+// Global server state tracking
+let serverReady = false;
+let serverStartTime = new Date();
+
+function getServerStatus() {
+  return {
+    ready: serverReady,
+    startTime: serverStartTime,
+    uptime: Date.now() - serverStartTime.getTime()
+  };
+}
+
 // Testing SSL? You can make a self signed certificate and point the ENVs to that location
 // make a directory in server called 'sslcert' - cd into it
 // - openssl genrsa -aes256 -passout pass:gsahdg -out server.pass.key 4096
@@ -35,13 +47,18 @@ function bootSSL(
           `Primary server in HTTPS mode listening on ${host}:${port}`
         );
         console.log(
-          `Health check endpoint available at https://localhost:${port}/api/ping`
+          `Health check endpoint available at https://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/ping`
         );
+        console.log(`[RAILWAY] Server ready for healthcheck requests`);
+        // Mark server as ready immediately after listening starts
+        serverReady = true;
         // Initialize services asynchronously without blocking the server
         initializeServicesAsync();
       })
       .on("error", (error) => {
         console.error(`HTTPS server failed to start on port ${port}:`, error);
+        console.error(`[RAILWAY] Server startup failed - healthcheck will fail`);
+        serverReady = false;
         catchSigTerms();
       });
 
@@ -72,13 +89,18 @@ function bootHTTP(
     .listen(port, host, () => {
       console.log(`Primary server in HTTP mode listening on ${host}:${port}`);
       console.log(
-        `Health check endpoint available at http://localhost:${port}/api/ping`
+        `Health check endpoint available at http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/ping`
       );
+      console.log(`[RAILWAY] Server ready for healthcheck requests`);
+      // Mark server as ready immediately after listening starts
+      serverReady = true;
       // Initialize services asynchronously without blocking the server
       initializeServicesAsync();
     })
     .on("error", (error) => {
       console.error(`Server failed to start on port ${port}:`, error);
+      console.error(`[RAILWAY] Server startup failed - healthcheck will fail`);
+      serverReady = false;
       catchSigTerms();
     });
 
@@ -87,6 +109,7 @@ function bootHTTP(
 
 async function initializeServicesAsync() {
   try {
+    console.log(`[STARTUP] Initializing services asynchronously...`);
     await setupTelemetry();
     try {
       new CommunicationKey(true);
@@ -107,10 +130,10 @@ async function initializeServicesAsync() {
       );
       // Continue without crashing if background service fails
     }
-    console.log(`Server initialization completed successfully`);
+    console.log(`[STARTUP] Server initialization completed successfully`);
   } catch (error) {
     console.error(
-      `Server initialization failed but server remains operational:`,
+      `[STARTUP] Server initialization failed but server remains operational:`,
       error
     );
     // Don't crash the server if initialization fails
@@ -131,4 +154,5 @@ function catchSigTerms() {
 module.exports = {
   bootHTTP,
   bootSSL,
+  getServerStatus,
 };
