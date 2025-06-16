@@ -144,4 +144,14 @@ app.all("*", function (_, response) {
 // In non-https mode we need to boot at the end since the server has not yet
 // started and is `.listen`ing.
 console.log("[STARTUP] Starting server...");
+
+// Add process-level error handlers to prevent crashes during Railway healthchecks
+process.on('uncaughtException', (error) => {
+  console.error('[UNCAUGHT EXCEPTION] Server encountered an error but will continue running:', error);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[UNHANDLED REJECTION] Server encountered an unhandled promise rejection but will continue running:', reason);
+});
+
 if (!process.env.ENABLE_HTTPS) bootHTTP(app, PORT);

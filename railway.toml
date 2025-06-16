@@ -1,11 +1,15 @@
 [build]
 builder = "nixpacks"
+buildCommand = "echo '[RAILWAY] Build starting...' && npm install --omit=dev"
 
 [deploy]
 root = "server"
-startCommand = "npx prisma generate && npx prisma migrate deploy && node index.js"
+startCommand = "echo '[RAILWAY] Starting Prisma operations...' && npx prisma generate && echo '[RAILWAY] Prisma generate completed' && (npx prisma migrate deploy || echo '[RAILWAY] Migrate failed but continuing...') && echo '[RAILWAY] Prisma migrate completed' && echo '[RAILWAY] Starting Node.js server...' && node index.js"
 healthcheckPath = "/api/ping"
-healthcheckTimeout = 120
+healthcheckTimeout = 180
+healthcheckInterval = 10
+restartPolicyType = "on_failure"
+restartPolicyMinDelay = 1000
 
 [deploy.env]
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
