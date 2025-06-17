@@ -1,10 +1,12 @@
 const path = require('node:path');
 const fs = require('node:fs');
 const { parentPort } = require('node:worker_threads');
-const documentsPath =
+const baseStoragePath =
   process.env.NODE_ENV === "development"
-    ? path.resolve(__dirname, `../../storage/documents`)
-    : path.resolve(process.env.STORAGE_DIR, `documents`);
+    ? path.resolve(__dirname, "../../storage")
+    : process.env.STORAGE_DIR || path.resolve(__dirname, "../../storage");
+
+const documentsPath = path.resolve(baseStoragePath, "documents");
 
 function log(stringContent = '') {
   if (parentPort) parentPort.postMessage(`\x1b[33m[${process.pid}]\x1b[0m: ${stringContent}`); // running as worker
