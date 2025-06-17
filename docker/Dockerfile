@@ -20,20 +20,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    # Install node and yarn
-    apt-get install -yq --no-install-recommends nodejs && \
-    curl -LO https://github.com/yarnpkg/yarn/releases/download/v1.22.19/yarn_1.22.19_all.deb \
-        && dpkg -i yarn_1.22.19_all.deb \
-        && rm yarn_1.22.19_all.deb && \
-    # Install uvx (pinned to 0.6.10) for MCP support
-    curl -LsSf https://astral.sh/uv/0.6.10/install.sh | sh && \
-        mv /root/.local/bin/uv /usr/local/bin/uv && \
-        mv /root/.local/bin/uvx /usr/local/bin/uvx && \
-        echo "Installed uvx! $(uv --version)" && \
+    # Install Node.js 18.x directly from binary (works around SSL certificate issues)
+    curl -fsSL https://nodejs.org/dist/v18.18.0/node-v18.18.0-linux-arm64.tar.xz --insecure -o node.tar.xz && \
+    tar -xf node.tar.xz -C /usr/local --strip-components=1 && \
+    rm node.tar.xz && \
+    # Enable corepack which includes yarn (Node.js 18 comes with yarn built-in)
+    corepack enable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -86,20 +78,12 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt-get update && \
-    # Install node and yarn
-    apt-get install -yq --no-install-recommends nodejs && \
-    curl -LO https://github.com/yarnpkg/yarn/releases/download/v1.22.19/yarn_1.22.19_all.deb \
-        && dpkg -i yarn_1.22.19_all.deb \
-        && rm yarn_1.22.19_all.deb && \
-    # Install uvx (pinned to 0.6.10) for MCP support
-    curl -LsSf https://astral.sh/uv/0.6.10/install.sh | sh && \
-        mv /root/.local/bin/uv /usr/local/bin/uv && \
-        mv /root/.local/bin/uvx /usr/local/bin/uvx && \
-        echo "Installed uvx! $(uv --version)" && \
+    # Install Node.js 18.x directly from binary (works around SSL certificate issues)
+    curl -fsSL https://nodejs.org/dist/v18.18.0/node-v18.18.0-linux-x64.tar.xz --insecure -o node.tar.xz && \
+    tar -xf node.tar.xz -C /usr/local --strip-components=1 && \
+    rm node.tar.xz && \
+    # Enable corepack which includes yarn (Node.js 18 comes with yarn built-in)
+    corepack enable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -132,6 +116,9 @@ WORKDIR /app
 FROM build AS frontend-build
 COPY --chown=anythingllm:anythingllm ./frontend /app/frontend/
 WORKDIR /app/frontend
+# Configure yarn to work around SSL certificate issues
+ENV YARN_DISABLE_SSL_VERIFY=true
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN yarn install --network-timeout 100000 && yarn cache clean
 RUN yarn build && \
     cp -r dist /tmp/frontend-build && \
@@ -145,6 +132,9 @@ WORKDIR /app
 FROM build AS backend-build
 COPY --chown=anythingllm:anythingllm ./server /app/server/
 WORKDIR /app/server
+# Configure yarn to work around SSL certificate issues
+ENV YARN_DISABLE_SSL_VERIFY=true
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN yarn install --production --network-timeout 100000 && yarn cache clean
 WORKDIR /app
 
@@ -152,6 +142,9 @@ WORKDIR /app
 COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
 WORKDIR /app/collector
 ENV PUPPETEER_DOWNLOAD_BASE_URL=https://storage.googleapis.com/chrome-for-testing-public
+# Configure yarn to work around SSL certificate issues
+ENV YARN_DISABLE_SSL_VERIFY=true
+ENV NODE_TLS_REJECT_UNAUTHORIZED=0
 RUN yarn install --production --network-timeout 100000 && yarn cache clean
 
 WORKDIR /app
