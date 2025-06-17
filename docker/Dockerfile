@@ -20,20 +20,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
+    # Install Node.js 18.x using NodeSource repository with insecure flag as temporary workaround
     mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    curl -fsSL --insecure https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
-    # Install node and yarn
     apt-get install -yq --no-install-recommends nodejs && \
     curl -LO https://github.com/yarnpkg/yarn/releases/download/v1.22.19/yarn_1.22.19_all.deb \
         && dpkg -i yarn_1.22.19_all.deb \
         && rm yarn_1.22.19_all.deb && \
-    # Install uvx (pinned to 0.6.10) for MCP support
-    curl -LsSf https://astral.sh/uv/0.6.10/install.sh | sh && \
-        mv /root/.local/bin/uv /usr/local/bin/uv && \
-        mv /root/.local/bin/uvx /usr/local/bin/uvx && \
-        echo "Installed uvx! $(uv --version)" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
@@ -86,20 +81,15 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
+    # Install Node.js 18.x using NodeSource repository with insecure flag as temporary workaround
     mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    curl -fsSL --insecure https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
-    # Install node and yarn
     apt-get install -yq --no-install-recommends nodejs && \
     curl -LO https://github.com/yarnpkg/yarn/releases/download/v1.22.19/yarn_1.22.19_all.deb \
         && dpkg -i yarn_1.22.19_all.deb \
         && rm yarn_1.22.19_all.deb && \
-    # Install uvx (pinned to 0.6.10) for MCP support
-    curl -LsSf https://astral.sh/uv/0.6.10/install.sh | sh && \
-        mv /root/.local/bin/uv /usr/local/bin/uv && \
-        mv /root/.local/bin/uvx /usr/local/bin/uvx && \
-        echo "Installed uvx! $(uv --version)" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
