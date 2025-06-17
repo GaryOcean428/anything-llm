@@ -10,10 +10,11 @@ const { normalizePath } = require(".");
  */
 const fileUploadStorage = multer.diskStorage({
   destination: function (_, __, cb) {
-    const uploadOutput =
+    const baseStoragePath =
       process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../../collector/hotdir`)
-        : path.resolve(process.env.STORAGE_DIR, `../../collector/hotdir`);
+        ? path.resolve(__dirname, "../../")
+        : process.env.STORAGE_DIR || path.resolve(__dirname, "../../");
+    const uploadOutput = path.resolve(baseStoragePath, "collector/hotdir");
     cb(null, uploadOutput);
   },
   filename: function (_, file, cb) {
@@ -30,10 +31,11 @@ const fileUploadStorage = multer.diskStorage({
  */
 const fileAPIUploadStorage = multer.diskStorage({
   destination: function (_, __, cb) {
-    const uploadOutput =
+    const baseStoragePath =
       process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../../collector/hotdir`)
-        : path.resolve(process.env.STORAGE_DIR, `../../collector/hotdir`);
+        ? path.resolve(__dirname, "../../")
+        : process.env.STORAGE_DIR || path.resolve(__dirname, "../../");
+    const uploadOutput = path.resolve(baseStoragePath, "collector/hotdir");
     cb(null, uploadOutput);
   },
   filename: function (_, file, cb) {
@@ -47,10 +49,11 @@ const fileAPIUploadStorage = multer.diskStorage({
 // Asset storage for logos
 const assetUploadStorage = multer.diskStorage({
   destination: function (_, __, cb) {
-    const uploadOutput =
+    const baseStoragePath =
       process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../storage/assets`)
-        : path.resolve(process.env.STORAGE_DIR, "assets");
+        ? path.resolve(__dirname, "../../storage")
+        : process.env.STORAGE_DIR || path.resolve(__dirname, "../../storage");
+    const uploadOutput = path.resolve(baseStoragePath, "assets");
     fs.mkdirSync(uploadOutput, { recursive: true });
     return cb(null, uploadOutput);
   },
@@ -67,10 +70,11 @@ const assetUploadStorage = multer.diskStorage({
  */
 const pfpUploadStorage = multer.diskStorage({
   destination: function (_, __, cb) {
-    const uploadOutput =
+    const baseStoragePath =
       process.env.NODE_ENV === "development"
-        ? path.resolve(__dirname, `../../storage/assets/pfp`)
-        : path.resolve(process.env.STORAGE_DIR, "assets/pfp");
+        ? path.resolve(__dirname, "../../storage")
+        : process.env.STORAGE_DIR || path.resolve(__dirname, "../../storage");
+    const uploadOutput = path.resolve(baseStoragePath, "assets/pfp");
     fs.mkdirSync(uploadOutput, { recursive: true });
     return cb(null, uploadOutput);
   },
