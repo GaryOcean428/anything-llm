@@ -1,10 +1,10 @@
 [build]
 builder = "nixpacks"
-buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && cd server && yarn install --production"
+buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && echo '[RAILWAY] Installing frontend dependencies...' && cd frontend && yarn install && echo '[RAILWAY] Building frontend...' && yarn build && echo '[RAILWAY] Copying frontend build to server/public...' && cd .. && cp -R frontend/dist server/public && echo '[RAILWAY] Installing server dependencies...' && cd server && yarn install --production && echo '[RAILWAY] Build completed successfully'"
 
 [deploy]
 root = "server"
-startCommand = "echo '[RAILWAY] Starting Prisma operations...' && npx prisma generate --schema=./server/prisma/schema.prisma && echo '[RAILWAY] Prisma generate completed' && (npx prisma migrate deploy --schema=./server/prisma/schema.prisma || echo '[RAILWAY] Migrate failed but continuing...') && echo '[RAILWAY] Prisma migrate completed' && echo '[RAILWAY] Starting Node.js server...' && node server/index.js"
+startCommand = "echo '[RAILWAY] Starting Prisma operations...' && npx prisma generate --schema=./prisma/schema.prisma && echo '[RAILWAY] Prisma generate completed' && (npx prisma migrate deploy --schema=./prisma/schema.prisma || echo '[RAILWAY] Migrate failed but continuing...') && echo '[RAILWAY] Prisma migrate completed' && echo '[RAILWAY] Starting Node.js server...' && node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10

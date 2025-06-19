@@ -4,4 +4,4 @@ providers = ["node"]
 nixPkgs = ["nodejs_18", "yarn"]
 
 [phases.build]
-cmds = ["echo '[RAILWAY] Build starting...' && cd server && yarn install --production"]
+cmds = ["echo '[RAILWAY] Build starting...' && cd frontend && yarn install && yarn build && cd .. && cp -R frontend/dist server/public && cd server && yarn install --production"]
