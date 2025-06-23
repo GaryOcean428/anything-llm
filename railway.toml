@@ -1,6 +1,6 @@
 [build]
 builder = "nixpacks"
-buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && echo '[RAILWAY] Installing frontend dependencies...' && cd frontend && yarn install && echo '[RAILWAY] Building frontend...' && yarn build && echo '[RAILWAY] Copying frontend build to server/public...' && cd .. && cp -R frontend/dist server/public && echo '[RAILWAY] Installing server dependencies...' && cd server && yarn install --production && echo '[RAILWAY] Ensuring Prisma schema is available...' && ls -la prisma/schema.prisma && echo '[RAILWAY] Build completed successfully'"
+buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && echo '[RAILWAY] Installing frontend dependencies...' && cd frontend && yarn install && echo '[RAILWAY] Building frontend...' && yarn build && echo '[RAILWAY] Copying frontend build to server/public...' && cd .. && cp -R frontend/dist server/public && echo '[RAILWAY] Installing server dependencies...' && cd server && yarn install --production && echo '[RAILWAY] Build completed successfully'"
 
 [deploy]
 root = "server"
