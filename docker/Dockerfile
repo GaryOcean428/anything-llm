@@ -140,8 +140,6 @@ WORKDIR /app
 
 # Install collector dependencies
 COPY --chown=anythingllm:anythingllm ./collector/ ./collector/
-# Copy the root-level prisma directory to ensure schema is available at root level
-COPY --chown=anythingllm:anythingllm ./prisma ./prisma
 WORKDIR /app/collector
 ENV PUPPETEER_DOWNLOAD_BASE_URL=https://storage.googleapis.com/chrome-for-testing-public
 # Configure yarn to work around SSL certificate issues
