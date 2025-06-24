@@ -90,3 +90,16 @@ If health checks fail:
 3. Ensure required environment variables are set
 4. Check that STORAGE_DIR path is writable (if set)
 5. Verify the server is binding to the correct port ($PORT)
+
+### Common Issues
+
+**Prisma Schema Not Found Error:**
+If you see `Error: Could not load --schema from provided path prisma/schema.prisma: file or directory not found`, this typically means:
+- The Prisma schema file is not available in the deployment environment
+- There are symlink issues (Railway doesn't handle symlinks well)
+- The working directory is not set correctly
+
+**Solution:**
+- Ensure `server/prisma/schema.prisma` exists and is committed to git
+- Remove any symlinks from `/prisma` that point to `server/prisma`
+- Verify `railway.toml` has `root = "server"` and uses `./prisma/schema.prisma` paths
