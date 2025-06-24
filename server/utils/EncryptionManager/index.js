@@ -12,7 +12,11 @@ class EncryptionManager {
   constructor({ key = null, salt = null } = {}) {
     try {
       this.#loadOrCreateKeySalt(key, salt);
-      this.key = crypto.scryptSync(this.#encryptionKey, this.#encryptionSalt, 32);
+      this.key = crypto.scryptSync(
+        this.#encryptionKey,
+        this.#encryptionSalt,
+        32
+      );
       this.algorithm = "aes-256-cbc";
       this.separator = ":";
 
@@ -21,7 +25,10 @@ class EncryptionManager {
       // server process so it is never sent in its raw format.
       this.xPayload = this.key.toString("base64");
     } catch (error) {
-      console.error(`\x1b[31m[EncryptionManager]\x1b[0m Failed to initialize encryption:`, error.message);
+      console.error(
+        `\x1b[31m[EncryptionManager]\x1b[0m Failed to initialize encryption:`,
+        error.message
+      );
       // Set fallback values to prevent crashes
       this.key = Buffer.alloc(32);
       this.algorithm = "aes-256-cbc";
@@ -52,7 +59,10 @@ class EncryptionManager {
         try {
           dumpENV();
         } catch (error) {
-          console.error(`\x1b[31m[EncryptionManager]\x1b[0m Failed to dump ENV:`, error.message);
+          console.error(
+            `\x1b[31m[EncryptionManager]\x1b[0m Failed to dump ENV:`,
+            error.message
+          );
           // Continue without crashing
         }
       }

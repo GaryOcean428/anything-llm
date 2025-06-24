@@ -29,7 +29,10 @@ async function setupTelemetry() {
       commit: getGitVersion(),
     });
   } catch (error) {
-    console.error(`\x1b[31m[TELEMETRY ERROR]\x1b[0m Failed to initialize telemetry:`, error.message);
+    console.error(
+      `\x1b[31m[TELEMETRY ERROR]\x1b[0m Failed to initialize telemetry:`,
+      error.message
+    );
     // Don't crash the server if telemetry fails
   }
   return;
