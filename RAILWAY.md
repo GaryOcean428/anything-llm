@@ -102,7 +102,9 @@ If you see `Error: Could not load --schema from provided path prisma/schema.pris
 
 **Solution:**
 - Ensure `server/prisma/schema.prisma` exists and is committed to git
-- Remove any symlinks from `/prisma` that point to `server/prisma`
+- **IMPORTANT**: Do not create symlinks from `/prisma` that point to `server/prisma` - Railway doesn't handle symlinks well
 - Verify `railway.toml` has `root = "server"` and uses Prisma auto-detection (no explicit `--schema` flags)
 - Check that the build process generates the Prisma client during build phase, not deployment
 - Ensure the working directory is correct when Prisma commands run
+
+**Note:** As of the fix for issue #66, the repository no longer contains a root-level `prisma` symlink. All Prisma files are located in `server/prisma/` and deployment scripts run from the server directory where the actual files exist.
