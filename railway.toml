@@ -1,10 +1,10 @@
 [build]
 builder = "nixpacks"
-buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && echo '[RAILWAY] Installing frontend dependencies...' && cd frontend && yarn install && echo '[RAILWAY] Building frontend...' && yarn build && echo '[RAILWAY] Copying frontend build to server/public...' && cd .. && cp -R frontend/dist server/public && echo '[RAILWAY] Installing server dependencies...' && cd server && yarn install --production && echo '[RAILWAY] Build completed successfully'"
+buildCommand = "echo '[RAILWAY] Build starting...' && npm install -g yarn && echo '[RAILWAY] Installing frontend dependencies...' && cd frontend && yarn install && echo '[RAILWAY] Building frontend...' && yarn build && echo '[RAILWAY] Copying frontend build to server/public...' && cd .. && cp -R frontend/dist server/public && echo '[RAILWAY] Installing server dependencies...' && cd server && yarn install --production && echo '[RAILWAY] Checking Prisma schema...' && ls -la prisma/ && echo '[RAILWAY] Generating Prisma client (auto-detect schema)...' && npx prisma generate && echo '[RAILWAY] Verifying Prisma client generation...' && ls -la node_modules/.prisma/ && echo '[RAILWAY] Build completed successfully'"
 
 [deploy]
 root = "server"
-startCommand = "echo '[RAILWAY] Starting Prisma operations...' && npx prisma generate --schema=./prisma/schema.prisma && echo '[RAILWAY] Prisma generate completed' && (npx prisma migrate deploy --schema=./prisma/schema.prisma || echo '[RAILWAY] Migrate failed but continuing...') && echo '[RAILWAY] Prisma migrate completed' && echo '[RAILWAY] Starting Node.js server...' && node index.js"
+startCommand = "echo '[RAILWAY] Starting deployment...' && pwd && ls -la prisma/ && echo '[RAILWAY] Checking for Prisma client...' && ls -la node_modules/.prisma/ && echo '[RAILWAY] Running database migrations (auto-detect schema)...' && (npx prisma migrate deploy || echo '[RAILWAY] Migrate failed, continuing without migrations...') && echo '[RAILWAY] Starting Node.js server...' && node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10

@@ -4,4 +4,7 @@ providers = ["node"]
 nixPkgs = ["nodejs_18", "yarn"]
 
 [phases.build]
-cmds = ["echo '[RAILWAY] Build starting...' && cd frontend && yarn install && yarn build && cd .. && cp -R frontend/dist server/public && cd server && yarn install --production"]
+cmds = ["echo '[RAILWAY] Build starting...' && cd frontend && yarn install && yarn build && cd .. && cp -R frontend/dist server/public && cd server && yarn install --production && echo '[RAILWAY] Checking Prisma schema...' && ls -la prisma/ && echo '[RAILWAY] Generating Prisma client (auto-detect schema)...' && npx prisma generate && echo '[RAILWAY] Verifying Prisma client generation...' && ls -la node_modules/.prisma/ && echo '[RAILWAY] Build completed successfully'"]
+
+[start]
+cmd = "cd server && echo '[RAILWAY] Starting deployment...' && pwd && ls -la prisma/ && echo '[RAILWAY] Checking for Prisma client...' && ls -la node_modules/.prisma/ && echo '[RAILWAY] Running database migrations (auto-detect schema)...' && (npx prisma migrate deploy || echo '[RAILWAY] Migrate failed, continuing without migrations...') && echo '[RAILWAY] Starting Node.js server...' && node index.js"

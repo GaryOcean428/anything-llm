@@ -6,10 +6,11 @@ This file contains notes for deploying AnythingLLM on Railway.
 
 The `railway.toml` file has been configured to:
 
-1. Generate Prisma client before starting the server
-2. Apply database migrations
+1. Generate Prisma client during the build phase (not deployment)
+2. Apply database migrations during deployment startup
 3. Install server dependencies during a pre-deploy step
 4. Start the server with the correct port mapping
+5. Use Prisma auto-detection for schema files (no explicit paths needed)
 
 > **Note**
 
@@ -102,4 +103,6 @@ If you see `Error: Could not load --schema from provided path prisma/schema.pris
 **Solution:**
 - Ensure `server/prisma/schema.prisma` exists and is committed to git
 - Remove any symlinks from `/prisma` that point to `server/prisma`
-- Verify `railway.toml` has `root = "server"` and uses `./prisma/schema.prisma` paths
+- Verify `railway.toml` has `root = "server"` and uses Prisma auto-detection (no explicit `--schema` flags)
+- Check that the build process generates the Prisma client during build phase, not deployment
+- Ensure the working directory is correct when Prisma commands run
