@@ -12,7 +12,7 @@ function getServerStatus() {
   return {
     ready: serverReady,
     startTime: serverStartTime,
-    uptime: Date.now() - serverStartTime.getTime()
+    uptime: Date.now() - serverStartTime.getTime(),
   };
 }
 
@@ -47,7 +47,7 @@ function bootSSL(
           `Primary server in HTTPS mode listening on ${host}:${port}`
         );
         console.log(
-          `Health check endpoint available at https://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/ping`
+          `Health check endpoint available at https://${host === "0.0.0.0" ? "localhost" : host}:${port}/api/ping`
         );
         console.log(`[RAILWAY] Server ready for healthcheck requests`);
         // Mark server as ready immediately after listening starts
@@ -57,7 +57,9 @@ function bootSSL(
       })
       .on("error", (error) => {
         console.error(`HTTPS server failed to start on port ${port}:`, error);
-        console.error(`[RAILWAY] Server startup failed - healthcheck will fail`);
+        console.error(
+          `[RAILWAY] Server startup failed - healthcheck will fail`
+        );
         serverReady = false;
         catchSigTerms();
       });
@@ -89,7 +91,7 @@ function bootHTTP(
     .listen(port, host, () => {
       console.log(`Primary server in HTTP mode listening on ${host}:${port}`);
       console.log(
-        `Health check endpoint available at http://${host === '0.0.0.0' ? 'localhost' : host}:${port}/api/ping`
+        `Health check endpoint available at http://${host === "0.0.0.0" ? "localhost" : host}:${port}/api/ping`
       );
       console.log(`[RAILWAY] Server ready for healthcheck requests`);
       // Mark server as ready immediately after listening starts

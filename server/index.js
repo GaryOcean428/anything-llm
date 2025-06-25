@@ -93,10 +93,13 @@ if (process.env.NODE_ENV !== "development") {
         // Disable I-framing of entire site UI
         res.removeHeader("X-Powered-By");
         res.setHeader("X-Frame-Options", "DENY");
-        
+
         // Ensure correct MIME type for JavaScript files
-        if (path.endsWith('.js')) {
-          res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
+        if (path.endsWith(".js")) {
+          res.setHeader(
+            "Content-Type",
+            "application/javascript; charset=utf-8"
+          );
         }
       },
     })
@@ -151,12 +154,18 @@ app.all("*", function (_, response) {
 console.log("[STARTUP] Starting server...");
 
 // Add process-level error handlers to prevent crashes during Railway healthchecks
-process.on('uncaughtException', (error) => {
-  console.error('[UNCAUGHT EXCEPTION] Server encountered an error but will continue running:', error);
+process.on("uncaughtException", (error) => {
+  console.error(
+    "[UNCAUGHT EXCEPTION] Server encountered an error but will continue running:",
+    error
+  );
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('[UNHANDLED REJECTION] Server encountered an unhandled promise rejection but will continue running:', reason);
+process.on("unhandledRejection", (reason, promise) => {
+  console.error(
+    "[UNHANDLED REJECTION] Server encountered an unhandled promise rejection but will continue running:",
+    reason
+  );
 });
 
 if (!process.env.ENABLE_HTTPS) bootHTTP(app, PORT);

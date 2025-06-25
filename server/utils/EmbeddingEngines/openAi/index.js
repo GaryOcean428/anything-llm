@@ -2,7 +2,8 @@ const { toChunks } = require("../../helpers");
 
 class OpenAiEmbedder {
   constructor() {
-    if (!process.env.OPENAI_API_KEY) throw new Error("No OpenAI API key was set.");
+    if (!process.env.OPENAI_API_KEY)
+      throw new Error("No OpenAI API key was set.");
     const { OpenAI: OpenAIApi } = require("openai");
     this.openai = new OpenAIApi({
       apiKey: process.env.OPENAI_API_KEY,

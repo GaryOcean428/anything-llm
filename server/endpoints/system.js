@@ -67,30 +67,35 @@ function systemEndpoints(app) {
     try {
       // Get server status from boot module
       const serverStatus = getServerStatus();
-      
+
       // Ensure we can access basic server functionality
       const timestamp = new Date().toISOString();
-      
+
       // Set explicit headers for better compatibility with health checkers
-      response.setHeader('Content-Type', 'application/json');
-      response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-      
-      console.log(`[HEALTHCHECK] Ping request received at ${timestamp}, server ready: ${serverStatus.ready}`);
-      
-      response.status(200).json({ 
-        online: true, 
+      response.setHeader("Content-Type", "application/json");
+      response.setHeader(
+        "Cache-Control",
+        "no-cache, no-store, must-revalidate"
+      );
+
+      console.log(
+        `[HEALTHCHECK] Ping request received at ${timestamp}, server ready: ${serverStatus.ready}`
+      );
+
+      response.status(200).json({
+        online: true,
         timestamp,
         status: "operational",
         server: "anything-llm",
         ready: serverStatus.ready,
-        uptime: serverStatus.uptime
+        uptime: serverStatus.uptime,
       });
     } catch (error) {
       console.error("Health check endpoint error:", error);
-      response.status(500).json({ 
-        online: false, 
+      response.status(500).json({
+        online: false,
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   });
