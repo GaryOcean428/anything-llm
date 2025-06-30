@@ -1,3 +1,0 @@
-# Removed nixpacks.toml to prevent conflicts with railway.toml
-# Railway will use railway.toml configuration instead
-# This eliminates build configuration conflicts that were causing Prisma deployment issues
