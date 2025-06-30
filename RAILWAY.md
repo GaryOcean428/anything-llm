@@ -4,13 +4,19 @@ This file contains notes for deploying AnythingLLM on Railway.
 
 ## Configuration
 
-The `railway.toml` file has been configured to:
+The `railway.toml` file has been simplified to:
 
-1. Generate Prisma client during the build phase (not deployment)
-2. Apply database migrations during deployment startup
-3. Install server dependencies during a pre-deploy step
-4. Start the server with the correct port mapping
-5. Use Prisma auto-detection for schema files (no explicit paths needed)
+1. Build frontend and server dependencies using standard Node.js/Yarn workflow
+2. Deploy from the `server` directory context 
+3. Run database migrations during deployment startup
+4. Start the server with proper health checks
+5. Use automatic Prisma client generation via `postinstall` script
+
+**Key Configuration Details:**
+- **Build**: Runs from root directory, installs frontend/server dependencies
+- **Deploy**: Runs from `server` directory where Prisma files are located
+- **Prisma**: Client generation handled automatically by `postinstall` script in `server/package.json`
+- **No Conflicts**: Removed `nixpacks.toml` to prevent configuration conflicts
 
 > **Note**
 
@@ -103,8 +109,15 @@ If you see `Error: Could not load --schema from provided path prisma/schema.pris
 **Solution:**
 - Ensure `server/prisma/schema.prisma` exists and is committed to git
 - **IMPORTANT**: Do not create symlinks from `/prisma` that point to `server/prisma` - Railway doesn't handle symlinks well
-- Verify `railway.toml` has `root = "server"` and uses Prisma auto-detection (no explicit `--schema` flags)
-- Check that the build process generates the Prisma client during build phase, not deployment
-- Ensure the working directory is correct when Prisma commands run
+- Verify `railway.toml` has `root = "server"` and uses simple deployment commands
+- The `server/package.json` includes a `postinstall` script that automatically generates the Prisma client
+- Ensure no conflicting build configurations (e.g., `nixpacks.toml` vs `railway.toml`)
 
-**Note:** As of the fix for issue #66, the repository no longer contains a root-level `prisma` symlink. All Prisma files are located in `server/prisma/` and deployment scripts run from the server directory where the actual files exist.
+**Build Configuration Conflicts:**
+If deployments fail with `ls: cannot access 'prisma/': No such file or directory`:
+- Remove any `nixpacks.toml` file that conflicts with `railway.toml`
+- Use simplified build commands in `railway.toml`
+- Let Railway's standard Node.js build process handle most of the setup
+- The existing `postinstall` script in `server/package.json` will generate the Prisma client automatically
+
+**Note:** As of the fix for issue #70, the repository uses a simplified `railway.toml` configuration without conflicting `nixpacks.toml`. All Prisma files are located in `server/prisma/` and the deployment runs from the server directory where the actual files exist.
