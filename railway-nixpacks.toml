@@ -1,0 +1,18 @@
+# Alternative railway.toml - Fixed Nixpacks approach
+# This version fixes the yarn PATH issue by using npm instead of yarn
+# Use this if you prefer to stick with Nixpacks instead of Docker
+
+[build]
+builder = "nixpacks"
+buildCommand = "cd frontend && npm ci && npm run build && cd .. && cp -R frontend/dist server/public && cd server && npm ci --only=production"
+
+[deploy]
+startCommand = "cd server && npx prisma migrate deploy && node index.js"
+healthcheckPath = "/api/ping"
+healthcheckTimeout = 180
+healthcheckInterval = 10
+restartPolicyType = "on_failure"
+restartPolicyMinDelay = 1000
+
+[deploy.env]
+DATABASE_URL = "${{Postgres.DATABASE_URL}}"

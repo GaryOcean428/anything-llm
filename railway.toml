@@ -1,10 +1,9 @@
 [build]
-builder = "nixpacks"
-buildCommand = "npm install -g yarn && cd frontend && yarn install && yarn build && cd .. && cp -R frontend/dist server/public && cd server && yarn install --production"
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-root = "server"
-startCommand = "npx prisma migrate deploy && node index.js"
+startCommand = "node server/index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10
