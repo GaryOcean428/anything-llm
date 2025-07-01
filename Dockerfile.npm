@@ -1,0 +1,41 @@
+# Railway AnythingLLM Dockerfile - Alternative with npm approach
+# This version uses npm instead of yarn to avoid PATH issues
+
+FROM node:18-slim AS base
+
+# Install system dependencies required for building
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    g++ \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy package files for dependency resolution
+COPY package*.json ./
+COPY frontend/package.json ./frontend/
+COPY server/package.json ./server/
+
+# Copy application source
+COPY . .
+
+# Build frontend using npm (alternative to yarn)
+RUN cd frontend && npm install && npm run build
+
+# Copy built frontend to server public directory
+RUN cp -R frontend/dist server/public
+
+# Install server production dependencies
+RUN cd server && npm install --only=production
+
+# Set production environment
+ENV NODE_ENV=production
+ENV PORT=3001
+
+# Expose port
+EXPOSE 3001
+
+# Start command
+CMD ["node", "server/index.js"]

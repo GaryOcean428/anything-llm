@@ -1,54 +1,42 @@
-# Railway AnythingLLM Dockerfile - Optimized for Railway Deployment
-# Resolves yarn command not found issue by using Node.js 18 Alpine with proper PATH configuration
+# Railway AnythingLLM Dockerfile - Simplified with corepack
+# Uses Node.js built-in corepack to manage yarn
 
-FROM node:18-alpine AS base
+FROM node:18-slim AS base
 
-# Install system dependencies required for building
-RUN apk add --no-cache \
-    python3 \
-    make \
-    g++ \
-    curl \
-    bash \
-    && ln -sf python3 /usr/bin/python
+# Install minimal dependencies for building
+RUN apt-get update && apt-get install -y python3 make g++ && \
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf python3 /usr/bin/python
 
-# Install yarn globally with explicit PATH configuration
-RUN npm install -g yarn@1.22.19
-ENV PATH="/usr/local/bin:$PATH"
-
-# Verify yarn installation
-RUN yarn --version
+# Enable corepack (includes yarn)
+RUN corepack enable
 
 WORKDIR /app
 
-# Copy package files for dependency resolution
-COPY package*.json ./
+# Copy package files
 COPY frontend/package.json frontend/yarn.lock ./frontend/
 COPY server/package.json server/yarn.lock ./server/
 
-# Copy application source
+# Copy all source files
 COPY . .
 
-# Build frontend with separated commands (CRITICAL FIX for Railway)
-RUN cd frontend && yarn install --frozen-lockfile
-RUN cd frontend && yarn build
+# Build frontend
+WORKDIR /app/frontend
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
-# Copy built frontend to server public directory
+# Setup production server
+WORKDIR /app
 RUN cp -R frontend/dist server/public
 
-# Install server production dependencies
-RUN cd server && yarn install --production --frozen-lockfile
+WORKDIR /app/server
+RUN yarn install --production --frozen-lockfile
 
-# Set production environment
+# Set environment
 ENV NODE_ENV=production
 ENV PORT=3001
 
-# Health check endpoint for Railway
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3001/api/ping || exit 1
-
-# Expose port
 EXPOSE 3001
 
-# Start command
-CMD ["node", "server/index.js"]
+# Start server
+CMD ["node", "index.js"]
