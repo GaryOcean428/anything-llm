@@ -1,7 +1,7 @@
 # Railway AnythingLLM Dockerfile - Alternative with npm approach
 # This version uses npm instead of yarn to avoid PATH issues
 
-FROM node:18-slim AS base
+FROM node:20-slim AS base
 
 # Install system dependencies required for building
 RUN apt-get update && apt-get install -y \

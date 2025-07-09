@@ -1,15 +1,15 @@
 # Railway AnythingLLM Dockerfile - Simplified with corepack
 # Uses Node.js built-in corepack to manage yarn
 
-FROM node:18-slim AS base
+FROM node:20-slim AS base
 
 # Install minimal dependencies for building
 RUN apt-get update && apt-get install -y python3 make g++ && \
     rm -rf /var/lib/apt/lists/* && \
     ln -sf python3 /usr/bin/python
 
-# Enable corepack (includes yarn)
-RUN corepack enable
+# Install yarn globally (avoids corepack certificate issues)
+RUN npm install -g yarn
 
 WORKDIR /app
 
