@@ -6,7 +6,7 @@
   "author": "Timothy Carambat (Mintplex Labs)",
   "license": "MIT",
   "engines": {
-    "node": ">=18.12.1"
+    "node": ">=20.18.1"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --ignore documents --ignore vector-cache --ignore storage --ignore swagger --trace-warnings index.js",
