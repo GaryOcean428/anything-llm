@@ -20,11 +20,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
-    # Install Node.js 18.x directly from binary (works around SSL certificate issues)
-    curl -fsSL https://nodejs.org/dist/v18.18.0/node-v18.18.0-linux-arm64.tar.xz --insecure -o node.tar.xz && \
+    # Install Node.js 20.x directly from binary (works around SSL certificate issues)
+    curl -fsSL https://nodejs.org/dist/v20.18.1/node-v20.18.1-linux-arm64.tar.xz --insecure -o node.tar.xz && \
     tar -xf node.tar.xz -C /usr/local --strip-components=1 && \
     rm node.tar.xz && \
-    # Enable corepack which includes yarn (Node.js 18 comes with yarn built-in)
+    # Enable corepack which includes yarn (Node.js 20 comes with yarn built-in)
     corepack enable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -79,11 +79,11 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
         libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 \
         libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release \
         xdg-utils git build-essential ffmpeg && \
-    # Install Node.js 18.x directly from binary (works around SSL certificate issues)
-    curl -fsSL https://nodejs.org/dist/v18.18.0/node-v18.18.0-linux-x64.tar.xz --insecure -o node.tar.xz && \
+    # Install Node.js 20.x directly from binary (works around SSL certificate issues)
+    curl -fsSL https://nodejs.org/dist/v20.18.1/node-v20.18.1-linux-x64.tar.xz --insecure -o node.tar.xz && \
     tar -xf node.tar.xz -C /usr/local --strip-components=1 && \
     rm node.tar.xz && \
-    # Enable corepack which includes yarn (Node.js 18 comes with yarn built-in)
+    # Enable corepack which includes yarn (Node.js 20 comes with yarn built-in)
     corepack enable && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
