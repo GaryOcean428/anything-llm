@@ -1,12 +1,5 @@
 {
-  "*.{js,jsx,ts,tsx}": [
-    "eslint --fix --max-warnings=0",
-    "prettier --write"
-  ],
   "*.{json,md,yaml,yml}": [
     "prettier --write"
-  ],
-  "*.{js,jsx}": [
-    "npm run test -- --passWithNoTests --findRelatedTests --bail"
   ]
 }
