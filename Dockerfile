@@ -24,7 +24,7 @@ COPY . .
 
 # Build frontend with npm
 WORKDIR /app/frontend
-RUN npm ci --legacy-peer-deps
+RUN npm install --legacy-peer-deps
 RUN npm run build
 
 # Setup production server
