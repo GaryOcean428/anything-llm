@@ -133,3 +133,23 @@ If deployment still fails:
 - **Reliability**: Eliminates Python version conflicts that caused original failures
 
 This fix provides a robust, production-ready deployment configuration that resolves the core issues causing Railway deployment failures.
+
+## Recent Fix (January 2025)
+
+### Issue: Cannot find module '/app/server/server/index.js'
+
+**Problem**: Railway deployment was failing with the error `Cannot find module '/app/server/server/index.js'` because of a conflict between:
+- Dockerfile setting WORKDIR to `/app/server` 
+- Railway configuration files specifying `startCommand = "node server/index.js"`
+
+This caused Railway to run `node server/index.js` from the `/app/server` directory, looking for `/app/server/server/index.js` instead of `/app/server/index.js`.
+
+**Solution**: Removed the conflicting `startCommand` from `railway.toml` and `railway.json` to let the Dockerfile's CMD execute correctly:
+- Docker CMD: `node index.js` (runs from WORKDIR `/app/server`)
+- Result: Correctly finds `/app/server/index.js`
+
+**Files Changed**:
+- `railway.toml`: Removed `startCommand = "node server/index.js"`
+- `railway.json`: Removed `"startCommand": "node server/index.js"`
+
+Now Railway uses the Docker CMD which properly executes from the correct working directory.
