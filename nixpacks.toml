@@ -1,0 +1,33 @@
+# nixpacks.toml - Optimized Railway deployment configuration
+# Updated to use Python 3.11 for better Railway compatibility
+
+[variables]
+NIXPACKS_PYTHON_VERSION = "3.11"
+NIXPACKS_NODE_VERSION = "20"
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
+NODE_OPTIONS = "--max-old-space-size=4096"
+
+[providers]
+providers = ["node", "python"]
+
+[phases.setup]
+nixPkgs = ["python311", "python311Packages.pip", "nodejs_20", "yarn", "build-essential"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = [
+    "python3 -m pip install --upgrade pip",
+    "cd frontend && npm ci --legacy-peer-deps",
+    "cd server && npm run install:production"
+]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = [
+    "cd frontend && npm run build",
+    "cp -R frontend/dist server/public"
+]
+
+[start]
+cmd = "cd server && npx prisma migrate deploy && node index.js"

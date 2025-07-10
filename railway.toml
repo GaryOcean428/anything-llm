@@ -12,3 +12,6 @@ restartPolicyMinDelay = 1000
 
 [deploy.env]
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
+NODE_OPTIONS = "--max-old-space-size=4096"
+PYTHONUNBUFFERED = "1"
+PYTHONDONTWRITEBYTECODE = "1"
