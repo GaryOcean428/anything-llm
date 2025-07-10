@@ -1,0 +1,10 @@
+# Python requirements for AnythingLLM Railway deployment
+# These packages support native Node.js module compilation
+
+# Essential packages for native module building
+setuptools>=65.0.0
+wheel>=0.38.0
+pip>=22.0.0
+
+# Common dependencies for Node.js native modules
+# (Most dependencies are in package.json, these support the build process)
