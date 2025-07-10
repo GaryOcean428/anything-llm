@@ -42,11 +42,33 @@ export default [
       ...reactRecommended.rules,
       ...reactHooks.configs.recommended.rules,
       ...ftFlow.recommended,
+      // Basic code quality
       "no-unused-vars": "warn",
       "no-undef": "warn",
       "no-empty": "warn",
       "no-extra-boolean-cast": "warn",
-      "prettier/prettier": "warn"
+      "prettier/prettier": "warn",
+      // Enhanced code quality rules
+      "complexity": ["warn", { max: 10 }],
+      "max-depth": ["warn", { max: 4 }],
+      "max-lines-per-function": ["warn", { max: 50, skipBlankLines: true, skipComments: true }],
+      "max-params": ["warn", { max: 5 }],
+      "no-magic-numbers": ["warn", { ignore: [0, 1, -1, 2], ignoreArrayIndexes: true }],
+      "no-console": "warn",
+      "no-debugger": "error",
+      "no-alert": "warn",
+      "no-eval": "error",
+      "no-implied-eval": "error",
+      "no-script-url": "error",
+      "prefer-const": "warn",
+      "prefer-arrow-callback": "warn",
+      "arrow-body-style": ["warn", "as-needed"],
+      "object-shorthand": "warn",
+      "prefer-template": "warn",
+      "no-var": "warn",
+      "eqeqeq": ["warn", "always"],
+      "curly": ["warn", "all"],
+      "dot-notation": "warn"
     }
   },
   {
@@ -84,7 +106,19 @@ export default [
     rules: {
       ...jsxRuntime.rules,
       "react/prop-types": "off", // FIXME
-      "react-refresh/only-export-components": "warn"
+      "react-refresh/only-export-components": "warn",
+      // React-specific quality rules
+      "react/jsx-no-target-blank": "warn",
+      "react/jsx-no-duplicate-props": "warn",
+      "react/jsx-key": "warn",
+      "react/no-array-index-key": "warn",
+      "react/no-deprecated": "warn",
+      "react/no-unsafe": "warn",
+      "react/prefer-stateless-function": "warn",
+      "react/self-closing-comp": "warn",
+      "react/jsx-boolean-value": ["warn", "never"],
+      "react/jsx-fragments": ["warn", "syntax"],
+      "react/jsx-no-useless-fragment": "warn"
     }
   }
 ]
