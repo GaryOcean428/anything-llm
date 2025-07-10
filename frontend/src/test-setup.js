@@ -1,14 +1,14 @@
-import { expect, afterEach } from 'vitest'
-import { cleanup } from '@testing-library/react'
-import * as matchers from '@testing-library/jest-dom/matchers'
+import { expect, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
 
 // Extend Vitest matchers with Testing Library assertions
-expect.extend(matchers)
+expect.extend(matchers);
 
 // Clean up after each test
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});
 
 // Mock browser APIs
 global.IntersectionObserver = class IntersectionObserver {
@@ -16,17 +16,17 @@ global.IntersectionObserver = class IntersectionObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
-}
+};
 
 global.ResizeObserver = class ResizeObserver {
   constructor() {}
   observe() {}
   unobserve() {}
   disconnect() {}
-}
+};
 
 // Mock localStorage
-Object.defineProperty(window, 'localStorage', {
+Object.defineProperty(window, "localStorage", {
   value: {
     getItem: () => null,
     setItem: () => {},
@@ -34,10 +34,10 @@ Object.defineProperty(window, 'localStorage', {
     clear: () => {},
   },
   writable: true,
-})
+});
 
 // Mock sessionStorage
-Object.defineProperty(window, 'sessionStorage', {
+Object.defineProperty(window, "sessionStorage", {
   value: {
     getItem: () => null,
     setItem: () => {},
@@ -45,4 +45,4 @@ Object.defineProperty(window, 'sessionStorage', {
     clear: () => {},
   },
   writable: true,
-})
+});
