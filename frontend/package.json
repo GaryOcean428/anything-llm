@@ -61,6 +61,8 @@
     "@types/react-dom": "^18.2.8",
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.0.0-beta.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "@vitest/ui": "^2.0.0",
     "autoprefixer": "^10.4.14",
     "buffer": "^6.0.3",
     "cross-env": "^7.0.3",
@@ -81,8 +83,6 @@
     "rollup-plugin-visualizer": "^5.9.0",
     "tailwindcss": "^3.3.1",
     "vite": "^4.3.0",
-    "vitest": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
-    "@vitest/coverage-v8": "^2.0.0"
+    "vitest": "^2.0.0"
   }
 }
