@@ -3,7 +3,6 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "node server/index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10
