@@ -1,0 +1,22 @@
+{
+  "threshold": 50,
+  "minLines": 10,
+  "minTokens": 50,
+  "mode": "strict",
+  "format": ["typescript", "tsx", "javascript", "jsx"],
+  "output": "./reports/duplication",
+  "reporters": ["html", "json", "console"],
+  "ignore": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "coverage/**",
+    "storage/**",
+    "vector-cache/**",
+    "documents/**",
+    "**/*.test.js",
+    "**/*.spec.js",
+    "**/*.config.js"
+  ],
+  "executionId": "duplication-analysis"
+}

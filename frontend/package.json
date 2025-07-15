@@ -7,6 +7,7 @@
     "start": "vite --open",
     "dev": "cross-env NODE_ENV=development vite --debug --host=0.0.0.0",
     "build": "vite build && node scripts/postbuild.js",
+    "analyze": "rollup-plugin-visualizer --open --filename dist/bundle-analysis.html",
     "lint": "yarn prettier --ignore-path ../.prettierignore --write ./src",
     "preview": "vite preview",
     "test": "vitest",
@@ -54,6 +55,7 @@
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
+    "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
