@@ -44,6 +44,25 @@ class AnthropicLLM {
     return "streamGetChatCompletion" in this;
   }
 
+  /**
+   * Get the maximum output tokens for the current model
+   * @returns {number} - Maximum output tokens supported by the model
+   */
+  getMaxOutputTokens() {
+    // Claude 4 Opus supports 32K output tokens
+    if (this.model.includes("claude-4-opus")) {
+      return 32000;
+    }
+    
+    // Claude 3.5 and newer models generally support 8K tokens
+    if (this.model.includes("claude-3-5") || this.model.includes("claude-3-7")) {
+      return 8192;
+    }
+    
+    // Older models default to 4K
+    return 4096;
+  }
+
   static promptWindowLimit(modelName) {
     return MODEL_MAP.get("anthropic", modelName) ?? 100_000;
   }
@@ -107,7 +126,7 @@ class AnthropicLLM {
       const result = await LLMPerformanceMonitor.measureAsyncFunction(
         this.anthropic.messages.create({
           model: this.model,
-          max_tokens: 4096,
+          max_tokens: this.getMaxOutputTokens(),
           system: messages[0].content, // Strip out the system message
           messages: messages.slice(1), // Pop off the system message
           temperature: Number(temperature ?? this.defaultTemp),
@@ -136,7 +155,7 @@ class AnthropicLLM {
     const measuredStreamRequest = await LLMPerformanceMonitor.measureStream(
       this.anthropic.messages.stream({
         model: this.model,
-        max_tokens: 4096,
+        max_tokens: this.getMaxOutputTokens(),
         system: messages[0].content, // Strip out the system message
         messages: messages.slice(1), // Pop off the system message
         temperature: Number(temperature ?? this.defaultTemp),
