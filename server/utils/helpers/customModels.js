@@ -33,6 +33,7 @@ const SUPPORT_CUSTOM_MODELS = [
   "gemini",
   "ppio",
   "dpais",
+  "moonshot",
 ];
 
 async function getCustomModels(provider = "", apiKey = null, basePath = null) {
@@ -84,6 +85,8 @@ async function getCustomModels(provider = "", apiKey = null, basePath = null) {
       return await getPPIOModels(apiKey);
     case "dpais":
       return await getDellProAiStudioModels(basePath);
+    case "moonshot":
+      return await getMoonshotModels(apiKey);
     default:
       return { models: [], error: "Invalid provider for custom models" };
   }
@@ -673,6 +676,61 @@ async function getDellProAiStudioModels(basePath = null) {
       error: "Could not reach Dell Pro Ai Studio from the provided base path",
     };
   }
+}
+
+async function getMoonshotModels(_apiKey = null) {
+  const { OpenAI: OpenAIApi } = require("openai");
+  const apiKey =
+    _apiKey === true
+      ? process.env.MOONSHOT_API_KEY
+      : _apiKey || process.env.MOONSHOT_API_KEY || null;
+  const openai = new OpenAIApi({
+    baseURL: "https://api.moonshot.cn/v1",
+    apiKey,
+  });
+  const models = await openai.models
+    .list()
+    .then((results) => results.data)
+    .then((models) =>
+      models.map((model) => ({
+        id: model.id,
+        name: model.id,
+        organization: model.owned_by || "moonshot",
+      }))
+    )
+    .catch((e) => {
+      console.error(`Moonshot:listModels`, e.message);
+      return [
+        {
+          id: "moonshot-v1-8k",
+          name: "moonshot-v1-8k",
+          organization: "moonshot",
+        },
+        {
+          id: "moonshot-v1-32k",
+          name: "moonshot-v1-32k",
+          organization: "moonshot",
+        },
+        {
+          id: "moonshot-v1-128k",
+          name: "moonshot-v1-128k",
+          organization: "moonshot",
+        },
+        {
+          id: "kimi-k2-base",
+          name: "Kimi K2 Base",
+          organization: "moonshot",
+        },
+        {
+          id: "kimi-k2-instruct",
+          name: "Kimi K2 Instruct",
+          organization: "moonshot",
+        },
+      ];
+    });
+
+  if (models.length > 0 && !!apiKey) process.env.MOONSHOT_API_KEY = apiKey;
+  return { models, error: null };
 }
 
 module.exports = {
