@@ -206,6 +206,9 @@ function getLLMProvider({ provider = null, model = null } = {}) {
     case "dpais":
       const { DellProAiStudioLLM } = require("../AiProviders/dellProAiStudio");
       return new DellProAiStudioLLM(embedder, model);
+    case "moonshot":
+      const { MoonshotLLM } = require("../AiProviders/moonshot");
+      return new MoonshotLLM(embedder, model);
     default:
       throw new Error(
         `ENV: No valid LLM_PROVIDER value found in environment! Using ${process.env.LLM_PROVIDER}`
@@ -353,6 +356,9 @@ function getLLMProviderClass({ provider = null } = {}) {
     case "dpais":
       const { DellProAiStudioLLM } = require("../AiProviders/dellProAiStudio");
       return DellProAiStudioLLM;
+    case "moonshot":
+      const { MoonshotLLM } = require("../AiProviders/moonshot");
+      return MoonshotLLM;
     default:
       return null;
   }
@@ -419,6 +425,8 @@ function getBaseLLMProviderModel({ provider = null } = {}) {
       return process.env.PPIO_API_KEY;
     case "dpais":
       return process.env.DPAIS_LLM_MODEL_PREF;
+    case "moonshot":
+      return process.env.MOONSHOT_MODEL_PREF;
     default:
       return null;
   }
