@@ -107,6 +107,7 @@ const LEGACY_MODEL_MAP = {
   },
   xai: {
     "grok-beta": 131072,
+    "grok-3-beta": 1000000,
   },
   moonshot: {
     "moonshot-v1-8k": 8192,
