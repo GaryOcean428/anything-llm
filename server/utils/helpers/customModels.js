@@ -575,6 +575,12 @@ async function getXAIModels(_apiKey = null) {
           object: "model",
           owned_by: "xai",
         },
+        {
+          created: 1751569200,
+          id: "grok-4",
+          object: "model",
+          owned_by: "xai",
+        },
       ];
     });
 
