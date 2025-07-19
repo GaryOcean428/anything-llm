@@ -107,6 +107,7 @@ const LEGACY_MODEL_MAP = {
   },
   xai: {
     "grok-beta": 131072,
+    "grok-3-mini-beta": 131072,
   },
 };
 module.exports = LEGACY_MODEL_MAP;
