@@ -31,7 +31,7 @@ const PROVIDER_DEFAULT_MODELS = {
   textgenwebui: [],
   "generic-openai": [],
   bedrock: [],
-  xai: ["grok-beta"],
+  xai: ["grok-beta", "grok-3-beta"],
 };
 
 // For providers with large model lists (e.g. togetherAi) - we subgroup the options
