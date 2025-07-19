@@ -7,7 +7,7 @@
 }
 
 :root {
-  /* Deep Blue Neon Theme Color Scheme */
+  /* Deep Blue Neon Theme Color Scheme - Dark Mode (Default) */
   --chat--color-primary: #00BFFF;           /* Electric Blue */
   --chat--color-primary-shade-50: #1C3F5D;  /* Deep Steel-Blue (User Bubble) */
   --chat--color-primary-shade-100: #102B40; /* Dark Navy-Blue (System Bubble) */
@@ -22,7 +22,7 @@
   --chat--color-disabled: #777980;
   --chat--color-typing: #404040;
 
-  /* Default theme - Updated to use Deep Blue Neon colors */
+  /* Dark Mode Theme - Deep Blue Neon */
   --theme-loader: #D3E2F4;
   --theme-bg-primary: #0A1B2A;
   --theme-bg-secondary: #142C44;
@@ -78,6 +78,7 @@
   --theme-home-button-primary-hover: rgba(0, 191, 255, 0.8);
   --theme-home-button-secondary: #1C3F5D;
   --theme-home-button-secondary-hover: rgba(0, 191, 255, 0.2);
+
   --theme-home-button-secondary-text: #D3E2F4;
   --theme-home-button-secondary-hover-text: #00BFFF;
   --theme-home-update-card-bg: #142C44;
@@ -121,6 +122,21 @@
 
 [data-theme="light"] {
   /* Light theme adaptation of Deep Blue Neon */
+  /* Chat widget specific variables for light mode */
+  --chat--color-primary: #00BFFF;           /* Electric Blue */
+  --chat--color-primary-shade-50: #D3E2F4;  /* Light Steel-Blue (User Bubble) */
+  --chat--color-primary-shade-100: #89CFF0; /* Light Navy-Blue (System Bubble) */
+  --chat--color-secondary: #1C3F5D;         /* Deep Blue for contrast */
+  --chat--color-secondary-shade-50: #00BFFF;/* Electric Blue accent */
+  --chat--color-white: #0A1B2A;             /* Dark text on light */
+  --chat--color-light: #1C3F5D;             /* Dark blue text */
+  --chat--color-light-shade-50: #ffffff;    /* Pure white panels */
+  --chat--color-light-shade-100: #D3E2F4;   /* Light background */
+  --chat--color-medium: #89CFF0;
+  --chat--color-dark: #D3E2F4;
+  --chat--color-disabled: #89CFF0;
+  --chat--color-typing: #1C3F5D;
+
   --theme-loader: #0A1B2A;
   --theme-bg-primary: #D3E2F4;
   --theme-bg-secondary: #D3E2F4;
@@ -349,6 +365,34 @@ a {
 }
 
 @media (prefers-color-scheme: light) {
+  :root {
+    /* Automatically apply light mode Deep Blue Neon theme */
+    --chat--color-primary: #00BFFF;
+    --chat--color-primary-shade-50: #D3E2F4;
+    --chat--color-primary-shade-100: #89CFF0;
+    --chat--color-secondary: #1C3F5D;
+    --chat--color-secondary-shade-50: #00BFFF;
+    --chat--color-white: #0A1B2A;
+    --chat--color-light: #1C3F5D;
+    --chat--color-light-shade-50: #ffffff;
+    --chat--color-light-shade-100: #D3E2F4;
+    --chat--color-medium: #89CFF0;
+    --chat--color-dark: #D3E2F4;
+    --chat--color-disabled: #89CFF0;
+    --chat--color-typing: #1C3F5D;
+
+    --theme-loader: #0A1B2A;
+    --theme-bg-primary: #D3E2F4;
+    --theme-bg-secondary: #D3E2F4;
+    --theme-bg-sidebar: #89CFF0;
+    --theme-bg-container: #ffffff;
+    --theme-bg-chat: #D3E2F4;
+    --theme-bg-chat-input: #ffffff;
+    --theme-text-primary: #0A1B2A;
+    --theme-text-secondary: #1C3F5D;
+    --theme-popup-menu-bg: #89CFF0;
+  }
+
   .sidebar-items:after {
     content: " ";
     position: absolute;
@@ -362,6 +406,34 @@ a {
 }
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    /* Ensure dark mode Deep Blue Neon theme is applied */
+    --chat--color-primary: #00BFFF;
+    --chat--color-primary-shade-50: #1C3F5D;
+    --chat--color-primary-shade-100: #102B40;
+    --chat--color-secondary: #39FF14;
+    --chat--color-secondary-shade-50: #EEFF00;
+    --chat--color-white: #D3E2F4;
+    --chat--color-light: #89CFF0;
+    --chat--color-light-shade-50: #142C44;
+    --chat--color-light-shade-100: #0A1B2A;
+    --chat--color-medium: #1C3F5D;
+    --chat--color-dark: #0A1B2A;
+    --chat--color-disabled: #777980;
+    --chat--color-typing: #404040;
+
+    --theme-loader: #D3E2F4;
+    --theme-bg-primary: #0A1B2A;
+    --theme-bg-secondary: #142C44;
+    --theme-bg-sidebar: #0A1B2A;
+    --theme-bg-container: #0A1B2A;
+    --theme-bg-chat: #142C44;
+    --theme-bg-chat-input: #1C3F5D;
+    --theme-text-primary: #D3E2F4;
+    --theme-text-secondary: #89CFF0;
+    --theme-popup-menu-bg: #0A1B2A;
+  }
+
   .sidebar-items:after {
     content: " ";
     position: absolute;
@@ -378,8 +450,8 @@ a {
   .fade-up-border {
     background: linear-gradient(
       to bottom,
-      rgba(220, 221, 223, 10%),
-      rgb(220, 221, 223) 89%
+      rgba(211, 226, 244, 10%),
+      rgb(211, 226, 244) 89%
     );
   }
 }
@@ -388,8 +460,8 @@ a {
   .fade-up-border {
     background: linear-gradient(
       to bottom,
-      rgba(41, 37, 36, 50%),
-      rgb(41 37 36) 90%
+      rgba(10, 27, 42, 50%),
+      rgb(10, 27, 42) 90%
     );
   }
 }
