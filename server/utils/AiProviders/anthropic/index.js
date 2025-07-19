@@ -57,6 +57,28 @@ class AnthropicLLM {
   }
 
   /**
+   * Get the maximum output tokens for a given model
+   * @param {string} modelName - The model name
+   * @returns {number} - The maximum output tokens for the model
+   */
+  static getMaxOutputTokens(modelName) {
+    // Claude 3.5 Haiku supports up to 8,192 output tokens
+    if (modelName === "claude-3-5-haiku-20241022" || modelName === "claude-3-5-haiku-latest") {
+      return 8192;
+    }
+    // Other Claude models use the default 4096 tokens
+    return 4096;
+  }
+
+  /**
+   * Get the maximum output tokens for the current model instance
+   * @returns {number} - The maximum output tokens for the current model
+   */
+  getMaxOutputTokens() {
+    return AnthropicLLM.getMaxOutputTokens(this.model);
+  }
+
+  /**
    * Generates appropriate content array for a message + attachments.
    * @param {{userPrompt:string, attachments: import("../../helpers").Attachment[]}}
    * @returns {string|object[]}
@@ -107,7 +129,7 @@ class AnthropicLLM {
       const result = await LLMPerformanceMonitor.measureAsyncFunction(
         this.anthropic.messages.create({
           model: this.model,
-          max_tokens: 4096,
+          max_tokens: this.getMaxOutputTokens(),
           system: messages[0].content, // Strip out the system message
           messages: messages.slice(1), // Pop off the system message
           temperature: Number(temperature ?? this.defaultTemp),
@@ -136,7 +158,7 @@ class AnthropicLLM {
     const measuredStreamRequest = await LLMPerformanceMonitor.measureStream(
       this.anthropic.messages.stream({
         model: this.model,
-        max_tokens: 4096,
+        max_tokens: this.getMaxOutputTokens(),
         system: messages[0].content, // Strip out the system message
         messages: messages.slice(1), // Pop off the system message
         temperature: Number(temperature ?? this.defaultTemp),
