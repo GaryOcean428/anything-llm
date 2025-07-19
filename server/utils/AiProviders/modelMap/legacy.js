@@ -109,5 +109,12 @@ const LEGACY_MODEL_MAP = {
     "grok-beta": 131072,
     "grok-3-beta": 1000000,
   },
+  moonshot: {
+    "moonshot-v1-8k": 8192,
+    "moonshot-v1-32k": 32768,
+    "moonshot-v1-128k": 131072,
+    "kimi-k2-base": 131072,
+    "kimi-k2-instruct": 131072,
+  },
 };
 module.exports = LEGACY_MODEL_MAP;
