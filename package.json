@@ -19,6 +19,8 @@
     "lint:fix": "echo 'Fixing lint issues...' && cd frontend && yarn lint",
     "quality:check": "npm run lint && npm run test && npm run test:frontend",
     "quality:check:ci": "npm run lint && npm run test -- --reporter=junit --outputFile.junit=./test-results.xml && npm run test:frontend -- --reporter=junit --outputFile.junit=./frontend/test-results.xml",
+    "analyze:duplication": "npx jscpd --config .jscpd.json frontend/src server",
+    "analyze:bundle": "cd frontend && npm run build && npm run analyze",
     "prepare": "husky",
     "setup": "cd server && yarn && cd ../collector && yarn && cd ../frontend && yarn && cd .. && yarn setup:envs && yarn prisma:setup && echo \"Please run yarn dev:server, yarn dev:collector, and yarn dev:frontend in separate terminal tabs.\"",
     "setup:envs": "cp -n ./frontend/.env.example ./frontend/.env && cp -n ./server/.env.example ./server/.env.development && cp -n ./collector/.env.example ./collector/.env && cp -n ./docker/.env.example ./docker/.env && echo \"All ENV files copied!\n\"",
@@ -39,13 +41,29 @@
     "normalize:translations": "cd frontend/src/locales && node normalizeEn.mjs && cd ../../.. && yarn lint && yarn verify:translations",
     "monitor:performance": "node scripts/performance-monitor.js"
   },
+  "bundlesize": [
+    {
+      "path": "./frontend/dist/assets/*.js",
+      "maxSize": "500kb",
+      "compression": "gzip"
+    },
+    {
+      "path": "./frontend/dist/assets/*.css",
+      "maxSize": "50kb",
+      "compression": "gzip"
+    }
+  ],
   "private": false,
   "devDependencies": {
-    "concurrently": "^9.1.2",
-    "vitest": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
     "@vitest/coverage-v8": "^2.0.0",
+    "@vitest/ui": "^2.0.0",
+    "bundlesize": "^0.18.2",
+    "concurrently": "^9.1.2",
     "husky": "^9.0.0",
-    "lint-staged": "^15.0.0"
+    "jscpd": "^4.0.5",
+    "lint-staged": "^15.0.0",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "vitest": "^2.0.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

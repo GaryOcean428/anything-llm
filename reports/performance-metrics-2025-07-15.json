@@ -1,0 +1,615 @@
+{
+  "timestamp": "2025-07-15T13:07:12.638Z",
+  "system": {
+    "node_version": "v20.19.3",
+    "memory_usage": {
+      "rss": 47366144,
+      "heapTotal": 4956160,
+      "heapUsed": 4509904,
+      "external": 1798433,
+      "arrayBuffers": 22887
+    },
+    "uptime": 0.046020917,
+    "platform": "linux",
+    "arch": "x64"
+  },
+  "codebase": {
+    "file_counts": {
+      "javascript": 14947,
+      "typescript": 8284,
+      "react_jsx": 340,
+      "react_tsx": 72
+    },
+    "line_counts": {
+      "total": "125297"
+    },
+    "size_analysis": {
+      "repository_size": "850M",
+      "node_modules_size": "103M"
+    }
+  },
+  "testing": {
+    "has_tests": true,
+    "test_files": 9,
+    "coverage_threshold": "configured"
+  },
+  "dependencies": {
+    "total": 10,
+    "production": 0,
+    "development": 10,
+    "outdated": [],
+    "vulnerabilities": {
+      "total": "unknown",
+      "note": "Could not run audit"
+    }
+  },
+  "bundle": {
+    "frontend_built": true,
+    "assets": {
+      "Browser-5909f9d2.js": {
+        "size": 2039,
+        "size_formatted": "1.99 KB"
+      },
+      "CaretLeft-399c9685.js": {
+        "size": 1705,
+        "size_formatted": "1.67 KB"
+      },
+      "Check-d976405b.js": {
+        "size": 1936,
+        "size_formatted": "1.89 KB"
+      },
+      "Copy-25014848.js": {
+        "size": 2190,
+        "size_formatted": "2.14 KB"
+      },
+      "DotsThreeVertical-68ac8e38.js": {
+        "size": 2073,
+        "size_formatted": "2.02 KB"
+      },
+      "Download-4a1f91eb.js": {
+        "size": 3220,
+        "size_formatted": "3.14 KB"
+      },
+      "EnvelopeSimple-1de4a1b5.js": {
+        "size": 2230,
+        "size_formatted": "2.18 KB"
+      },
+      "Eye-9a8e7b18.js": {
+        "size": 4593,
+        "size_formatted": "4.49 KB"
+      },
+      "File-e6bca566.js": {
+        "size": 2311,
+        "size_formatted": "2.26 KB"
+      },
+      "Gauge-a83fa204.js": {
+        "size": 3801,
+        "size_formatted": "3.71 KB"
+      },
+      "Plug-904f1ecd.js": {
+        "size": 3608,
+        "size_formatted": "3.52 KB"
+      },
+      "PlusCircle-7facbe5a.js": {
+        "size": 2376,
+        "size_formatted": "2.32 KB"
+      },
+      "Warning-2ee5f3a9.js": {
+        "size": 3731,
+        "size_formatted": "3.64 KB"
+      },
+      "WarningOctagon-18e6bf55.js": {
+        "size": 4342,
+        "size_formatted": "4.24 KB"
+      },
+      "_commonjs-dynamic-modules-302442b1.js": {
+        "size": 239,
+        "size_formatted": "239 Bytes"
+      },
+      "admin-ed8a099a.js": {
+        "size": 3511,
+        "size_formatted": "3.43 KB"
+      },
+      "agentFlows-1f4d068f.js": {
+        "size": 1398,
+        "size_formatted": "1.37 KB"
+      },
+      "communityHub-7a68434e.js": {
+        "size": 1729,
+        "size_formatted": "1.69 KB"
+      },
+      "github-8c9c0591.js": {
+        "size": 957533,
+        "size_formatted": "935.09 KB"
+      },
+      "index-00177b4c.js": {
+        "size": 9021,
+        "size_formatted": "8.81 KB"
+      },
+      "index-0a2e24e3.js": {
+        "size": 9362,
+        "size_formatted": "9.14 KB"
+      },
+      "index-0cc2b63a.js": {
+        "size": 72339,
+        "size_formatted": "70.64 KB"
+      },
+      "index-1747f5c8.js": {
+        "size": 5043,
+        "size_formatted": "4.92 KB"
+      },
+      "index-2b4a85d4.js": {
+        "size": 19891,
+        "size_formatted": "19.42 KB"
+      },
+      "index-2c8669bf.js": {
+        "size": 1242,
+        "size_formatted": "1.21 KB"
+      },
+      "index-3d529e68.js": {
+        "size": 9275,
+        "size_formatted": "9.06 KB"
+      },
+      "index-42993053.js": {
+        "size": 269827,
+        "size_formatted": "263.5 KB"
+      },
+      "index-44bf2282.js": {
+        "size": 1520,
+        "size_formatted": "1.48 KB"
+      },
+      "index-46a11ee2.js": {
+        "size": 9476,
+        "size_formatted": "9.25 KB"
+      },
+      "index-49612bee.js": {
+        "size": 114936,
+        "size_formatted": "112.24 KB"
+      },
+      "index-4fb4d421.js": {
+        "size": 2695,
+        "size_formatted": "2.63 KB"
+      },
+      "index-553ed780.js": {
+        "size": 12482,
+        "size_formatted": "12.19 KB"
+      },
+      "index-587650e9.js": {
+        "size": 1410,
+        "size_formatted": "1.38 KB"
+      },
+      "index-60cc80e3.js": {
+        "size": 23208,
+        "size_formatted": "22.66 KB"
+      },
+      "index-633d279c.js": {
+        "size": 6224,
+        "size_formatted": "6.08 KB"
+      },
+      "index-6d95857e.js": {
+        "size": 5740,
+        "size_formatted": "5.61 KB"
+      },
+      "index-6fac155a.js": {
+        "size": 21240,
+        "size_formatted": "20.74 KB"
+      },
+      "index-7aa7c429.js": {
+        "size": 12230,
+        "size_formatted": "11.94 KB"
+      },
+      "index-7b05e59b.js": {
+        "size": 18893,
+        "size_formatted": "18.45 KB"
+      },
+      "index-7bc15844.js": {
+        "size": 4721,
+        "size_formatted": "4.61 KB"
+      },
+      "index-7c905261.js": {
+        "size": 4828,
+        "size_formatted": "4.71 KB"
+      },
+      "index-7d0c23ac.js": {
+        "size": 8054,
+        "size_formatted": "7.87 KB"
+      },
+      "index-7e578027.js": {
+        "size": 47621,
+        "size_formatted": "46.5 KB"
+      },
+      "index-7eb4a7ed.js": {
+        "size": 987,
+        "size_formatted": "987 Bytes"
+      },
+      "index-83260c80.js": {
+        "size": 7683,
+        "size_formatted": "7.5 KB"
+      },
+      "index-980efda7.js": {
+        "size": 5970,
+        "size_formatted": "5.83 KB"
+      },
+      "index-a5847992.js": {
+        "size": 42385,
+        "size_formatted": "41.39 KB"
+      },
+      "index-a5a8e41d.js": {
+        "size": 1202117,
+        "size_formatted": "1.15 MB"
+      },
+      "index-aa7f2eb9.js": {
+        "size": 3629,
+        "size_formatted": "3.54 KB"
+      },
+      "index-b542d8eb.js": {
+        "size": 523,
+        "size_formatted": "523 Bytes"
+      },
+      "index-bb2eadf3.js": {
+        "size": 8270,
+        "size_formatted": "8.08 KB"
+      },
+      "index-c839742b.js": {
+        "size": 4007,
+        "size_formatted": "3.91 KB"
+      },
+      "index-d5372365.js": {
+        "size": 8919,
+        "size_formatted": "8.71 KB"
+      },
+      "index-da708633.js": {
+        "size": 20942,
+        "size_formatted": "20.45 KB"
+      },
+      "index-dacac271.js": {
+        "size": 39201,
+        "size_formatted": "38.28 KB"
+      },
+      "index-dc7de251.js": {
+        "size": 15985,
+        "size_formatted": "15.61 KB"
+      },
+      "index-e8d70e43.js": {
+        "size": 1925,
+        "size_formatted": "1.88 KB"
+      },
+      "index-ea7c06f7.js": {
+        "size": 86876,
+        "size_formatted": "84.84 KB"
+      },
+      "index-f600c4bb.js": {
+        "size": 6553,
+        "size_formatted": "6.4 KB"
+      },
+      "moment-9ccd106d.js": {
+        "size": 60888,
+        "size_formatted": "59.46 KB"
+      },
+      "numbers-3998afe1.js": {
+        "size": 903,
+        "size_formatted": "903 Bytes"
+      },
+      "ort.min-faca3c2b.js": {
+        "size": 538550,
+        "size_formatted": "525.93 KB"
+      },
+      "piper-o91UDS6e-0c78e94e.js": {
+        "size": 89311,
+        "size_formatted": "87.22 KB"
+      },
+      "pluralize-dacb604d.js": {
+        "size": 5865,
+        "size_formatted": "5.73 KB"
+      },
+      "purify-d2131574.js": {
+        "size": 319958,
+        "size_formatted": "312.46 KB"
+      },
+      "truncate-355a114a.js": {
+        "size": 718,
+        "size_formatted": "718 Bytes"
+      },
+      "types-7967d449.js": {
+        "size": 5232,
+        "size_formatted": "5.11 KB"
+      },
+      "useChatMessageAlignment-8c608757.js": {
+        "size": 361,
+        "size_formatted": "361 Bytes"
+      },
+      "voices_static-D_OtJDHM-5cdb0950.js": {
+        "size": 96828,
+        "size_formatted": "94.56 KB"
+      },
+      "worker-8f433525.js": {
+        "size": 14943,
+        "size_formatted": "14.59 KB"
+      }
+    },
+    "total_size": 4285372,
+    "gzip_estimated": {
+      "Browser-5909f9d2.js": {
+        "size": 612,
+        "size_formatted": "612 Bytes"
+      },
+      "CaretLeft-399c9685.js": {
+        "size": 512,
+        "size_formatted": "512 Bytes"
+      },
+      "Check-d976405b.js": {
+        "size": 581,
+        "size_formatted": "581 Bytes"
+      },
+      "Copy-25014848.js": {
+        "size": 657,
+        "size_formatted": "657 Bytes"
+      },
+      "DotsThreeVertical-68ac8e38.js": {
+        "size": 622,
+        "size_formatted": "622 Bytes"
+      },
+      "Download-4a1f91eb.js": {
+        "size": 966,
+        "size_formatted": "966 Bytes"
+      },
+      "EnvelopeSimple-1de4a1b5.js": {
+        "size": 669,
+        "size_formatted": "669 Bytes"
+      },
+      "Eye-9a8e7b18.js": {
+        "size": 1378,
+        "size_formatted": "1.35 KB"
+      },
+      "File-e6bca566.js": {
+        "size": 693,
+        "size_formatted": "693 Bytes"
+      },
+      "Gauge-a83fa204.js": {
+        "size": 1140,
+        "size_formatted": "1.11 KB"
+      },
+      "Plug-904f1ecd.js": {
+        "size": 1082,
+        "size_formatted": "1.06 KB"
+      },
+      "PlusCircle-7facbe5a.js": {
+        "size": 713,
+        "size_formatted": "713 Bytes"
+      },
+      "Warning-2ee5f3a9.js": {
+        "size": 1119,
+        "size_formatted": "1.09 KB"
+      },
+      "WarningOctagon-18e6bf55.js": {
+        "size": 1303,
+        "size_formatted": "1.27 KB"
+      },
+      "_commonjs-dynamic-modules-302442b1.js": {
+        "size": 72,
+        "size_formatted": "72 Bytes"
+      },
+      "admin-ed8a099a.js": {
+        "size": 1053,
+        "size_formatted": "1.03 KB"
+      },
+      "agentFlows-1f4d068f.js": {
+        "size": 419,
+        "size_formatted": "419 Bytes"
+      },
+      "communityHub-7a68434e.js": {
+        "size": 519,
+        "size_formatted": "519 Bytes"
+      },
+      "github-8c9c0591.js": {
+        "size": 287260,
+        "size_formatted": "280.53 KB"
+      },
+      "index-00177b4c.js": {
+        "size": 2706,
+        "size_formatted": "2.64 KB"
+      },
+      "index-0a2e24e3.js": {
+        "size": 2809,
+        "size_formatted": "2.74 KB"
+      },
+      "index-0cc2b63a.js": {
+        "size": 21702,
+        "size_formatted": "21.19 KB"
+      },
+      "index-1747f5c8.js": {
+        "size": 1513,
+        "size_formatted": "1.48 KB"
+      },
+      "index-2b4a85d4.js": {
+        "size": 5967,
+        "size_formatted": "5.83 KB"
+      },
+      "index-2c8669bf.js": {
+        "size": 373,
+        "size_formatted": "373 Bytes"
+      },
+      "index-3d529e68.js": {
+        "size": 2783,
+        "size_formatted": "2.72 KB"
+      },
+      "index-42993053.js": {
+        "size": 80948,
+        "size_formatted": "79.05 KB"
+      },
+      "index-44bf2282.js": {
+        "size": 456,
+        "size_formatted": "456 Bytes"
+      },
+      "index-46a11ee2.js": {
+        "size": 2843,
+        "size_formatted": "2.78 KB"
+      },
+      "index-49612bee.js": {
+        "size": 34481,
+        "size_formatted": "33.67 KB"
+      },
+      "index-4fb4d421.js": {
+        "size": 809,
+        "size_formatted": "809 Bytes"
+      },
+      "index-553ed780.js": {
+        "size": 3745,
+        "size_formatted": "3.66 KB"
+      },
+      "index-587650e9.js": {
+        "size": 423,
+        "size_formatted": "423 Bytes"
+      },
+      "index-60cc80e3.js": {
+        "size": 6962,
+        "size_formatted": "6.8 KB"
+      },
+      "index-633d279c.js": {
+        "size": 1867,
+        "size_formatted": "1.82 KB"
+      },
+      "index-6d95857e.js": {
+        "size": 1722,
+        "size_formatted": "1.68 KB"
+      },
+      "index-6fac155a.js": {
+        "size": 6372,
+        "size_formatted": "6.22 KB"
+      },
+      "index-7aa7c429.js": {
+        "size": 3669,
+        "size_formatted": "3.58 KB"
+      },
+      "index-7b05e59b.js": {
+        "size": 5668,
+        "size_formatted": "5.54 KB"
+      },
+      "index-7bc15844.js": {
+        "size": 1416,
+        "size_formatted": "1.38 KB"
+      },
+      "index-7c905261.js": {
+        "size": 1448,
+        "size_formatted": "1.41 KB"
+      },
+      "index-7d0c23ac.js": {
+        "size": 2416,
+        "size_formatted": "2.36 KB"
+      },
+      "index-7e578027.js": {
+        "size": 14286,
+        "size_formatted": "13.95 KB"
+      },
+      "index-7eb4a7ed.js": {
+        "size": 296,
+        "size_formatted": "296 Bytes"
+      },
+      "index-83260c80.js": {
+        "size": 2305,
+        "size_formatted": "2.25 KB"
+      },
+      "index-980efda7.js": {
+        "size": 1791,
+        "size_formatted": "1.75 KB"
+      },
+      "index-a5847992.js": {
+        "size": 12716,
+        "size_formatted": "12.42 KB"
+      },
+      "index-a5a8e41d.js": {
+        "size": 360635,
+        "size_formatted": "352.18 KB"
+      },
+      "index-aa7f2eb9.js": {
+        "size": 1089,
+        "size_formatted": "1.06 KB"
+      },
+      "index-b542d8eb.js": {
+        "size": 157,
+        "size_formatted": "157 Bytes"
+      },
+      "index-bb2eadf3.js": {
+        "size": 2481,
+        "size_formatted": "2.42 KB"
+      },
+      "index-c839742b.js": {
+        "size": 1202,
+        "size_formatted": "1.17 KB"
+      },
+      "index-d5372365.js": {
+        "size": 2676,
+        "size_formatted": "2.61 KB"
+      },
+      "index-da708633.js": {
+        "size": 6283,
+        "size_formatted": "6.14 KB"
+      },
+      "index-dacac271.js": {
+        "size": 11760,
+        "size_formatted": "11.48 KB"
+      },
+      "index-dc7de251.js": {
+        "size": 4796,
+        "size_formatted": "4.68 KB"
+      },
+      "index-e8d70e43.js": {
+        "size": 578,
+        "size_formatted": "578 Bytes"
+      },
+      "index-ea7c06f7.js": {
+        "size": 26063,
+        "size_formatted": "25.45 KB"
+      },
+      "index-f600c4bb.js": {
+        "size": 1966,
+        "size_formatted": "1.92 KB"
+      },
+      "moment-9ccd106d.js": {
+        "size": 18266,
+        "size_formatted": "17.84 KB"
+      },
+      "numbers-3998afe1.js": {
+        "size": 271,
+        "size_formatted": "271 Bytes"
+      },
+      "ort.min-faca3c2b.js": {
+        "size": 161565,
+        "size_formatted": "157.78 KB"
+      },
+      "piper-o91UDS6e-0c78e94e.js": {
+        "size": 26793,
+        "size_formatted": "26.17 KB"
+      },
+      "pluralize-dacb604d.js": {
+        "size": 1760,
+        "size_formatted": "1.72 KB"
+      },
+      "purify-d2131574.js": {
+        "size": 95987,
+        "size_formatted": "93.74 KB"
+      },
+      "truncate-355a114a.js": {
+        "size": 215,
+        "size_formatted": "215 Bytes"
+      },
+      "types-7967d449.js": {
+        "size": 1570,
+        "size_formatted": "1.53 KB"
+      },
+      "useChatMessageAlignment-8c608757.js": {
+        "size": 108,
+        "size_formatted": "108 Bytes"
+      },
+      "voices_static-D_OtJDHM-5cdb0950.js": {
+        "size": 29048,
+        "size_formatted": "28.37 KB"
+      },
+      "worker-8f433525.js": {
+        "size": 4483,
+        "size_formatted": "4.38 KB"
+      }
+    },
+    "has_analysis_report": false
+  }
+}
