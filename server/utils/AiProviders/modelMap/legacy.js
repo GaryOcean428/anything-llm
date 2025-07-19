@@ -14,6 +14,7 @@ const LEGACY_MODEL_MAP = {
     "claude-3-5-sonnet-20240620": 200000,
     "claude-3-7-sonnet-20250219": 200000,
     "claude-3-7-sonnet-latest": 200000,
+    "claude-4-sonnet-20250514": 200000,
   },
   cohere: {
     "command-r": 128000,

@@ -24,7 +24,7 @@ class AnthropicLLM {
     this.model =
       modelPreference ||
       process.env.ANTHROPIC_MODEL_PREF ||
-      "claude-3-5-sonnet-20241022";
+      "claude-4-sonnet-20250514";
     this.limits = {
       history: this.promptWindowLimit() * 0.15,
       system: this.promptWindowLimit() * 0.15,
@@ -50,6 +50,22 @@ class AnthropicLLM {
 
   promptWindowLimit() {
     return MODEL_MAP.get("anthropic", this.model) ?? 100_000;
+  }
+
+  /**
+   * Determines the maximum output tokens for a model.
+   * Claude 4 models support 64K output tokens, others default to 4096.
+   * @param {string} modelName - The model name
+   * @returns {number} - The maximum output tokens
+   */
+  getMaxOutputTokens(modelName = null) {
+    const model = modelName || this.model;
+    // Claude 4 models support 64K output tokens
+    if (model.includes("claude-4")) {
+      return 64000;
+    }
+    // Default for other models
+    return 4096;
   }
 
   isValidChatCompletionModel(_modelName = "") {
@@ -107,7 +123,7 @@ class AnthropicLLM {
       const result = await LLMPerformanceMonitor.measureAsyncFunction(
         this.anthropic.messages.create({
           model: this.model,
-          max_tokens: 4096,
+          max_tokens: this.getMaxOutputTokens(),
           system: messages[0].content, // Strip out the system message
           messages: messages.slice(1), // Pop off the system message
           temperature: Number(temperature ?? this.defaultTemp),
@@ -136,7 +152,7 @@ class AnthropicLLM {
     const measuredStreamRequest = await LLMPerformanceMonitor.measureStream(
       this.anthropic.messages.stream({
         model: this.model,
-        max_tokens: 4096,
+        max_tokens: this.getMaxOutputTokens(),
         system: messages[0].content, // Strip out the system message
         messages: messages.slice(1), // Pop off the system message
         temperature: Number(temperature ?? this.defaultTemp),
