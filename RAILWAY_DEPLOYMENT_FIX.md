@@ -136,6 +136,29 @@ This fix provides a robust, production-ready deployment configuration that resol
 
 ## Recent Fix (January 2025)
 
+### Issue: Prisma P3005 Migration Error
+
+**Problem**: Railway deployment was failing with Prisma error P3005 - "The database schema is not empty. Read more about how to baseline an existing production database". This occurs when:
+- PostgreSQL database has existing tables from previous deployments
+- `_prisma_migrations` table is missing or incomplete migration history
+- Prisma refuses to apply migrations without proper baseline
+
+**Solution**: Added automatic P3005 error detection and resolution:
+- New migration script `server/scripts/migrate-deploy.js` automatically detects P3005 errors
+- Baselines existing migrations using `prisma migrate resolve --applied`
+- Retries migration deployment after baselining
+- Provides detailed logging and troubleshooting guidance
+
+**Files Changed**:
+- `Dockerfile`: Updated to use new migration script
+- `nixpacks.toml`: Updated startup command
+- `railway-nixpacks.toml`: Updated startup command
+- Added `server/scripts/migrate-deploy.js`: Robust migration deployment script
+- Added `server/scripts/manual-baseline.js`: Manual baseline tool for edge cases
+- Added `PRISMA_P3005_FIX.md`: Comprehensive documentation
+
+This fix preserves existing data while ensuring migrations work correctly on Railway.
+
 ### Issue: Cannot find module '/app/server/server/index.js'
 
 **Problem**: Railway deployment was failing with the error `Cannot find module '/app/server/server/index.js'` because of a conflict between:

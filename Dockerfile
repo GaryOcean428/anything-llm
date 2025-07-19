@@ -41,5 +41,5 @@ ENV NODE_OPTIONS=--max-old-space-size=4096
 
 EXPOSE 3001
 
-# Start server with migration
-CMD ["sh", "-c", "npx prisma migrate deploy && node index.js"]
+# Start server with robust migration handling
+CMD ["sh", "-c", "node scripts/migrate-deploy.js && node index.js"]
