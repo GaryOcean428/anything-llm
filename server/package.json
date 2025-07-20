@@ -16,7 +16,14 @@
     "swagger": "node ./swagger/init.js",
     "postinstall": "npx prisma generate",
     "migrate:deploy": "node scripts/migrate-deploy.js",
-    "migrate:baseline": "node scripts/manual-baseline.js"
+    "migrate:baseline": "node scripts/manual-baseline.js",
+    "migrate:check": "npx prisma migrate status",
+    "migrate:fix": "npx prisma migrate resolve --applied 20250720073934_init",
+    "migrate:recovery": "node scripts/migration-recovery.js",
+    "migrate:recovery:quick": "node scripts/migration-recovery.js --quick",
+    "deploy:safe": "npm run migrate:check && npx prisma migrate deploy",
+    "health:check": "node startup-checks.js",
+    "health:startup": "node startup-checks.js"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
