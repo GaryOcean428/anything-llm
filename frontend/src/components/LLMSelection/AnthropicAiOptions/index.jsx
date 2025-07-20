@@ -43,7 +43,7 @@ const DEFAULT_MODELS = [
   {
     id: "claude-4-sonnet-20250514",
     name: "Claude 4 Sonnet",
-  }
+  },
   {
     id: "claude-4-opus-20250514",
     name: "Claude 4 Opus",
