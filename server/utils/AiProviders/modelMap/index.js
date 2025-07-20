@@ -18,6 +18,7 @@ class ContextWindowFinder {
     groq: "groq",
     xai: "xai",
     deepseek: "deepseek",
+    moonshot: "moonshot",
   };
   static expiryMs = 1000 * 60 * 60 * 24 * 3; // 3 days
   static remoteUrl =
@@ -187,19 +188,31 @@ You can fix this by restarting AnythingLLM so the model map is re-pulled.
    * @returns {number|null} - The context window for the given provider and model
    */
   get(provider = null, model = null) {
-    if (!provider || !this.cachedModelMap || !this.cachedModelMap[provider])
-      return null;
-    if (!model) return this.cachedModelMap[provider];
+    if (!provider) return null;
 
-    const modelContextWindow = this.cachedModelMap[provider][model];
-    if (!modelContextWindow) {
-      this.log("Invalid access to model context window - not found in cache", {
+    // Try to get from cached model map first
+    if (this.cachedModelMap && this.cachedModelMap[provider]) {
+      if (!model) return this.cachedModelMap[provider];
+      const modelContextWindow = this.cachedModelMap[provider][model];
+      if (modelContextWindow) return Number(modelContextWindow);
+    }
+
+    // Fallback to legacy model map if cache is not available or model not found in cache
+    if (ContextWindowFinder.modelMap && ContextWindowFinder.modelMap[provider]) {
+      if (!model) return ContextWindowFinder.modelMap[provider];
+      const legacyContextWindow = ContextWindowFinder.modelMap[provider][model];
+      if (legacyContextWindow) return Number(legacyContextWindow);
+    }
+
+    // If model is not found in either cached or legacy map, log and return null
+    if (model) {
+      this.log("Invalid access to model context window - not found in cache or legacy map", {
         provider,
         model,
       });
-      return null;
     }
-    return Number(modelContextWindow);
+
+    return null;
   }
 }
 
