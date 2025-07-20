@@ -10,7 +10,22 @@ restartPolicyType = "on_failure"
 restartPolicyMinDelay = 1000
 
 [deploy.env]
+# Database Configuration - Reference PostgreSQL service
 DATABASE_URL = "${{Postgres.DATABASE_URL}}"
+
+# Node.js Configuration
+NODE_ENV = "production"
 NODE_OPTIONS = "--max-old-space-size=4096"
 PYTHONUNBUFFERED = "1"
 PYTHONDONTWRITEBYTECODE = "1"
+
+# AnythingLLM Configuration - Use Railway Variables
+JWT_SECRET = "${{JWT_SECRET}}"
+SIG_KEY = "${{SIG_KEY}}" 
+SIG_SALT = "${{SIG_SALT}}"
+ENCRYPTION_KEY = "${{ENCRYPTION_KEY}}"
+STORAGE_DIR = "/app/server/storage"
+VECTOR_DB = "lancedb"
+WHISPER_PROVIDER = "local"
+TTS_PROVIDER = "native"
+DISABLE_TELEMETRY = "false"
