@@ -15,6 +15,8 @@ const LEGACY_MODEL_MAP = {
     "claude-3-7-sonnet-20250219": 200000,
     "claude-3-7-sonnet-latest": 200000,
     "claude-4-sonnet-20250514": 200000,
+    "claude-4-opus-20250514": 200000,
+    "claude-4-opus-latest": 200000,
   },
   cohere: {
     "command-r": 128000,
@@ -107,7 +109,17 @@ const LEGACY_MODEL_MAP = {
     "deepseek-reasoner": 128000,
   },
   xai: {
-    "grok-beta": 131072,
+    "grok-3-fast": 131072,
+    "grok-4": 256000,
+    "grok-3-mini": 131072,
+    "grok-3": 1000000,
+  },
+  moonshot: {
+    "moonshot-v1-8k": 8192,
+    "moonshot-v1-32k": 32768,
+    "moonshot-v1-128k": 131072,
+    "kimi-k2-base": 131072,
+    "kimi-k2-instruct": 131072,
   },
 };
 module.exports = LEGACY_MODEL_MAP;

@@ -44,6 +44,25 @@ class AnthropicLLM {
     return "streamGetChatCompletion" in this;
   }
 
+  /**
+   * Get the maximum output tokens for the current model
+   * @returns {number} - Maximum output tokens supported by the model
+   */
+  getMaxOutputTokens() {
+    // Claude 4 Opus supports 32K output tokens
+    if (this.model.includes("claude-4-opus")) {
+      return 32000;
+    }
+    
+    // Claude 3.5 and newer models generally support 8K tokens
+    if (this.model.includes("claude-3-5") || this.model.includes("claude-3-7")) {
+      return 8192;
+    }
+    
+    // Older models default to 4K
+    return 4096;
+  }
+
   static promptWindowLimit(modelName) {
     return MODEL_MAP.get("anthropic", modelName) ?? 100_000;
   }
@@ -70,6 +89,28 @@ class AnthropicLLM {
 
   isValidChatCompletionModel(_modelName = "") {
     return true;
+  }
+
+  /**
+   * Get the maximum output tokens for a given model
+   * @param {string} modelName - The model name
+   * @returns {number} - The maximum output tokens for the model
+   */
+  static getMaxOutputTokens(modelName) {
+    // Claude 3.5 Haiku supports up to 8,192 output tokens
+    if (modelName === "claude-3-5-haiku-20241022" || modelName === "claude-3-5-haiku-latest") {
+      return 8192;
+    }
+    // Other Claude models use the default 4096 tokens
+    return 4096;
+  }
+
+  /**
+   * Get the maximum output tokens for the current model instance
+   * @returns {number} - The maximum output tokens for the current model
+   */
+  getMaxOutputTokens() {
+    return AnthropicLLM.getMaxOutputTokens(this.model);
   }
 
   /**

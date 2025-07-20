@@ -11,3 +11,7 @@ yarn.lock
 package-lock.json
 *.bak
 .idea
+
+# Build artifacts
+frontend/dist
+coverage

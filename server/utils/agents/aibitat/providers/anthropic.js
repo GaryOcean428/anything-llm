@@ -25,6 +25,25 @@ class AnthropicProvider extends Provider {
     this.model = model;
   }
 
+  /**
+   * Get the maximum output tokens for the current model
+   * @returns {number} - Maximum output tokens supported by the model
+   */
+  getMaxOutputTokens() {
+    // Claude 4 Opus supports 32K output tokens
+    if (this.model.includes("claude-4-opus")) {
+      return 32000;
+    }
+    
+    // Claude 3.5 and newer models generally support 8K tokens
+    if (this.model.includes("claude-3-5") || this.model.includes("claude-3-7")) {
+      return 8192;
+    }
+    
+    // Older models default to 4K
+    return 4096;
+  }
+
   // For Anthropic we will always need to ensure the message sequence is role,content
   // as we can attach any data to message nodes and this keeps the message property
   // sent to the API always in spec.
@@ -122,7 +141,7 @@ class AnthropicProvider extends Provider {
       const response = await this.client.messages.create(
         {
           model: this.model,
-          max_tokens: 4096,
+          max_tokens: this.getMaxOutputTokens(),
           system: systemPrompt,
           messages: this.#sanitize(chats),
           stream: false,
