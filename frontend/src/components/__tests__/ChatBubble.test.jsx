@@ -1,70 +1,70 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import ChatBubble from '../ChatBubble';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import ChatBubble from "../ChatBubble";
 
 // Mock necessary dependencies
-vi.mock('../../models/system', () => ({
+vi.mock("../../models/system", () => ({
   default: {
     keys: vi.fn().mockResolvedValue({
       TextToSpeechProvider: null,
       TTSVoiceModel: null,
-      TTSChatPiperAPIKey: null
-    })
-  }
+      TTSChatPiperAPIKey: null,
+    }),
+  },
 }));
 
-vi.mock('../../hooks/useUser', () => ({
+vi.mock("../../hooks/useUser", () => ({
   default: () => ({
-    user: { id: 1, username: 'testuser' },
-    loading: false
-  })
+    user: { id: 1, username: "testuser" },
+    loading: false,
+  }),
 }));
 
 // Mock markdown processing
-vi.mock('../../utils/chat/markdown', () => ({
+vi.mock("../../utils/chat/markdown", () => ({
   default: {
-    parse: vi.fn().mockReturnValue('Test message content')
-  }
+    parse: vi.fn().mockReturnValue("Test message content"),
+  },
 }));
 
 const MockedChatBubble = ({ props = {} }) => (
   <BrowserRouter>
-    <ChatBubble 
+    <ChatBubble
       message={{
-        content: 'Test message content',
-        role: 'user',
-        id: '1',
-        createdAt: new Date().toISOString()
+        content: "Test message content",
+        role: "user",
+        id: "1",
+        createdAt: new Date().toISOString(),
       }}
       type="user"
-      {...props} 
+      {...props}
     />
   </BrowserRouter>
 );
 
-describe('ChatBubble Component', () => {
+describe("ChatBubble Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should render user message correctly', () => {
+  it("should render user message correctly", () => {
     render(<MockedChatBubble />);
     const messageElements = screen.queryAllByText(/test message/i);
     expect(messageElements.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should render assistant message correctly', () => {
+  it("should render assistant message correctly", () => {
     render(
-      <MockedChatBubble 
+      <MockedChatBubble
         props={{
           message: {
-            content: 'Assistant response',
-            role: 'assistant',
-            id: '2',
-            createdAt: new Date().toISOString()
+            content: "Assistant response",
+            role: "assistant",
+            id: "2",
+            createdAt: new Date().toISOString(),
           },
-          type: 'assistant'
+          type: "assistant",
         }}
       />
     );
@@ -72,42 +72,44 @@ describe('ChatBubble Component', () => {
     expect(assistantElements.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should handle message actions', () => {
+  it("should handle message actions", () => {
     render(<MockedChatBubble />);
-    const buttons = screen.queryAllByRole('button');
+    const buttons = screen.queryAllByRole("button");
     expect(buttons.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should display message timestamp', () => {
+  it("should display message timestamp", () => {
     render(<MockedChatBubble />);
     // Check for any time-related elements
-    const timeElements = screen.queryAllByText(/\d{1,2}:\d{2}|\d{1,2}\/\d{1,2}|ago|today|yesterday/i);
+    const timeElements = screen.queryAllByText(
+      /\d{1,2}:\d{2}|\d{1,2}\/\d{1,2}|ago|today|yesterday/i
+    );
     expect(timeElements.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should handle message copying', () => {
+  it("should handle message copying", () => {
     render(<MockedChatBubble />);
     const copyElements = screen.queryAllByTitle(/copy/i);
     expect(copyElements.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should handle message editing for user messages', () => {
+  it("should handle message editing for user messages", () => {
     render(<MockedChatBubble />);
     const editElements = screen.queryAllByTitle(/edit/i);
     expect(editElements.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('should render message content with proper formatting', () => {
+  it("should render message content with proper formatting", () => {
     render(
-      <MockedChatBubble 
+      <MockedChatBubble
         props={{
           message: {
-            content: '**Bold text** and *italic text*',
-            role: 'assistant',
-            id: '3',
-            createdAt: new Date().toISOString()
+            content: "**Bold text** and *italic text*",
+            role: "assistant",
+            id: "3",
+            createdAt: new Date().toISOString(),
           },
-          type: 'assistant'
+          type: "assistant",
         }}
       />
     );

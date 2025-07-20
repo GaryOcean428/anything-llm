@@ -32,6 +32,7 @@ import XAILogo from "@/media/llmprovider/xai.png";
 import NvidiaNimLogo from "@/media/llmprovider/nvidia-nim.png";
 import PPIOLogo from "@/media/llmprovider/ppio.png";
 import DellProAiStudioLogo from "@/media/llmprovider/dpais.png";
+import MoonshotLogo from "@/media/llmprovider/moonshot.png";
 
 import PreLoader from "@/components/Preloader";
 import OpenAiOptions from "@/components/LLMSelection/OpenAiOptions";
@@ -61,6 +62,7 @@ import XAILLMOptions from "@/components/LLMSelection/XAiLLMOptions";
 import NvidiaNimOptions from "@/components/LLMSelection/NvidiaNimOptions";
 import PPIOLLMOptions from "@/components/LLMSelection/PPIOLLMOptions";
 import DellProAiStudioOptions from "@/components/LLMSelection/DPAISOptions";
+import MoonshotOptions from "@/components/LLMSelection/MoonshotOptions";
 
 import LLMItem from "@/components/LLMSelection/LLMItem";
 import { CaretUpDown, MagnifyingGlass, X } from "@phosphor-icons/react";
@@ -314,6 +316,15 @@ export const AVAILABLE_LLM_PROVIDERS = [
     options: (settings) => <XAILLMOptions settings={settings} />,
     description: "Run xAI's powerful LLMs like Grok-2 and more.",
     requiredConfig: ["XAIApiKey", "XAIModelPref"],
+  },
+  {
+    name: "Moonshot AI",
+    value: "moonshot",
+    logo: MoonshotLogo,
+    options: (settings) => <MoonshotOptions settings={settings} />,
+    description:
+      "Kimi K2 models with 128K context window and Mixture-of-Experts architecture.",
+    requiredConfig: ["MoonshotApiKey"],
   },
 ];
 
