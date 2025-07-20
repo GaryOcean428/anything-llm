@@ -4,21 +4,6 @@ const envResult =
     ? require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` })
     : require("dotenv").config();
 
-// Ensure DATABASE_URL is set properly for AnythingLLM
-if (!process.env.DATABASE_URL) {
-  // Use SQLite as default for development
-  const path = require("path");
-  process.env.DATABASE_URL = `file:${path.join(__dirname, "storage", "anythingllm.db")}`;
-  console.log(`[STARTUP] Using SQLite database: ${process.env.DATABASE_URL}`);
-} else if (process.env.DATABASE_URL.includes('postgres') && process.env.DATABASE_URL.includes('metro.proxy.rlwy.net')) {
-  // This is a different service's database, fall back to SQLite
-  const path = require("path");
-  process.env.DATABASE_URL = `file:${path.join(__dirname, "storage", "anythingllm.db")}`;
-  console.log(`[STARTUP] Detected incompatible PostgreSQL database, falling back to SQLite: ${process.env.DATABASE_URL}`);
-} else {
-  console.log(`[STARTUP] Using configured database: ${process.env.DATABASE_URL?.replace(/:[^:]*@/, ':***@')}`);
-}
-
 console.log(`[STARTUP] Environment: ${process.env.NODE_ENV || "production"}`);
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3001;
 console.log(`[STARTUP] Server Port: ${PORT}`);
