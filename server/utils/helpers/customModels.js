@@ -579,6 +579,8 @@ async function getXAIModels(_apiKey = null) {
           owned_by: "xai",
         },
         {
+          created: 1740096000, // Feb 19 2025
+          id: "grok-3-mini-beta",
           created: 1740528000,
           id: "grok-3-beta",
           object: "model",
