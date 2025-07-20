@@ -188,9 +188,11 @@ You can fix this by restarting AnythingLLM so the model map is re-pulled.
    */
   get(provider = null, model = null) {
     if (!provider) return null;
+
     
-    // Try to get from cached model map first
-    if (this.cachedModelMap && this.cachedModelMap[provider]) {
+   / Try to get from cached model map first
+    if (this.cachedModelMap &
+        & this.cachedModelMap[provider]) {
       if (!model) return this.cachedModelMap[provider];
       const modelContextWindow = this.cachedModelMap[provider][model];
       if (modelContextWindow) return Number(modelContextWindow);
@@ -216,3 +218,4 @@ You can fix this by restarting AnythingLLM so the model map is re-pulled.
 }
 
 module.exports = { MODEL_MAP: new ContextWindowFinder() };
+
