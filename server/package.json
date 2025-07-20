@@ -21,7 +21,9 @@
     "migrate:fix": "npx prisma migrate resolve --applied 20250720073934_init",
     "migrate:recovery": "node scripts/migration-recovery.js",
     "migrate:recovery:quick": "node scripts/migration-recovery.js --quick",
+    "migrate:idempotent": "node scripts/idempotent-migration.js",
     "deploy:safe": "npm run migrate:check && npx prisma migrate deploy",
+    "deploy:idempotent": "node scripts/idempotent-migration.js",
     "health:check": "node startup-checks.js",
     "health:startup": "node startup-checks.js"
   },
