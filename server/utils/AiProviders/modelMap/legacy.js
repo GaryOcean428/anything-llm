@@ -106,9 +106,10 @@ const LEGACY_MODEL_MAP = {
     "deepseek-reasoner": 128000,
   },
   xai: {
-    "grok-beta": 131072,
-    "grok-3-mini-beta": 131072,
-    "grok-3-beta": 1000000,
+    "grok-3-fast": 131072,
+    "grok-4": 256000,
+    "grok-3-mini": 131072,
+    "grok-3": 1000000,
   },
   moonshot: {
     "moonshot-v1-8k": 8192,
