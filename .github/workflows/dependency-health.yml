@@ -1,0 +1,79 @@
+name: Dependency Health Check
+
+on:
+  schedule:
+    # Run every Monday at 8 AM UTC
+    - cron: '0 8 * * 1'
+  pull_request:
+    paths: 
+      - 'package.json'
+      - 'package-lock.json'
+      - 'server/package.json'
+      - 'server/package-lock.json'
+      - 'frontend/package.json'
+      - 'frontend/yarn.lock'
+      - 'collector/package.json'
+      - 'collector/yarn.lock'
+  workflow_dispatch:
+
+jobs:
+  dependency-check:
+    runs-on: ubuntu-latest
+    name: Check Dependencies
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd server && npm install --legacy-peer-deps
+          
+      - name: Run dependency health check
+        run: ./scripts/dependency-health-check.sh
+
+      - name: Security audit
+        run: |
+          echo "🛡️ Running security audits..."
+          npm audit --level high || true
+          cd server && npm audit --level moderate || true
+          
+      - name: Check for deprecated packages
+        run: |
+          echo "🔍 Scanning for deprecated package warnings..."
+          if npm list 2>&1 | grep -i "deprecated\|warn"; then
+            echo "⚠️  Found deprecated packages - review needed"
+            exit 1
+          else
+            echo "✅ No deprecated packages detected"
+          fi
+
+      - name: Verify critical packages
+        run: |
+          echo "📦 Verifying critical security fixes..."
+          cd server
+          
+          # Check multer v2
+          if npm list multer@2 &>/dev/null; then
+            echo "✅ Multer v2.x verified"
+          else
+            echo "❌ Multer v2.x not found - security risk!"
+            exit 1
+          fi
+          
+          # Check elevenlabs migration
+          if npm list @elevenlabs/elevenlabs-js &>/dev/null; then
+            echo "✅ ElevenLabs JS client verified"
+          else
+            echo "❌ ElevenLabs JS client not found"
+            exit 1
+          fi
+          
+          echo "🔒 All critical security packages verified"
