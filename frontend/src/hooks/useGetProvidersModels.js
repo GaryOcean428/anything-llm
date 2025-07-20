@@ -32,7 +32,6 @@ const PROVIDER_DEFAULT_MODELS = {
   "generic-openai": [],
   bedrock: [],
   xai: ["grok-beta", "grok-3-mini-beta"],
-};
 
 // For providers with large model lists (e.g. togetherAi) - we subgroup the options
 // by their creator organization (eg: Meta, Mistral, etc)
