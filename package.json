@@ -57,15 +57,15 @@
   ],
   "private": false,
   "devDependencies": {
-    "@vitest/coverage-v8": "^2.0.0",
-    "@vitest/ui": "^2.0.0",
+    "@vitest/coverage-v8": "^2.1.8",
+    "@vitest/ui": "^2.1.8",
     "bundlesize": "^0.18.2",
     "concurrently": "^9.1.2",
-    "husky": "^9.0.0",
+    "husky": "^9.1.7",
     "jscpd": "^4.0.5",
-    "lint-staged": "^15.0.0",
-    "rollup-plugin-visualizer": "^6.0.3",
-    "vitest": "^2.0.0",
+    "lint-staged": "^15.2.10",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "vitest": "^2.1.8",
     "webpack-bundle-analyzer": "^4.10.2"
   },
   "overrides": {
@@ -75,5 +75,9 @@
     "gauge": false,
     "rimraf": "^6.0.0",
     "glob": "^11.0.0"
+  },
+  "dependencies": {
+    "@railway/cli": "^4.5.5",
+    "yarn": "^1.22.22"
   }
 }
