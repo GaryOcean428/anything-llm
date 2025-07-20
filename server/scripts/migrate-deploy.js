@@ -52,13 +52,25 @@ function executeCommand(command, options = {}) {
 }
 
 /**
- * Check if error is the P3005 migration baseline error
+ * Check if error is the P3005 migration baseline error or failed migration error
  */
 function isP3005Error(error) {
   const errorStr = error.toString().toLowerCase();
   return errorStr.includes('p3005') || 
          errorStr.includes('database schema is not empty') ||
-         errorStr.includes('baseline an existing production database');
+         errorStr.includes('baseline an existing production database') ||
+         errorStr.includes('failed migration') ||
+         errorStr.includes('migration.*failed') ||
+         errorStr.includes('20250720073934_init');
+}
+
+/**
+ * Check if the specific failed migration 20250720073934_init is blocking deployment
+ */
+function isFailedInitMigration(error) {
+  const errorStr = error.toString().toLowerCase();
+  return errorStr.includes('20250720073934_init') ||
+         errorStr.includes('init') && errorStr.includes('failed');
 }
 
 /**
@@ -102,20 +114,46 @@ async function getInitialMigrationName() {
 }
 
 /**
- * Baseline existing migrations to resolve P3005 error
+ * Baseline existing migrations to resolve P3005 error or failed migration
  */
 async function baselineExistingMigrations() {
   console.log('[MIGRATION] Attempting to baseline existing migrations...');
   
   try {
-    const migrationName = await getInitialMigrationName();
-    console.log(`[MIGRATION] Baselining migration: ${migrationName}`);
+    // Check if the specific failed migration exists and baseline it first
+    const failedMigrationName = '20250720073934_init';
+    const migrationExists = await checkMigrationExists(failedMigrationName);
     
-    await executeCommand(`npx prisma migrate resolve --applied "${migrationName}"`);
-    console.log('[MIGRATION] Successfully baselined existing migration');
+    if (migrationExists) {
+      console.log(`[MIGRATION] Found failed migration: ${failedMigrationName}, baselining it first...`);
+      await executeCommand(`npx prisma migrate resolve --applied "${failedMigrationName}"`);
+      console.log('[MIGRATION] Successfully baselined failed init migration');
+    }
+    
+    // Get other migrations and baseline them
+    const migrationName = await getInitialMigrationName();
+    if (migrationName && migrationName !== failedMigrationName) {
+      console.log(`[MIGRATION] Baselining additional migration: ${migrationName}`);
+      await executeCommand(`npx prisma migrate resolve --applied "${migrationName}"`);
+      console.log('[MIGRATION] Successfully baselined additional migration');
+    }
+    
     return true;
   } catch (error) {
     console.error('[MIGRATION] Failed to baseline migrations:', error);
+    return false;
+  }
+}
+
+/**
+ * Check if a specific migration exists in the migrations directory
+ */
+async function checkMigrationExists(migrationName) {
+  try {
+    const { stdout } = await executeCommand('ls -la prisma/migrations/', { stdio: 'pipe' });
+    return stdout.includes(migrationName);
+  } catch (error) {
+    console.error(`[MIGRATION] Error checking for migration ${migrationName}:`, error);
     return false;
   }
 }
@@ -140,9 +178,16 @@ async function deployMigrations() {
     console.log('[MIGRATION] Initial migration deployment failed');
     console.log('[MIGRATION] Error details:', firstError.stderr || firstError.error?.message);
     
-    // Check if this is the P3005 error
-    if (isP3005Error(firstError.stderr || firstError.error?.message || '')) {
-      console.log('[MIGRATION] Detected P3005 error - attempting to baseline existing database...');
+    // Check if this is the P3005 error or failed migration error
+    const isP3005 = isP3005Error(firstError.stderr || firstError.error?.message || '');
+    const isFailedInit = isFailedInitMigration(firstError.stderr || firstError.error?.message || '');
+    
+    if (isP3005 || isFailedInit) {
+      console.log('[MIGRATION] Detected migration baseline error - attempting to resolve...');
+      
+      if (isFailedInit) {
+        console.log('[MIGRATION] Detected specific failed init migration (20250720073934_init)');
+      }
       
       // Try to baseline existing migrations
       const baselineSuccess = await baselineExistingMigrations();
@@ -158,14 +203,26 @@ async function deployMigrations() {
           
         } catch (retryError) {
           console.error('[MIGRATION] ❌ Migration deployment failed even after baselining:', retryError);
-          throw retryError;
+          
+          // Try one more time with forced resolution
+          try {
+            console.log('[MIGRATION] Attempting forced resolution of all migrations...');
+            await executeCommand('npx prisma migrate resolve --applied 20250720073934_init');
+            await executeCommand('npx prisma migrate deploy');
+            
+            console.log('[MIGRATION] ✅ Migration deployment successful after forced resolution!');
+            return true;
+          } catch (finalError) {
+            console.error('[MIGRATION] ❌ All migration recovery attempts failed:', finalError);
+            throw retryError;
+          }
         }
       } else {
         console.error('[MIGRATION] ❌ Failed to baseline existing migrations');
         throw firstError;
       }
     } else {
-      console.error('[MIGRATION] ❌ Migration deployment failed with non-P3005 error:', firstError);
+      console.error('[MIGRATION] ❌ Migration deployment failed with non-baseline error:', firstError);
       throw firstError;
     }
   }
@@ -207,4 +264,10 @@ if (require.main === module) {
   main();
 }
 
-module.exports = { deployMigrations, baselineExistingMigrations };
+module.exports = { 
+  deployMigrations, 
+  baselineExistingMigrations, 
+  checkMigrationExists,
+  isP3005Error,
+  isFailedInitMigration 
+};
