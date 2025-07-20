@@ -11,10 +11,12 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon --ignore documents --ignore vector-cache --ignore storage --ignore swagger --trace-warnings index.js",
     "start": "cross-env NODE_ENV=production node index.js",
+    "start:migrate": "node scripts/db-migrate.js && cross-env NODE_ENV=production node index.js",
     "install:production": "npm install --omit=dev --legacy-peer-deps",
     "lint": "yarn prettier --ignore-path ../.prettierignore --write ./endpoints ./models ./utils index.js",
     "swagger": "node ./swagger/init.js",
     "postinstall": "npx prisma generate",
+    "db:migrate": "node scripts/db-migrate.js",
     "migrate:deploy": "node scripts/migrate-deploy.js",
     "migrate:baseline": "node scripts/manual-baseline.js",
     "migrate:check": "npx prisma migrate status",

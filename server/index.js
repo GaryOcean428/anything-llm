@@ -39,7 +39,21 @@ const app = express();
 const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
-app.use(cors({ origin: true }));
+// Enhanced CORS configuration for Railway deployment
+const corsOrigins = process.env.NODE_ENV === "production" 
+  ? [
+      process.env.FRONTEND_URL,
+      process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : null,
+      process.env.RAILWAY_STATIC_URL || null
+    ].filter(Boolean)
+  : true; // Allow all origins in development
+
+app.use(cors({ 
+  origin: corsOrigins,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(bodyParser.text({ limit: FILE_LIMIT }));
 app.use(bodyParser.json({ limit: FILE_LIMIT }));
 app.use(

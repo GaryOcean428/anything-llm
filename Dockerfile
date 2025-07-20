@@ -35,11 +35,11 @@ WORKDIR /app/server
 RUN npm run install:production
 
 # Set environment
+ARG PORT=3001
 ENV NODE_ENV=production
-ENV PORT=3001
 ENV NODE_OPTIONS=--max-old-space-size=4096
 
-EXPOSE 3001
+EXPOSE ${PORT}
 
-# Start server with robust migration handling
-CMD ["sh", "-c", "node scripts/migrate-deploy.js && node index.js"]
+# Start server with database migration
+CMD ["npm", "run", "start:migrate"]
