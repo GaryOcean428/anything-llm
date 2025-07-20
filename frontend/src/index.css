@@ -8,114 +8,114 @@
 
 :root {
   /* Deep Blue Neon Theme Color Scheme - Dark Mode (Default) */
-  --chat--color-primary: #00BFFF;           /* Electric Blue */
-  --chat--color-primary-shade-50: #1C3F5D;  /* Deep Steel-Blue (User Bubble) */
-  --chat--color-primary-shade-100: #102B40; /* Dark Navy-Blue (System Bubble) */
-  --chat--color-secondary: #39FF14;         /* Neon Green */
-  --chat--color-secondary-shade-50: #EEFF00;/* Neon Yellow */
-  --chat--color-white: #D3E2F4;             /* Off-White/Pale Gray-Blue */
-  --chat--color-light: #89CFF0;             /* Baby Blue */
-  --chat--color-light-shade-50: #142C44;    /* Secondary Panel BG */
-  --chat--color-light-shade-100: #0A1B2A;   /* Primary BG */
-  --chat--color-medium: #1C3F5D;
-  --chat--color-dark: #0A1B2A;
+  --chat--color-primary: #00bfff; /* Electric Blue */
+  --chat--color-primary-shade-50: #1c3f5d; /* Deep Steel-Blue (User Bubble) */
+  --chat--color-primary-shade-100: #102b40; /* Dark Navy-Blue (System Bubble) */
+  --chat--color-secondary: #39ff14; /* Neon Green */
+  --chat--color-secondary-shade-50: #eeff00; /* Neon Yellow */
+  --chat--color-white: #d3e2f4; /* Off-White/Pale Gray-Blue */
+  --chat--color-light: #89cff0; /* Baby Blue */
+  --chat--color-light-shade-50: #142c44; /* Secondary Panel BG */
+  --chat--color-light-shade-100: #0a1b2a; /* Primary BG */
+  --chat--color-medium: #1c3f5d;
+  --chat--color-dark: #0a1b2a;
   --chat--color-disabled: #777980;
   --chat--color-typing: #404040;
 
   /* Dark Mode Theme - Deep Blue Neon */
-  --theme-loader: #D3E2F4;
-  --theme-bg-primary: #0A1B2A;
-  --theme-bg-secondary: #142C44;
-  --theme-bg-sidebar: #0A1B2A;
-  --theme-bg-container: #0A1B2A;
-  --theme-bg-chat: #142C44;
-  --theme-bg-chat-input: #1C3F5D;
-  --theme-text-primary: #D3E2F4;
-  --theme-text-secondary: #89CFF0;
+  --theme-loader: #d3e2f4;
+  --theme-bg-primary: #0a1b2a;
+  --theme-bg-secondary: #142c44;
+  --theme-bg-sidebar: #0a1b2a;
+  --theme-bg-container: #0a1b2a;
+  --theme-bg-chat: #142c44;
+  --theme-bg-chat-input: #1c3f5d;
+  --theme-text-primary: #d3e2f4;
+  --theme-text-secondary: #89cff0;
   --theme-sidebar-item-default: rgba(28, 63, 93, 0.3);
   --theme-sidebar-item-selected: rgba(0, 191, 255, 0.3);
-  --theme-sidebar-item-hover: #1C3F5D;
+  --theme-sidebar-item-hover: #1c3f5d;
   --theme-sidebar-subitem-default: rgba(28, 63, 93, 0.15);
   --theme-sidebar-subitem-selected: rgba(0, 191, 255, 0.15);
   --theme-sidebar-thread-selected: rgba(0, 191, 255, 0.15);
-  --theme-popup-menu-bg: #0A1B2A;
+  --theme-popup-menu-bg: #0a1b2a;
 
   --theme-sidebar-subitem-hover: rgba(28, 63, 93, 0.15);
   --theme-sidebar-border: rgba(0, 191, 255, 0.3);
-  --theme-sidebar-item-workspace-active: #00BFFF;
-  --theme-sidebar-item-workspace-inactive: #89CFF0;
+  --theme-sidebar-item-workspace-active: #00bfff;
+  --theme-sidebar-item-workspace-inactive: #89cff0;
 
   --theme-sidebar-footer-icon: rgba(28, 63, 93, 0.3);
-  --theme-sidebar-footer-icon-fill: #89CFF0;
+  --theme-sidebar-footer-icon-fill: #89cff0;
   --theme-sidebar-footer-icon-hover: rgba(0, 191, 255, 0.5);
 
-  --theme-chat-input-border: #00BFFF;
-  --theme-action-menu-bg: #1C3F5D;
+  --theme-chat-input-border: #00bfff;
+  --theme-action-menu-bg: #1c3f5d;
   --theme-action-menu-item-hover: rgba(0, 191, 255, 0.2);
-  --theme-settings-input-bg: #0A1B2A;
-  --theme-settings-input-placeholder: #89CFF0;
+  --theme-settings-input-bg: #0a1b2a;
+  --theme-settings-input-placeholder: #89cff0;
   --theme-settings-input-active: rgba(0, 191, 255, 0.3);
-  --theme-settings-input-text: #D3E2F4;
-  --theme-modal-border: #00BFFF;
+  --theme-settings-input-text: #d3e2f4;
+  --theme-modal-border: #00bfff;
 
-  --theme-button-primary: #00BFFF;
-  --theme-button-primary-hover: #39FF14;
+  --theme-button-primary: #00bfff;
+  --theme-button-primary-hover: #39ff14;
 
-  --theme-button-cta: #00BFFF;
+  --theme-button-cta: #00bfff;
 
-  --theme-file-row-even: #0A1B2A;
-  --theme-file-row-odd: #142C44;
+  --theme-file-row-even: #0a1b2a;
+  --theme-file-row-odd: #142c44;
   --theme-file-row-selected-even: rgba(0, 191, 255, 0.3);
   --theme-file-row-selected-odd: rgba(0, 191, 255, 0.2);
   --theme-file-picker-hover: rgba(0, 191, 255, 0.2);
 
-  --theme-home-text: #D3E2F4;
-  --theme-home-text-secondary: #89CFF0;
-  --theme-home-bg-card: #142C44;
-  --theme-home-bg-button: #1C3F5D;
+  --theme-home-text: #d3e2f4;
+  --theme-home-text-secondary: #89cff0;
+  --theme-home-bg-card: #142c44;
+  --theme-home-bg-button: #1c3f5d;
   --theme-home-border: rgba(0, 191, 255, 0.3);
-  --theme-home-button-primary: #00BFFF;
+  --theme-home-button-primary: #00bfff;
   --theme-home-button-primary-hover: rgba(0, 191, 255, 0.8);
-  --theme-home-button-secondary: #1C3F5D;
+  --theme-home-button-secondary: #1c3f5d;
   --theme-home-button-secondary-hover: rgba(0, 191, 255, 0.2);
 
-  --theme-home-button-secondary-text: #D3E2F4;
-  --theme-home-button-secondary-hover-text: #00BFFF;
-  --theme-home-update-card-bg: #142C44;
-  --theme-home-update-card-hover: #1C3F5D;
-  --theme-home-update-source: #00BFFF;
+  --theme-home-button-secondary-text: #d3e2f4;
+  --theme-home-button-secondary-hover-text: #00bfff;
+  --theme-home-update-card-bg: #142c44;
+  --theme-home-update-card-hover: #1c3f5d;
+  --theme-home-update-source: #00bfff;
 
-  --theme-checklist-item-bg: #1C3F5D;
-  --theme-checklist-item-bg-hover: #00BFFF;
-  --theme-checklist-item-text: #D3E2F4;
-  --theme-checklist-item-completed-bg: #102B40;
-  --theme-checklist-item-completed-text: #39FF14;
-  --theme-checklist-checkbox-fill: #39FF14;
-  --theme-checklist-checkbox-text: #0A1B2A;
-  --theme-checklist-item-hover: #00BFFF;
-  --theme-checklist-checkbox-border: #89CFF0;
-  --theme-checklist-button-border: #00BFFF;
-  --theme-checklist-button-text: #00BFFF;
+  --theme-checklist-item-bg: #1c3f5d;
+  --theme-checklist-item-bg-hover: #00bfff;
+  --theme-checklist-item-text: #d3e2f4;
+  --theme-checklist-item-completed-bg: #102b40;
+  --theme-checklist-item-completed-text: #39ff14;
+  --theme-checklist-checkbox-fill: #39ff14;
+  --theme-checklist-checkbox-text: #0a1b2a;
+  --theme-checklist-item-hover: #00bfff;
+  --theme-checklist-checkbox-border: #89cff0;
+  --theme-checklist-button-border: #00bfff;
+  --theme-checklist-button-text: #00bfff;
   --theme-checklist-button-hover-bg: rgba(0, 191, 255, 0.2);
   --theme-checklist-button-hover-border: rgba(0, 191, 255, 0.8);
 
-  --theme-home-button-secondary-border: #89CFF0;
-  --theme-home-button-secondary-border-hover: #00BFFF;
+  --theme-home-button-secondary-border: #89cff0;
+  --theme-home-button-secondary-border-hover: #00bfff;
 
-  --theme-attachment-bg: #142C44;
+  --theme-attachment-bg: #142c44;
   --theme-attachment-error-bg: rgba(180, 35, 24, 0.4);
-  --theme-attachment-success-bg: #142C44;
-  --theme-attachment-text: #D3E2F4;
-  --theme-attachment-text-secondary: #89CFF0;
-  --theme-attachment-icon: #D3E2F4;
-  --theme-attachment-icon-spinner: #00BFFF;
-  --theme-attachment-icon-spinner-bg: #1C3F5D;
+  --theme-attachment-success-bg: #142c44;
+  --theme-attachment-text: #d3e2f4;
+  --theme-attachment-text-secondary: #89cff0;
+  --theme-attachment-icon: #d3e2f4;
+  --theme-attachment-icon-spinner: #00bfff;
+  --theme-attachment-icon-spinner-bg: #1c3f5d;
 
-  --theme-button-text: #89CFF0;
-  --theme-button-code-hover-text: #00BFFF;
-  --theme-button-code-hover-bg: #1C3F5D;
-  --theme-button-disable-hover-text: #EEFF00;
-  --theme-button-disable-hover-bg: #102B40;
+  --theme-button-text: #89cff0;
+  --theme-button-code-hover-text: #00bfff;
+  --theme-button-code-hover-bg: #1c3f5d;
+  --theme-button-disable-hover-text: #eeff00;
+  --theme-button-disable-hover-bg: #102b40;
   --theme-button-delete-hover-text: #f97066;
   --theme-button-delete-hover-bg: #37282b;
 }
@@ -123,114 +123,114 @@
 [data-theme="light"] {
   /* Light theme adaptation of Deep Blue Neon */
   /* Chat widget specific variables for light mode */
-  --chat--color-primary: #00BFFF;           /* Electric Blue */
-  --chat--color-primary-shade-50: #D3E2F4;  /* Light Steel-Blue (User Bubble) */
-  --chat--color-primary-shade-100: #89CFF0; /* Light Navy-Blue (System Bubble) */
-  --chat--color-secondary: #1C3F5D;         /* Deep Blue for contrast */
-  --chat--color-secondary-shade-50: #00BFFF;/* Electric Blue accent */
-  --chat--color-white: #0A1B2A;             /* Dark text on light */
-  --chat--color-light: #1C3F5D;             /* Dark blue text */
-  --chat--color-light-shade-50: #ffffff;    /* Pure white panels */
-  --chat--color-light-shade-100: #D3E2F4;   /* Light background */
-  --chat--color-medium: #89CFF0;
-  --chat--color-dark: #D3E2F4;
-  --chat--color-disabled: #89CFF0;
-  --chat--color-typing: #1C3F5D;
+  --chat--color-primary: #00bfff; /* Electric Blue */
+  --chat--color-primary-shade-50: #d3e2f4; /* Light Steel-Blue (User Bubble) */
+  --chat--color-primary-shade-100: #89cff0; /* Light Navy-Blue (System Bubble) */
+  --chat--color-secondary: #1c3f5d; /* Deep Blue for contrast */
+  --chat--color-secondary-shade-50: #00bfff; /* Electric Blue accent */
+  --chat--color-white: #0a1b2a; /* Dark text on light */
+  --chat--color-light: #1c3f5d; /* Dark blue text */
+  --chat--color-light-shade-50: #ffffff; /* Pure white panels */
+  --chat--color-light-shade-100: #d3e2f4; /* Light background */
+  --chat--color-medium: #89cff0;
+  --chat--color-dark: #d3e2f4;
+  --chat--color-disabled: #89cff0;
+  --chat--color-typing: #1c3f5d;
 
-  --theme-loader: #0A1B2A;
-  --theme-bg-primary: #D3E2F4;
-  --theme-bg-secondary: #D3E2F4;
-  --theme-bg-sidebar: #89CFF0;
+  --theme-loader: #0a1b2a;
+  --theme-bg-primary: #d3e2f4;
+  --theme-bg-secondary: #d3e2f4;
+  --theme-bg-sidebar: #89cff0;
   --theme-bg-container: #ffffff;
-  --theme-popup-menu-bg: #89CFF0;
+  --theme-popup-menu-bg: #89cff0;
 
-  --theme-bg-chat: #D3E2F4;
+  --theme-bg-chat: #d3e2f4;
   --theme-bg-chat-input: #ffffff;
-  --theme-text-primary: #0A1B2A;
-  --theme-text-secondary: #1C3F5D;
+  --theme-text-primary: #0a1b2a;
+  --theme-text-secondary: #1c3f5d;
   --theme-sidebar-item-default: #ffffff;
   --theme-sidebar-item-selected: #ffffff;
-  --theme-sidebar-item-hover: #D3E2F4;
+  --theme-sidebar-item-hover: #d3e2f4;
 
-  --theme-sidebar-item-text-inactive: #1C3F5D;
-  --theme-sidebar-item-text-active: #0A1B2A;
+  --theme-sidebar-item-text-inactive: #1c3f5d;
+  --theme-sidebar-item-text-active: #0a1b2a;
 
-  --theme-sidebar-item-workspace-active: #0A1B2A;
-  --theme-sidebar-item-workspace-inactive: #1C3F5D;
+  --theme-sidebar-item-workspace-active: #0a1b2a;
+  --theme-sidebar-item-workspace-inactive: #1c3f5d;
 
   --theme-sidebar-subitem-default: transparent;
-  --theme-sidebar-subitem-selected: #89CFF0;
+  --theme-sidebar-subitem-selected: #89cff0;
   --theme-sidebar-thread-selected: #ffffff;
-  --theme-sidebar-subitem-hover: #89CFF0;
-  --theme-sidebar-border: #00BFFF;
+  --theme-sidebar-subitem-hover: #89cff0;
+  --theme-sidebar-border: #00bfff;
 
   --theme-sidebar-footer-icon: #ffffff;
-  --theme-sidebar-footer-icon-fill: #1C3F5D;
-  --theme-sidebar-footer-icon-hover: #89CFF0;
+  --theme-sidebar-footer-icon-fill: #1c3f5d;
+  --theme-sidebar-footer-icon-hover: #89cff0;
 
-  --theme-chat-input-border: #00BFFF;
+  --theme-chat-input-border: #00bfff;
   --theme-action-menu-bg: #ffffff;
   --theme-action-menu-item-hover: rgba(0, 191, 255, 0.1);
-  --theme-settings-input-bg: #89CFF0;
+  --theme-settings-input-bg: #89cff0;
   --theme-settings-input-placeholder: rgba(10, 27, 42, 0.6);
   --theme-settings-input-active: rgba(0, 191, 255, 0.2);
-  --theme-settings-input-text: #0A1B2A;
-  --theme-modal-border: #00BFFF;
+  --theme-settings-input-text: #0a1b2a;
+  --theme-modal-border: #00bfff;
 
-  --theme-button-primary: #00BFFF;
-  --theme-button-primary-hover: #89CFF0;
+  --theme-button-primary: #00bfff;
+  --theme-button-primary-hover: #89cff0;
 
-  --theme-button-cta: #00BFFF;
+  --theme-button-cta: #00bfff;
 
   --theme-file-row-even: #ffffff;
-  --theme-file-row-odd: #D3E2F4;
+  --theme-file-row-odd: #d3e2f4;
   --theme-file-row-selected-even: rgba(0, 191, 255, 0.3);
   --theme-file-row-selected-odd: rgba(0, 191, 255, 0.2);
-  --theme-file-picker-hover: #89CFF0;
+  --theme-file-picker-hover: #89cff0;
 
-  --theme-home-text: #0A1B2A;
-  --theme-home-text-secondary: #1C3F5D;
-  --theme-home-bg-card: #89CFF0;
-  --theme-home-bg-button: #D3E2F4;
+  --theme-home-text: #0a1b2a;
+  --theme-home-text-secondary: #1c3f5d;
+  --theme-home-bg-card: #89cff0;
+  --theme-home-bg-button: #d3e2f4;
   --theme-home-border: rgba(0, 191, 255, 0.5);
-  --theme-home-button-primary: #00BFFF;
+  --theme-home-button-primary: #00bfff;
   --theme-home-button-primary-hover: rgba(0, 191, 255, 0.8);
-  --theme-home-button-secondary: #D3E2F4;
-  --theme-home-button-secondary-hover: #89CFF0;
-  --theme-home-button-secondary-text: #1C3F5D;
-  --theme-home-button-secondary-hover-text: #0A1B2A;
-  --theme-home-update-card-bg: #89CFF0;
-  --theme-home-update-card-hover: #D3E2F4;
-  --theme-home-update-source: #00BFFF;
+  --theme-home-button-secondary: #d3e2f4;
+  --theme-home-button-secondary-hover: #89cff0;
+  --theme-home-button-secondary-text: #1c3f5d;
+  --theme-home-button-secondary-hover-text: #0a1b2a;
+  --theme-home-update-card-bg: #89cff0;
+  --theme-home-update-card-hover: #d3e2f4;
+  --theme-home-update-source: #00bfff;
 
-  --theme-checklist-item-bg: #89CFF0;
-  --theme-checklist-item-bg-hover: #D3E2F4;
-  --theme-checklist-item-text: #0A1B2A;
-  --theme-checklist-item-completed-bg: #D3E2F4;
-  --theme-checklist-item-completed-text: #1C3F5D;
-  --theme-checklist-checkbox-fill: #39FF14;
+  --theme-checklist-item-bg: #89cff0;
+  --theme-checklist-item-bg-hover: #d3e2f4;
+  --theme-checklist-item-text: #0a1b2a;
+  --theme-checklist-item-completed-bg: #d3e2f4;
+  --theme-checklist-item-completed-text: #1c3f5d;
+  --theme-checklist-checkbox-fill: #39ff14;
   --theme-checklist-checkbox-text: #ffffff;
-  --theme-checklist-item-hover: #00BFFF;
-  --theme-checklist-checkbox-border: #1C3F5D;
-  --theme-checklist-button-border: #00BFFF;
-  --theme-checklist-button-text: #00BFFF;
+  --theme-checklist-item-hover: #00bfff;
+  --theme-checklist-checkbox-border: #1c3f5d;
+  --theme-checklist-button-border: #00bfff;
+  --theme-checklist-button-text: #00bfff;
   --theme-checklist-button-hover-bg: rgba(0, 191, 255, 0.1);
   --theme-checklist-button-hover-border: rgba(0, 191, 255, 0.8);
 
-  --theme-home-button-secondary-border-hover: #1C3F5D;
+  --theme-home-button-secondary-border-hover: #1c3f5d;
 
-  --theme-attachment-bg: #89CFF0;
+  --theme-attachment-bg: #89cff0;
   --theme-attachment-error-bg: rgba(180, 35, 24, 0.3);
   --theme-attachment-success-bg: #ffffff;
-  --theme-attachment-text: #0A1B2A;
+  --theme-attachment-text: #0a1b2a;
   --theme-attachment-text-secondary: rgba(10, 27, 42, 0.8);
   --theme-attachment-icon: #ffffff;
-  --theme-attachment-icon-spinner: #00BFFF;
+  --theme-attachment-icon-spinner: #00bfff;
   --theme-attachment-icon-spinner-bg: #ffffff;
 
-  --theme-button-text: #1C3F5D;
-  --theme-button-code-hover-text: #00BFFF;
-  --theme-button-code-hover-bg: #D3E2F4;
+  --theme-button-text: #1c3f5d;
+  --theme-button-code-hover-text: #00bfff;
+  --theme-button-code-hover-bg: #d3e2f4;
   --theme-button-disable-hover-text: #854708;
   --theme-button-disable-hover-bg: #fef7e6;
   --theme-button-delete-hover-text: #b42318;
@@ -367,30 +367,30 @@ a {
 @media (prefers-color-scheme: light) {
   :root {
     /* Automatically apply light mode Deep Blue Neon theme */
-    --chat--color-primary: #00BFFF;
-    --chat--color-primary-shade-50: #D3E2F4;
-    --chat--color-primary-shade-100: #89CFF0;
-    --chat--color-secondary: #1C3F5D;
-    --chat--color-secondary-shade-50: #00BFFF;
-    --chat--color-white: #0A1B2A;
-    --chat--color-light: #1C3F5D;
+    --chat--color-primary: #00bfff;
+    --chat--color-primary-shade-50: #d3e2f4;
+    --chat--color-primary-shade-100: #89cff0;
+    --chat--color-secondary: #1c3f5d;
+    --chat--color-secondary-shade-50: #00bfff;
+    --chat--color-white: #0a1b2a;
+    --chat--color-light: #1c3f5d;
     --chat--color-light-shade-50: #ffffff;
-    --chat--color-light-shade-100: #D3E2F4;
-    --chat--color-medium: #89CFF0;
-    --chat--color-dark: #D3E2F4;
-    --chat--color-disabled: #89CFF0;
-    --chat--color-typing: #1C3F5D;
+    --chat--color-light-shade-100: #d3e2f4;
+    --chat--color-medium: #89cff0;
+    --chat--color-dark: #d3e2f4;
+    --chat--color-disabled: #89cff0;
+    --chat--color-typing: #1c3f5d;
 
-    --theme-loader: #0A1B2A;
-    --theme-bg-primary: #D3E2F4;
-    --theme-bg-secondary: #D3E2F4;
-    --theme-bg-sidebar: #89CFF0;
+    --theme-loader: #0a1b2a;
+    --theme-bg-primary: #d3e2f4;
+    --theme-bg-secondary: #d3e2f4;
+    --theme-bg-sidebar: #89cff0;
     --theme-bg-container: #ffffff;
-    --theme-bg-chat: #D3E2F4;
+    --theme-bg-chat: #d3e2f4;
     --theme-bg-chat-input: #ffffff;
-    --theme-text-primary: #0A1B2A;
-    --theme-text-secondary: #1C3F5D;
-    --theme-popup-menu-bg: #89CFF0;
+    --theme-text-primary: #0a1b2a;
+    --theme-text-secondary: #1c3f5d;
+    --theme-popup-menu-bg: #89cff0;
   }
 
   .sidebar-items:after {
@@ -408,30 +408,30 @@ a {
 @media (prefers-color-scheme: dark) {
   :root {
     /* Ensure dark mode Deep Blue Neon theme is applied */
-    --chat--color-primary: #00BFFF;
-    --chat--color-primary-shade-50: #1C3F5D;
-    --chat--color-primary-shade-100: #102B40;
-    --chat--color-secondary: #39FF14;
-    --chat--color-secondary-shade-50: #EEFF00;
-    --chat--color-white: #D3E2F4;
-    --chat--color-light: #89CFF0;
-    --chat--color-light-shade-50: #142C44;
-    --chat--color-light-shade-100: #0A1B2A;
-    --chat--color-medium: #1C3F5D;
-    --chat--color-dark: #0A1B2A;
+    --chat--color-primary: #00bfff;
+    --chat--color-primary-shade-50: #1c3f5d;
+    --chat--color-primary-shade-100: #102b40;
+    --chat--color-secondary: #39ff14;
+    --chat--color-secondary-shade-50: #eeff00;
+    --chat--color-white: #d3e2f4;
+    --chat--color-light: #89cff0;
+    --chat--color-light-shade-50: #142c44;
+    --chat--color-light-shade-100: #0a1b2a;
+    --chat--color-medium: #1c3f5d;
+    --chat--color-dark: #0a1b2a;
     --chat--color-disabled: #777980;
     --chat--color-typing: #404040;
 
-    --theme-loader: #D3E2F4;
-    --theme-bg-primary: #0A1B2A;
-    --theme-bg-secondary: #142C44;
-    --theme-bg-sidebar: #0A1B2A;
-    --theme-bg-container: #0A1B2A;
-    --theme-bg-chat: #142C44;
-    --theme-bg-chat-input: #1C3F5D;
-    --theme-text-primary: #D3E2F4;
-    --theme-text-secondary: #89CFF0;
-    --theme-popup-menu-bg: #0A1B2A;
+    --theme-loader: #d3e2f4;
+    --theme-bg-primary: #0a1b2a;
+    --theme-bg-secondary: #142c44;
+    --theme-bg-sidebar: #0a1b2a;
+    --theme-bg-container: #0a1b2a;
+    --theme-bg-chat: #142c44;
+    --theme-bg-chat-input: #1c3f5d;
+    --theme-text-primary: #d3e2f4;
+    --theme-text-secondary: #89cff0;
+    --theme-popup-menu-bg: #0a1b2a;
   }
 
   .sidebar-items:after {
@@ -1198,9 +1198,12 @@ does not extend the close button beyond the viewport. */
 /* Deep Blue Neon Chat Widget Styles */
 :root {
   /* Modern Futuristic Fonts */
-  --chat--font-family: 'Inter', 'Space Grotesk', 'Sora', 'Montserrat', 'DM Sans', 'Poppins', 'Segoe UI', Arial, sans-serif;
-  --chat--font-family-heading: 'Space Grotesk', 'Montserrat', 'Geist', 'DM Sans', 'Poppins', 'Inter', Arial, sans-serif;
-  --chat--font-family-mono: 'JetBrains Mono', 'Fira Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+  --chat--font-family: "Inter", "Space Grotesk", "Sora", "Montserrat", "DM Sans",
+    "Poppins", "Segoe UI", Arial, sans-serif;
+  --chat--font-family-heading: "Space Grotesk", "Montserrat", "Geist", "DM Sans",
+    "Poppins", "Inter", Arial, sans-serif;
+  --chat--font-family-mono: "JetBrains Mono", "Fira Mono", "Menlo", "Consolas",
+    "Liberation Mono", monospace;
 
   /* Base Layout */
   --chat--spacing: 1rem;
@@ -1217,7 +1220,7 @@ does not extend the close button beyond the viewport. */
   --chat--window--border: 1.5px solid var(--chat--color-primary);
   --chat--window--border-radius: var(--chat--border-radius);
   --chat--window--margin-bottom: var(--chat--spacing);
-  --chat--window--box-shadow: 0 8px 48px 0 #00BFFF22, 0 0 32px 4px #1C3F5D;
+  --chat--window--box-shadow: 0 8px 48px 0 #00bfff22, 0 0 32px 4px #1c3f5d;
 
   /* Header Styles */
   --chat--header-height: auto;
@@ -1228,7 +1231,7 @@ does not extend the close button beyond the viewport. */
   --chat--heading--font-size: 2.2em;
   --chat--heading--font-family: var(--chat--font-family-heading);
   --chat--heading--font-weight: 700;
-  --chat--heading--text-shadow: 0 0 10px #00BFFFcc, 0 0 8px #39FF1480;
+  --chat--heading--text-shadow: 0 0 10px #00bfffcc, 0 0 8px #39ff1480;
   --chat--subtitle--font-size: 1.12em;
   --chat--subtitle--line-height: 1.7;
   --chat--subtitle--color: var(--chat--color-light);
@@ -1242,11 +1245,11 @@ does not extend the close button beyond the viewport. */
   --chat--message--margin-bottom: 0.8rem;
   --chat--message--bot--background: var(--chat--color-primary-shade-100);
   --chat--message--bot--color: var(--chat--color-white);
-  --chat--message--bot--box-shadow: 0 0 14px 0 #00BFFF33, 0 2px 8px 0 #1C3F5D55;
+  --chat--message--bot--box-shadow: 0 0 14px 0 #00bfff33, 0 2px 8px 0 #1c3f5d55;
   --chat--message--user--background: var(--chat--color-primary-shade-50);
   --chat--message--user--color: var(--chat--color-white);
-  --chat--message--user--box-shadow: 0 0 10px 0 #39FF1444, 0 2px 8px 0 #142C4477;
-  --chat--message--pre--background: #102B40b8;
+  --chat--message--user--box-shadow: 0 0 10px 0 #39ff1444, 0 2px 8px 0 #142c4477;
+  --chat--message--pre--background: #102b40b8;
   --chat--messages-list--padding: 1.5rem 2.5rem 0 2.5rem;
 
   /* Toggle Button */
@@ -1258,23 +1261,23 @@ does not extend the close button beyond the viewport. */
   --chat--toggle--hover--background: var(--chat--color-primary-shade-50);
   --chat--toggle--active--background: var(--chat--color-primary-shade-100);
   --chat--toggle--color: var(--chat--color-white);
-  --chat--toggle--box-shadow: 0 0 24px 0 #00BFFF80, 0 0 8px 2px #39FF14;
+  --chat--toggle--box-shadow: 0 0 24px 0 #00bfff80, 0 0 8px 2px #39ff14;
 
   /* Input Area */
   --chat--textarea--height: 54px;
   --chat--textarea--max-height: 16vh;
-  --chat--input--font-size: 1.10rem;
+  --chat--input--font-size: 1.1rem;
   --chat--input--font-family: var(--chat--font-family);
   --chat--input--border: none;
   --chat--input--border-radius: 0.6rem;
   --chat--input--padding: 1.15rem 1.5rem;
   --chat--input--background: #12223a;
-  --chat--input--active-background: #142C44;
+  --chat--input--active-background: #142c44;
   --chat--input--text-color: var(--chat--color-light);
   --chat--input--line-height: 1.6;
   --chat--input--placeholder--font-size: var(--chat--input--font-size);
   --chat--input--outline: 2px solid var(--chat--color-primary);
-  --chat--input--box-shadow: 0 0 12px 0 #00BFFF44, 0 0 4px 0 #39FF1455;
+  --chat--input--box-shadow: 0 0 12px 0 #00bfff44, 0 0 4px 0 #39ff1455;
   --chat--input--left--panel--width: 2rem;
   --chat--input--width: 66vw;
   --chat--input--max-width: 540px;
@@ -1290,7 +1293,7 @@ does not extend the close button beyond the viewport. */
   --chat--button--border-radius: 0.7rem;
   --chat--button--hover--color: var(--chat--color-dark);
   --chat--button--hover--background: var(--chat--color-secondary);
-  --chat--button--box-shadow: 0 0 12px 0 #00BFFF88, 0 0 5px #39FF14aa;
+  --chat--button--box-shadow: 0 0 12px 0 #00bfff88, 0 0 5px #39ff14aa;
 
   /* Send and File Buttons */
   --chat--input--send--button--background: var(--chat--color-primary);
@@ -1299,14 +1302,16 @@ does not extend the close button beyond the viewport. */
   --chat--input--send--button--color-hover: var(--chat--color-dark);
   --chat--input--file--button--background: var(--chat--color-primary-shade-50);
   --chat--input--file--button--color: var(--chat--color-secondary);
-  --chat--input--file--button--background-hover: var(--chat--color-secondary-shade-50);
+  --chat--input--file--button--background-hover: var(
+    --chat--color-secondary-shade-50
+  );
   --chat--input--file--button--color-hover: var(--chat--color-primary);
   --chat--files-spacing: 0.32rem;
 
   /* Icon Colors (Neon) */
-  --chat--icon--neon-green: #39FF14;
-  --chat--icon--neon-yellow: #EEFF00;
-  --chat--icon--electric-blue: #00BFFF;
+  --chat--icon--neon-green: #39ff14;
+  --chat--icon--neon-yellow: #eeff00;
+  --chat--icon--electric-blue: #00bfff;
 
   /* Body and Footer */
   --chat--body--background: var(--chat--color-light-shade-100);
