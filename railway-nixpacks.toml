@@ -4,10 +4,10 @@
 
 [build]
 builder = "nixpacks"
-buildCommand = "cd frontend && npm ci && npm run build && cd .. && cp -R frontend/dist server/public && cd server && npm ci --only=production"
+buildCommand = "bash -c 'cd frontend && npm ci && npm run build && cd .. && cp -R frontend/dist server/public && cd server && npm ci --only=production'"
 
 [deploy]
-startCommand = "cd server && node scripts/migrate-deploy.js && node index.js"
+startCommand = "bash -c 'cd server && node scripts/migrate-deploy.js && node index.js'"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10
