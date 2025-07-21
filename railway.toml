@@ -4,7 +4,7 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 root = "server"
-startCommand = "npx prisma migrate deploy && node index.js"
+startCommand = "node index.js"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10
@@ -21,13 +21,41 @@ NODE_OPTIONS = "--max-old-space-size=4096"
 PYTHONUNBUFFERED = "1"
 PYTHONDONTWRITEBYTECODE = "1"
 
-# AnythingLLM Configuration - Use Railway Variables
+# Security Keys - Use Railway Variables
 JWT_SECRET = "${{JWT_SECRET}}"
-SIG_KEY = "${{SIG_KEY}}" 
+SIG_KEY = "${{SIG_KEY}}"
 SIG_SALT = "${{SIG_SALT}}"
 ENCRYPTION_KEY = "${{ENCRYPTION_KEY}}"
+
+# AnythingLLM Configuration
 STORAGE_DIR = "/app/server/storage"
 VECTOR_DB = "lancedb"
 WHISPER_PROVIDER = "local"
 TTS_PROVIDER = "native"
 DISABLE_TELEMETRY = "false"
+
+# LLM Provider Configuration - Use Railway Variables
+LLM_PROVIDER = "openai"
+OPENAI_API_KEY = "${{OPENAI_API_KEY}}"
+OPEN_MODEL_PREF = "gpt-4o"
+
+# Alternative LLM Providers
+ANTHROPIC_API_KEY = "${{ANTHROPIC_API_KEY}}"
+GEMINI_API_KEY = "${{GEMINI_API_KEY}}"
+GROQ_API_KEY = "${{GROQ_API_KEY}}"
+PERPLEXITY_API_KEY = "${{PERPLEXITY_API_KEY}}"
+
+# Embedding Configuration
+EMBEDDING_ENGINE = "openai"
+EMBEDDING_MODEL_PREF = "text-embedding-ada-002"
+
+# Redis Configuration
+REDIS_URL = "${{REDIS_URL}}"
+
+# Search and Agent Configuration
+SERP_API_KEY = "${{SERP_API_KEY}}"
+TAVILY_API_KEY = "${{TAVILY_API_KEY}}"
+BING_API_KEY = "${{BING_API_KEY}}"
+
+# Session Configuration
+SESSION_SECRET = "${{SESSION_SECRET}}"
