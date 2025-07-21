@@ -41,7 +41,13 @@
     "normalize:translations": "cd frontend/src/locales && node normalizeEn.mjs && cd ../../.. && yarn lint && yarn verify:translations",
     "monitor:performance": "node scripts/performance-monitor.js",
     "health:dependencies": "./scripts/dependency-health-check.sh",
-    "security:audit": "npm audit && cd server && npm audit && cd ../frontend && npm audit && cd ../collector && npm audit"
+    "security:audit": "npm audit && cd server && npm audit && cd ../frontend && npm audit && cd ../collector && npm audit",
+    "railway": "./scripts/railway.sh",
+    "railway:login": "./scripts/railway.sh login",
+    "railway:deploy": "./scripts/railway.sh up",
+    "railway:status": "./scripts/railway.sh status",
+    "railway:env": "./scripts/railway.sh variables",
+    "railway:logs": "./scripts/railway.sh logs"
   },
   "bundlesize": [
     {
@@ -55,8 +61,8 @@
       "compression": "gzip"
     }
   ],
-  "private": false,
   "devDependencies": {
+    "@railway/cli": "^4.5.5",
     "@vitest/coverage-v8": "^2.1.8",
     "@vitest/ui": "^2.1.8",
     "bundlesize": "^0.18.2",
@@ -75,9 +81,5 @@
     "gauge": false,
     "rimraf": "^6.0.0",
     "glob": "^11.0.0"
-  },
-  "dependencies": {
-    "@railway/cli": "^4.5.5",
-    "yarn": "^1.22.22"
   }
 }

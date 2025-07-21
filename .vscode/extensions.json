@@ -1,0 +1,41 @@
+{
+  "recommendations": [
+    // Core development
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-eslint",
+
+    // React/Frontend
+    "bradlc.vscode-tailwindcss",
+    "formulahendry.auto-rename-tag",
+
+    // Database/Backend
+    "Prisma.prisma",
+    "ms-vscode.vscode-json",
+
+    // DevOps/Deployment
+    "ms-vscode.vscode-docker",
+    "github.vscode-github-actions",
+
+    // API/Testing
+    "ms-vscode.vscode-thunder-client",
+    "ms-playwright.playwright",
+
+    // Utilities
+    "ms-vscode.vscode-yaml",
+    "christian-kohler.path-intellisense",
+    "ms-vscode.vscode-todo-highlight",
+    "aaron-bond.better-comments"
+  ],
+  "unwantedRecommendations": [
+    "ms-vscode.vscode-typescript",
+    "ms-vscode.remote-containers",
+    "rangav.vscode-thunder-client",
+    "humao.rest-client",
+    "ms-vscode.hexeditor",
+    "redhat.vscode-xml",
+    "ms-vscode.vscode-css-peek",
+    "ms-vscode.test-adapter-converter",
+    "hbenl.vscode-test-explorer"
+  ]
+}

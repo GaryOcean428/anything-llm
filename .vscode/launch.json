@@ -5,70 +5,68 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Collector debug",
+      "name": "Debug AnythingLLM Server",
+      "type": "node",
       "request": "launch",
+      "program": "${workspaceFolder}/server/index.js",
+      "cwd": "${workspaceFolder}/server",
+      "env": {
+        "NODE_ENV": "development",
+        "DATABASE_URL": "file:./storage/anythingllm.db",
+        "JWT_SECRET": "anything-llm-jwt-dev",
+        "STORAGE_DIR": "./storage",
+        "SERVER_PORT": "3001"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "restart": true,
+      "runtimeArgs": ["--enable-source-maps"]
+    },
+    {
+      "name": "Debug Frontend (Vite)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/frontend",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["dev"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Collector Service",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/collector/index.js",
       "cwd": "${workspaceFolder}/collector",
       "env": {
         "NODE_ENV": "development"
       },
-      "runtimeArgs": [
-        "index.js"
-      ],
-      // not using yarn/nodemon because it doesn't work with breakpoints
-      // "runtimeExecutable": "yarn",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Server debug",
+      "name": "Debug Tests",
+      "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/server",
-      "env": {
-        "NODE_ENV": "development"
-      },
-      "runtimeArgs": [
-        "index.js"
-      ],
-      // not using yarn/nodemon because it doesn't work with breakpoints
-      // "runtimeExecutable": "yarn",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["test", "--reporter=verbose"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     },
     {
-      "name": "Frontend debug",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/frontend",
-      "env": {
-        "NODE_ENV": "development",
-      },
-      "runtimeExecutable": "${workspaceFolder}/frontend/node_modules/.bin/vite",
-      "runtimeArgs": [
-        "--debug",
-        "--host=0.0.0.0"
-      ],
-      // "runtimeExecutable": "yarn",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "type": "node"
-    },
+      "name": "Attach to Process",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ],
+  "compounds": [
     {
-      "name": "Launch Edge",
-      "request": "launch",
-      "type": "msedge",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "type": "chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "name": "Debug Full Stack",
+      "configurations": ["Debug AnythingLLM Server", "Debug Frontend (Vite)"],
+      "stopAll": true
     }
   ]
 }

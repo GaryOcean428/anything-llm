@@ -4,91 +4,110 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Install Dependencies",
       "type": "shell",
-      "options": {
-        "cwd": "${workspaceFolder}/collector",
-        "statusbar": {
-          "color": "#ffea00",
-          "detail": "Runs the collector",
-          "label": "Collector: $(play) run",
-          "running": {
-            "color": "#ffea00",
-            "label": "Collector: $(gear~spin) running"
-          }
-        }
-      },
-      "command": "cd ${workspaceFolder}/collector/ && yarn dev",
-      "runOptions": {
-        "instanceLimit": 1,
-        "reevaluateOnRerun": true
-      },
+      "command": "yarn install && cd frontend && yarn install && cd ../server && yarn install && cd ../collector && yarn install",
+      "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+        "panel": "shared"
       },
-      "label": "Collector: run"
+      "problemMatcher": []
     },
     {
+      "label": "Start Development Server",
       "type": "shell",
-      "options": {
-        "cwd": "${workspaceFolder}/server",
-        "statusbar": {
-          "color": "#ffea00",
-          "detail": "Runs the server",
-          "label": "Server: $(play) run",
-          "running": {
-            "color": "#ffea00",
-            "label": "Server: $(gear~spin) running"
-          }
-        }
-      },
-      "command": "if [ \"${CODESPACES}\" = \"true\" ]; then while ! gh codespace ports -c $CODESPACE_NAME | grep 3001; do sleep 1; done; gh codespace ports visibility 3001:public -c $CODESPACE_NAME; fi & cd ${workspaceFolder}/server/ && yarn dev",
-      "runOptions": {
-        "instanceLimit": 1,
-        "reevaluateOnRerun": true
-      },
+      "command": "cd server && yarn dev",
+      "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+        "panel": "shared"
       },
-      "label": "Server: run"
+      "isBackground": true,
+      "problemMatcher": []
     },
     {
+      "label": "Start Frontend Development",
       "type": "shell",
-      "options": {
-        "cwd": "${workspaceFolder}/frontend",
-        "statusbar": {
-          "color": "#ffea00",
-          "detail": "Runs the frontend",
-          "label": "Frontend: $(play) run",
-          "running": {
-            "color": "#ffea00",
-            "label": "Frontend: $(gear~spin) running"
-          }
-        }
-      },
-      "command": "cd ${workspaceFolder}/frontend/ && yarn dev",
-      "runOptions": {
-        "instanceLimit": 1,
-        "reevaluateOnRerun": true
-      },
+      "command": "cd frontend && yarn dev",
+      "group": "build",
       "presentation": {
         "echo": true,
         "reveal": "always",
         "focus": false,
-        "panel": "shared",
-        "showReuseMessage": true,
-        "clear": false
+        "panel": "shared"
       },
-      "label": "Frontend: run"
+      "isBackground": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Database Migration",
+      "type": "shell",
+      "command": "cd server && yarn db:migrate",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build Production",
+      "type": "shell",
+      "command": "yarn build",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run Tests",
+      "type": "shell",
+      "command": "yarn test",
+      "group": "test",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint Code",
+      "type": "shell",
+      "command": "yarn lint",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Deploy to Railway",
+      "type": "shell",
+      "command": "yarn railway deploy",
+      "group": "build",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
     }
   ]
 }
