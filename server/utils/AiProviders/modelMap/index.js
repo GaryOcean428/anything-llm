@@ -198,7 +198,10 @@ You can fix this by restarting AnythingLLM so the model map is re-pulled.
     }
 
     // Fallback to legacy model map if cache is not available or model not found in cache
-    if (ContextWindowFinder.modelMap && ContextWindowFinder.modelMap[provider]) {
+    if (
+      ContextWindowFinder.modelMap &&
+      ContextWindowFinder.modelMap[provider]
+    ) {
       if (!model) return ContextWindowFinder.modelMap[provider];
       const legacyContextWindow = ContextWindowFinder.modelMap[provider][model];
       if (legacyContextWindow) return Number(legacyContextWindow);
@@ -206,10 +209,13 @@ You can fix this by restarting AnythingLLM so the model map is re-pulled.
 
     // If model is not found in either cached or legacy map, log and return null
     if (model) {
-      this.log("Invalid access to model context window - not found in cache or legacy map", {
-        provider,
-        model,
-      });
+      this.log(
+        "Invalid access to model context window - not found in cache or legacy map",
+        {
+          provider,
+          model,
+        }
+      );
     }
 
     return null;

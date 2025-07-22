@@ -34,12 +34,15 @@ class AnthropicProvider extends Provider {
     if (this.model.includes("claude-4-opus")) {
       return 32000;
     }
-    
+
     // Claude 3.5 and newer models generally support 8K tokens
-    if (this.model.includes("claude-3-5") || this.model.includes("claude-3-7")) {
+    if (
+      this.model.includes("claude-3-5") ||
+      this.model.includes("claude-3-7")
+    ) {
       return 8192;
     }
-    
+
     // Older models default to 4K
     return 4096;
   }
