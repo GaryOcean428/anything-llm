@@ -48,7 +48,7 @@ app.ws("/ws", function (ws, _response) {
   } catch (error) {}
 });
 
-app.all("*", function (_, response) {
+app.all("/*catchAll", function (_, response) {
   response.sendFile(path.join(__dirname, "index.html"));
 });
 
