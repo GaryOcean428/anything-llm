@@ -170,7 +170,7 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
-app.all("*", function (_, response) {
+app.all("/*catchAll", function (_, response) {
   response.sendStatus(404);
 });
 
