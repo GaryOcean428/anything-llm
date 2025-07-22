@@ -53,12 +53,15 @@ class AnthropicLLM {
     if (this.model.includes("claude-4-opus")) {
       return 32000;
     }
-    
+
     // Claude 3.5 and newer models generally support 8K tokens
-    if (this.model.includes("claude-3-5") || this.model.includes("claude-3-7")) {
+    if (
+      this.model.includes("claude-3-5") ||
+      this.model.includes("claude-3-7")
+    ) {
       return 8192;
     }
-    
+
     // Older models default to 4K
     return 4096;
   }
@@ -98,7 +101,10 @@ class AnthropicLLM {
    */
   static getMaxOutputTokens(modelName) {
     // Claude 3.5 Haiku supports up to 8,192 output tokens
-    if (modelName === "claude-3-5-haiku-20241022" || modelName === "claude-3-5-haiku-latest") {
+    if (
+      modelName === "claude-3-5-haiku-20241022" ||
+      modelName === "claude-3-5-haiku-latest"
+    ) {
       return 8192;
     }
     // Other Claude models use the default 4096 tokens

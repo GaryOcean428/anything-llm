@@ -10,7 +10,8 @@ const { MODEL_MAP } = require("../modelMap");
 class MoonshotLLM {
   constructor(embedder = null, modelPreference = null) {
     const { OpenAI: OpenAIApi } = require("openai");
-    if (!process.env.MOONSHOT_API_KEY) throw new Error("No Moonshot API key was set.");
+    if (!process.env.MOONSHOT_API_KEY)
+      throw new Error("No Moonshot API key was set.");
 
     this.openai = new OpenAIApi({
       baseURL: "https://api.moonshot.cn/v1",

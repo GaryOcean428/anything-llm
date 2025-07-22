@@ -40,20 +40,25 @@ const apiRouter = express.Router();
 const FILE_LIMIT = "3GB";
 
 // Enhanced CORS configuration for Railway deployment
-const corsOrigins = process.env.NODE_ENV === "production" 
-  ? [
-      process.env.FRONTEND_URL,
-      process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : null,
-      process.env.RAILWAY_STATIC_URL || null
-    ].filter(Boolean)
-  : true; // Allow all origins in development
+const corsOrigins =
+  process.env.NODE_ENV === "production"
+    ? [
+        process.env.FRONTEND_URL,
+        process.env.RAILWAY_PUBLIC_DOMAIN
+          ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+          : null,
+        process.env.RAILWAY_STATIC_URL || null,
+      ].filter(Boolean)
+    : true; // Allow all origins in development
 
-app.use(cors({ 
-  origin: corsOrigins,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
-}));
+app.use(
+  cors({
+    origin: corsOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  })
+);
 app.use(bodyParser.text({ limit: FILE_LIMIT }));
 app.use(bodyParser.json({ limit: FILE_LIMIT }));
 app.use(
@@ -69,6 +74,12 @@ if (!!process.env.ENABLE_HTTPS) {
   require("@mintplex-labs/express-ws").default(app); // load WebSockets in non-SSL mode.
 }
 
+// Validate WebSocket initialization
+console.log(
+  "[STARTUP] WebSocket support initialized:",
+  typeof app.ws === "function"
+);
+
 app.use("/api", apiRouter);
 console.log("[STARTUP] Registering API endpoints...");
 systemEndpoints(apiRouter);
@@ -82,7 +93,7 @@ inviteEndpoints(apiRouter);
 embedManagementEndpoints(apiRouter);
 utilEndpoints(apiRouter);
 documentEndpoints(apiRouter);
-agentWebsocket(apiRouter);
+agentWebsocket(app);
 experimentalEndpoints(apiRouter);
 developerEndpoints(app, apiRouter);
 communityHubEndpoints(apiRouter);
