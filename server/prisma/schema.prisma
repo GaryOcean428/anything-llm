@@ -1,16 +1,18 @@
 // server/prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "anythingllm"]
 }
 
-// Your existing models should remain the same
-// Only the datasource block needs to change from sqlite to postgresql
-// Prisma will handle the SQL dialect differences automatically
+// Multi-schema architecture for Railway multi-service deployments
+// Core tables isolated in anythingllm schema to prevent conflicts
+// Note: This configuration requires PostgreSQL for production deployments
 
 model api_keys {
   id            Int      @id @default(autoincrement())
@@ -18,6 +20,8 @@ model api_keys {
   createdBy     Int?
   createdAt     DateTime @default(now())
   lastUpdatedAt DateTime @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model workspace_documents {
@@ -33,6 +37,8 @@ model workspace_documents {
   lastUpdatedAt        DateTime              @default(now())
   workspace            workspaces            @relation(fields: [workspaceId], references: [id])
   document_sync_queues document_sync_queues?
+  
+  @@schema("anythingllm")
 }
 
 model invites {
@@ -44,6 +50,8 @@ model invites {
   createdAt     DateTime @default(now())
   createdBy     Int
   lastUpdatedAt DateTime @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model system_settings {
@@ -52,6 +60,8 @@ model system_settings {
   value         String?
   createdAt     DateTime @default(now())
   lastUpdatedAt DateTime @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model users {
@@ -79,6 +89,8 @@ model users {
   temporary_auth_tokens       temporary_auth_tokens[]
   system_prompt_variables     system_prompt_variables[]
   prompt_history              prompt_history[]
+  
+  @@schema("anythingllm")
 }
 
 model recovery_codes {
@@ -89,6 +101,7 @@ model recovery_codes {
   user      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
+  @@schema("anythingllm")
 }
 
 model password_reset_tokens {
@@ -100,6 +113,7 @@ model password_reset_tokens {
   user      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
+  @@schema("anythingllm")
 }
 
 model document_vectors {
@@ -108,6 +122,8 @@ model document_vectors {
   vectorId      String
   createdAt     DateTime @default(now())
   lastUpdatedAt DateTime @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model welcome_messages {
@@ -116,6 +132,8 @@ model welcome_messages {
   response   String
   orderIndex Int?
   createdAt  DateTime @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model workspaces {
@@ -145,6 +163,8 @@ model workspaces {
   threads                      workspace_threads[]
   workspace_agent_invocations  workspace_agent_invocations[]
   prompt_history               prompt_history[]
+  
+  @@schema("anythingllm")
 }
 
 model workspace_threads {
@@ -160,6 +180,7 @@ model workspace_threads {
 
   @@index([workspace_id])
   @@index([user_id])
+  @@schema("anythingllm")
 }
 
 model workspace_suggested_messages {
@@ -172,6 +193,7 @@ model workspace_suggested_messages {
   workspace     workspaces @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@index([workspaceId])
+  @@schema("anythingllm")
 }
 
 model workspace_chats {
@@ -187,6 +209,8 @@ model workspace_chats {
   lastUpdatedAt  DateTime @default(now())
   feedbackScore  Boolean?
   users          users?   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@schema("anythingllm")
 }
 
 model workspace_agent_invocations {
@@ -203,6 +227,7 @@ model workspace_agent_invocations {
   workspace     workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([uuid])
+  @@schema("anythingllm")
 }
 
 model workspace_users {
@@ -213,6 +238,8 @@ model workspace_users {
   lastUpdatedAt DateTime   @default(now())
   workspaces    workspaces @relation(fields: [workspace_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   users         users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  
+  @@schema("anythingllm")
 }
 
 model cache_data {
@@ -224,6 +251,8 @@ model cache_data {
   expiresAt     DateTime?
   createdAt     DateTime  @default(now())
   lastUpdatedAt DateTime  @default(now())
+  
+  @@schema("anythingllm")
 }
 
 model embed_configs {
@@ -244,6 +273,8 @@ model embed_configs {
   workspace                  workspaces    @relation(fields: [workspace_id], references: [id], onDelete: Cascade)
   embed_chats                embed_chats[]
   users                      users?        @relation(fields: [usersId], references: [id])
+  
+  @@schema("anythingllm")
 }
 
 model embed_chats {
@@ -258,6 +289,8 @@ model embed_chats {
   createdAt              DateTime      @default(now())
   embed_config           embed_configs @relation(fields: [embed_id], references: [id], onDelete: Cascade)
   users                  users?        @relation(fields: [usersId], references: [id])
+  
+  @@schema("anythingllm")
 }
 
 model event_logs {
@@ -268,6 +301,7 @@ model event_logs {
   occurredAt DateTime @default(now())
 
   @@index([event])
+  @@schema("anythingllm")
 }
 
 model slash_command_presets {
@@ -282,6 +316,7 @@ model slash_command_presets {
   user          users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([uid, command])
+  @@schema("anythingllm")
 }
 
 model document_sync_queues {
@@ -293,6 +328,8 @@ model document_sync_queues {
   workspaceDocId Int                        @unique
   workspaceDoc   workspace_documents?       @relation(fields: [workspaceDocId], references: [id], onDelete: Cascade)
   runs           document_sync_executions[]
+  
+  @@schema("anythingllm")
 }
 
 model document_sync_executions {
@@ -302,6 +339,8 @@ model document_sync_executions {
   result    String?
   createdAt DateTime             @default(now())
   queue     document_sync_queues @relation(fields: [queueId], references: [id], onDelete: Cascade)
+  
+  @@schema("anythingllm")
 }
 
 model browser_extension_api_keys {
@@ -313,6 +352,7 @@ model browser_extension_api_keys {
   user          users?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
+  @@schema("anythingllm")
 }
 
 model temporary_auth_tokens {
@@ -325,6 +365,7 @@ model temporary_auth_tokens {
 
   @@index([token])
   @@index([userId])
+  @@schema("anythingllm")
 }
 
 model system_prompt_variables {
@@ -339,6 +380,7 @@ model system_prompt_variables {
   user        users?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@schema("anythingllm")
 }
 
 model prompt_history {
@@ -351,4 +393,5 @@ model prompt_history {
   user        users?     @relation(fields: [modifiedBy], references: [id])
 
   @@index([workspaceId])
+  @@schema("anythingllm")
 }
