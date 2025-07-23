@@ -4,7 +4,7 @@ dockerfilePath = "Dockerfile"
 
 [deploy]
 root = "server"
-startCommand = "node index.js"
+startCommand = "npm run start:migrate"
 healthcheckPath = "/api/ping"
 healthcheckTimeout = 180
 healthcheckInterval = 10
