@@ -6,9 +6,10 @@ dockerfilePath = "Dockerfile"
 root = "server"
 startCommand = "npm run start:migrate"
 healthcheckPath = "/api/ping"
-healthcheckTimeout = 180
-healthcheckInterval = 10
+healthcheckTimeout = 300
+healthcheckInterval = 15
 restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
 restartPolicyMinDelay = 1000
 
 [deploy.env]
@@ -20,6 +21,10 @@ NODE_ENV = "production"
 NODE_OPTIONS = "--max-old-space-size=4096"
 PYTHONUNBUFFERED = "1"
 PYTHONDONTWRITEBYTECODE = "1"
+
+# Multi-Service Database Configuration
+PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK = "1"
+SKIP_SEED = "false"
 
 # Security Keys - Use Railway Variables
 JWT_SECRET = "${{JWT_SECRET}}"
