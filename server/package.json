@@ -26,6 +26,7 @@
     "migrate:idempotent": "node scripts/idempotent-migration.js",
     "deploy:safe": "npm run migrate:check && npx prisma migrate deploy",
     "deploy:idempotent": "node scripts/idempotent-migration.js",
+    "deploy:validate": "node ../scripts/railway-deployment-validator.js",
     "health:check": "node startup-checks.js",
     "health:startup": "node startup-checks.js"
   },
