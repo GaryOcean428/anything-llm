@@ -14,7 +14,8 @@ restartPolicyMinDelay = 1000
 
 [deploy.env]
 # Database Configuration - Reference PostgreSQL service
-DATABASE_URL = "${{Postgres.DATABASE_URL}}"
+# Note: Add search_path to prioritize anythingllm schema for multi-service isolation
+DATABASE_URL = "${{Postgres.DATABASE_URL}}?search_path=anythingllm,public"
 
 # Node.js Configuration
 NODE_ENV = "production"
