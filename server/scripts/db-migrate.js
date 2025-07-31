@@ -30,8 +30,12 @@ async function createAnythingLLMSchema() {
     // Create anythingllm schema if it doesn't exist
     await prisma.$executeRaw`CREATE SCHEMA IF NOT EXISTS anythingllm;`;
     console.log('[DB-MIGRATE] ✅ AnythingLLM schema created/verified');
+    
+    // Set default search path to prioritize anythingllm schema
+    await prisma.$executeRaw`SET search_path TO anythingllm, public;`;
+    console.log('[DB-MIGRATE] ✅ Search path configured for anythingllm schema');
   } catch (error) {
-    console.log('[DB-MIGRATE] Schema creation skipped:', error.message);
+    console.log('[DB-MIGRATE] Schema creation/configuration skipped:', error.message);
   } finally {
     await prisma.$disconnect();
   }
@@ -106,11 +110,23 @@ async function runMigration() {
       const prisma = new PrismaClient();
       
       try {
-        // Try to access the system_settings table
+        // Try to access the system_settings table and workspaces table
         await prisma.system_settings.findFirst();
+        console.log('[DB-MIGRATE] ✅ System settings table accessible');
+        
+        // Specifically verify workspaces table (the one mentioned in the issue)
+        await prisma.workspaces.findFirst();
+        console.log('[DB-MIGRATE] ✅ Workspaces table accessible in anythingllm schema');
+        
         console.log('[DB-MIGRATE] ✅ Database tables accessible');
       } catch (error) {
         console.log('[DB-MIGRATE] ⚠️  Table verification failed, but continuing deployment:', error.message);
+        
+        // Additional diagnostics for workspaces table specifically
+        if (error.message.includes('workspaces')) {
+          console.log('[DB-MIGRATE] 🔍 Workspaces table issue detected - this indicates schema isolation problem');
+          console.log('[DB-MIGRATE] 💡 Ensure DATABASE_URL includes search_path=anythingllm,public');
+        }
       } finally {
         await prisma.$disconnect();
       }

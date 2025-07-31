@@ -24,6 +24,8 @@
     "migrate:recovery": "node scripts/migration-recovery.js",
     "migrate:recovery:quick": "node scripts/migration-recovery.js --quick",
     "migrate:idempotent": "node scripts/idempotent-migration.js",
+    "migrate:schema": "node scripts/schema-migrate.js",
+    "test:schema": "node scripts/test-schema-setup.js",
     "deploy:safe": "npm run migrate:check && npx prisma migrate deploy",
     "deploy:idempotent": "node scripts/idempotent-migration.js",
     "deploy:validate": "node ../scripts/railway-deployment-validator.js",
