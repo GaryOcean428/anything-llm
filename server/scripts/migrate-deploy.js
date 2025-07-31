@@ -22,6 +22,21 @@ process.chdir(path.join(__dirname, '..'));
 console.log('[MIGRATION] Starting Prisma migration deployment...');
 console.log('[MIGRATION] Current directory:', process.cwd());
 
+// Ensure DATABASE_URL includes proper search path for multi-schema setup
+if (process.env.DATABASE_URL) {
+  let databaseUrl = process.env.DATABASE_URL;
+  if (databaseUrl.includes('postgresql') && !databaseUrl.includes('search_path') && !databaseUrl.includes('schema=')) {
+    if (databaseUrl.includes('?')) {
+      databaseUrl += '&search_path=anythingllm,public';
+    } else {
+      databaseUrl += '?search_path=anythingllm,public';
+    }
+    process.env.DATABASE_URL = databaseUrl;
+    console.log('[MIGRATION] ✅ Added search_path to DATABASE_URL for multi-schema support');
+  }
+  console.log(`[MIGRATION] Schema configuration: ${process.env.DATABASE_URL.includes('search_path') ? 'Multi-schema (anythingllm,public)' : 'Default schema'}`);
+}
+
 /**
  * Execute a command and return a promise
  */
@@ -59,6 +74,7 @@ function isP3005Error(error) {
   return errorStr.includes('p3005') || 
          errorStr.includes('database schema is not empty') ||
          errorStr.includes('baseline an existing production database') ||
+         errorStr.includes('baseline') ||
          errorStr.includes('failed migration') ||
          errorStr.includes('migration.*failed') ||
          errorStr.includes('20250720073934_init');
@@ -159,6 +175,53 @@ async function checkMigrationExists(migrationName) {
 }
 
 /**
+ * Ensure anythingllm schema exists before migrations
+ */
+async function ensureAnythingLLMSchema() {
+  console.log('[MIGRATION] Ensuring anythingllm schema exists...');
+  
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    
+    // Create anythingllm schema if it doesn't exist
+    await prisma.$executeRaw`CREATE SCHEMA IF NOT EXISTS anythingllm;`;
+    console.log('[MIGRATION] ✅ AnythingLLM schema ensured');
+    
+    await prisma.$disconnect();
+    return true;
+  } catch (error) {
+    console.log('[MIGRATION] ⚠️  Schema creation failed, but continuing:', error.message);
+    return false;
+  }
+}
+
+/**
+ * Verify tables exist in anythingllm schema after migration
+ */
+async function verifySchemaDeployment() {
+  console.log('[MIGRATION] Verifying schema deployment...');
+  
+  try {
+    const { PrismaClient } = require('@prisma/client');
+    const prisma = new PrismaClient();
+    
+    // Test critical tables in anythingllm schema
+    await prisma.workspaces.findFirst();
+    await prisma.system_settings.findFirst();
+    await prisma.event_logs.findFirst();
+    
+    console.log('[MIGRATION] ✅ Tables verified in anythingllm schema');
+    await prisma.$disconnect();
+    return true;
+  } catch (error) {
+    console.log('[MIGRATION] ❌ Schema verification failed:', error.message);
+    await this.prisma?.$disconnect?.();
+    return false;
+  }
+}
+
+/**
  * Main migration deployment function
  */
 async function deployMigrations() {
@@ -167,9 +230,27 @@ async function deployMigrations() {
     console.log('[MIGRATION] Generating Prisma client...');
     await executeCommand('npx prisma generate');
     
+    // Ensure anythingllm schema exists before any migration attempts
+    await ensureAnythingLLMSchema();
+    
     // Try normal migration deployment first
     console.log('[MIGRATION] Attempting normal migration deployment...');
     await executeCommand('npx prisma migrate deploy');
+    
+    // Verify that tables are properly deployed in anythingllm schema
+    const verificationSuccess = await verifySchemaDeployment();
+    if (!verificationSuccess) {
+      console.log('[MIGRATION] ⚠️  Schema verification failed, attempting schema push...');
+      
+      // Try db push to ensure schema is properly synchronized
+      await executeCommand('npx prisma db push --skip-generate');
+      
+      // Verify again after push
+      const retryVerification = await verifySchemaDeployment();
+      if (!retryVerification) {
+        throw new Error('Schema verification failed after db push');
+      }
+    }
     
     console.log('[MIGRATION] ✅ Migration deployment successful!');
     return true;
@@ -269,5 +350,7 @@ module.exports = {
   baselineExistingMigrations, 
   checkMigrationExists,
   isP3005Error,
-  isFailedInitMigration 
+  isFailedInitMigration,
+  ensureAnythingLLMSchema,
+  verifySchemaDeployment 
 };
