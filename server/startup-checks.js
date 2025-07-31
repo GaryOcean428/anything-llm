@@ -160,6 +160,18 @@ async function performStartupChecks() {
     return false;
   }
   
+  // Ensure DATABASE_URL includes proper search path for multi-schema setup
+  let databaseUrl = process.env.DATABASE_URL;
+  if (databaseUrl.includes('postgresql') && !databaseUrl.includes('search_path') && !databaseUrl.includes('schema=')) {
+    if (databaseUrl.includes('?')) {
+      databaseUrl += '&search_path=anythingllm,public';
+    } else {
+      databaseUrl += '?search_path=anythingllm,public';
+    }
+    process.env.DATABASE_URL = databaseUrl;
+    console.log('[STARTUP] ✅ Added search_path to DATABASE_URL for multi-schema support');
+  }
+  
   console.log('[STARTUP] ✅ DATABASE_URL is configured');
   
   // Perform all checks

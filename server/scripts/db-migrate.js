@@ -20,7 +20,20 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+// Ensure DATABASE_URL includes proper search path for multi-schema setup
+let databaseUrl = process.env.DATABASE_URL;
+if (databaseUrl.includes('postgresql') && !databaseUrl.includes('search_path') && !databaseUrl.includes('schema=')) {
+  if (databaseUrl.includes('?')) {
+    databaseUrl += '&search_path=anythingllm,public';
+  } else {
+    databaseUrl += '?search_path=anythingllm,public';
+  }
+  process.env.DATABASE_URL = databaseUrl;
+  console.log('[DB-MIGRATE] ✅ Added search_path to DATABASE_URL for multi-schema support');
+}
+
 console.log(`[DB-MIGRATE] Database URL: ${process.env.DATABASE_URL.includes('postgresql') ? 'PostgreSQL' : 'SQLite'}`);
+console.log(`[DB-MIGRATE] Schema configuration: ${process.env.DATABASE_URL.includes('search_path') ? 'Multi-schema (anythingllm,public)' : 'Default schema'}`);
 
 async function createAnythingLLMSchema() {
   const { PrismaClient } = require('@prisma/client');
@@ -118,14 +131,37 @@ async function runMigration() {
         await prisma.workspaces.findFirst();
         console.log('[DB-MIGRATE] ✅ Workspaces table accessible in anythingllm schema');
         
+        // Verify event_logs table (also mentioned in the issue)
+        await prisma.event_logs.findFirst();
+        console.log('[DB-MIGRATE] ✅ Event logs table accessible in anythingllm schema');
+        
         console.log('[DB-MIGRATE] ✅ Database tables accessible');
       } catch (error) {
-        console.log('[DB-MIGRATE] ⚠️  Table verification failed, but continuing deployment:', error.message);
+        console.log('[DB-MIGRATE] ⚠️  Table verification failed, attempting schema fix:', error.message);
         
-        // Additional diagnostics for workspaces table specifically
-        if (error.message.includes('workspaces')) {
-          console.log('[DB-MIGRATE] 🔍 Workspaces table issue detected - this indicates schema isolation problem');
-          console.log('[DB-MIGRATE] 💡 Ensure DATABASE_URL includes search_path=anythingllm,public');
+        // If tables don't exist in anythingllm schema, try to run db push
+        try {
+          console.log('[DB-MIGRATE] Attempting to synchronize schema with db push...');
+          execSync('npx prisma db push --skip-generate', { 
+            stdio: 'inherit',
+            cwd: path.join(__dirname, '..')
+          });
+          
+          // Retry verification after schema push
+          await prisma.system_settings.findFirst();
+          await prisma.workspaces.findFirst();
+          await prisma.event_logs.findFirst();
+          
+          console.log('[DB-MIGRATE] ✅ Schema synchronized and tables accessible');
+        } catch (schemaError) {
+          console.log('[DB-MIGRATE] ❌ Schema synchronization failed:', schemaError.message);
+          
+          // Additional diagnostics for workspaces table specifically
+          if (error.message.includes('workspaces') || error.message.includes('system_settings') || error.message.includes('event_logs')) {
+            console.log('[DB-MIGRATE] 🔍 Core tables missing - this indicates schema isolation problem');
+            console.log('[DB-MIGRATE] 💡 Ensure DATABASE_URL includes search_path=anythingllm,public');
+            console.log('[DB-MIGRATE] 💡 Or add ?schema=anythingllm to DATABASE_URL');
+          }
         }
       } finally {
         await prisma.$disconnect();
