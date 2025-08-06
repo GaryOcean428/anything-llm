@@ -11,7 +11,7 @@ SET search_path TO anythingllm, public;
 -- Function to move table from public to anythingllm schema if it exists
 DO $$
 DECLARE
-    table_name text;
+    v_table_name text;
     tables_to_move text[] := ARRAY[
         'api_keys', 'workspace_documents', 'invites', 'system_settings', 'users',
         'recovery_codes', 'password_reset_tokens', 'document_vectors', 'welcome_messages',
@@ -22,30 +22,30 @@ DECLARE
         'system_prompt_variables', 'prompt_history'
     ];
 BEGIN
-    FOREACH table_name IN ARRAY tables_to_move
+    FOREACH v_table_name IN ARRAY tables_to_move
     LOOP
         -- Check if table exists in public schema
         IF EXISTS (
             SELECT 1 
-            FROM information_schema.tables 
-            WHERE table_schema = 'public' 
-            AND table_name = table_name
+            FROM information_schema.tables t
+            WHERE t.table_schema = 'public' 
+            AND t.table_name = v_table_name
         ) THEN
             -- Check if table doesn't already exist in anythingllm schema
             IF NOT EXISTS (
                 SELECT 1 
-                FROM information_schema.tables 
-                WHERE table_schema = 'anythingllm' 
-                AND table_name = table_name
+                FROM information_schema.tables t2
+                WHERE t2.table_schema = 'anythingllm' 
+                AND t2.table_name = v_table_name
             ) THEN
                 -- Move table from public to anythingllm schema
-                EXECUTE format('ALTER TABLE public.%I SET SCHEMA anythingllm', table_name);
-                RAISE NOTICE 'Moved table % from public to anythingllm schema', table_name;
+                EXECUTE format('ALTER TABLE public.%I SET SCHEMA anythingllm', v_table_name);
+                RAISE NOTICE 'Moved table % from public to anythingllm schema', v_table_name;
             ELSE
-                RAISE NOTICE 'Table % already exists in anythingllm schema, skipping move', table_name;
+                RAISE NOTICE 'Table % already exists in anythingllm schema, skipping move', v_table_name;
             END IF;
         ELSE
-            RAISE NOTICE 'Table % does not exist in public schema, will be created in anythingllm schema', table_name;
+            RAISE NOTICE 'Table % does not exist in public schema, will be created in anythingllm schema', v_table_name;
         END IF;
     END LOOP;
 END $$;
