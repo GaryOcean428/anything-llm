@@ -1,5 +1,9 @@
-const chalk = require("chalk");
 const { Telemetry } = require("../../../../models/telemetry");
+
+// Load chalk module dynamically to avoid ES module issues
+// async function getChalk() {
+//   return await import("chalk");
+// }
 
 /**
  * HTTP Interface plugin for Aibitat to emulate a websocket interface in the agent
@@ -23,7 +27,7 @@ const httpSocket = {
       },
     },
   },
-  plugin: function ({
+  plugin({
     handler,
     muteUserReply = true, // Do not post messages to "USER" back to frontend.
     introspection = false, // when enabled will attach socket to Aibitat object with .introspect method which reports status updates to frontend.
@@ -32,9 +36,11 @@ const httpSocket = {
       name: this.name,
       setup(aibitat) {
         aibitat.onError(async (error) => {
-          let errorMessage =
+          const errorMessage =
             error?.message || "An error occurred while running the agent.";
-          console.error(chalk.red(`   error: ${errorMessage}`), error);
+          // Log error for debugging
+          // const chalk = await getChalk();
+          // console.error(chalk.red(`   error: ${errorMessage}`), error);
           aibitat.introspect(
             `Error encountered while running: ${errorMessage}`
           );
@@ -45,7 +51,9 @@ const httpSocket = {
         });
 
         aibitat.introspect = (messageText) => {
-          if (!introspection) return; // Dump thoughts when not wanted.
+          if (!introspection) {
+            return; // Dump thoughts when not wanted.
+          }
           handler.send(
             JSON.stringify({ type: "statusResponse", content: messageText })
           );
@@ -62,9 +70,12 @@ const httpSocket = {
         // We can only receive one message response with HTTP
         // so we end on first response.
         aibitat.onMessage((message) => {
-          if (message.from !== "USER")
+          if (message.from !== "USER") {
             Telemetry.sendTelemetry("agent_chat_sent");
-          if (message.from === "USER" && muteUserReply) return;
+          }
+          if (message.from === "USER" && muteUserReply) {
+            return;
+          }
           handler.send(JSON.stringify(message));
           handler.close();
         });

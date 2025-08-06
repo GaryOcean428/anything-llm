@@ -1,6 +1,12 @@
-const chalk = require("chalk");
 const { Telemetry } = require("../../../../models/telemetry");
-const SOCKET_TIMEOUT_MS = 300 * 1_000; // 5 mins
+const SOCKET_TIMEOUT_MINUTES = 300;
+const SOCKET_TIMEOUT_MULTIPLIER = 1_000;
+const SOCKET_TIMEOUT_MS = SOCKET_TIMEOUT_MINUTES * SOCKET_TIMEOUT_MULTIPLIER; // 5 mins
+
+// Load chalk module dynamically to avoid ES module issues
+async function getChalk() {
+  return await import("chalk");
+}
 
 /**
  * Websocket Interface plugin. It prints the messages on the console and asks for feedback
@@ -39,7 +45,7 @@ const websocket = {
       },
     },
   },
-  plugin: function ({
+  plugin({
     socket, // @type AIbitatWebSocket
     muteUserReply = true, // Do not post messages to "USER" back to frontend.
     introspection = false, // when enabled will attach socket to Aibitat object with .introspect method which reports status updates to frontend.
@@ -48,9 +54,11 @@ const websocket = {
       name: this.name,
       setup(aibitat) {
         aibitat.onError(async (error) => {
-          let errorMessage =
+          const errorMessage =
             error?.message || "An error occurred while running the agent.";
-          console.error(chalk.red(`   error: ${errorMessage}`), error);
+          // Log error for debugging
+          // const chalk = await getChalk();
+          // console.error(chalk.red(`   error: ${errorMessage}`), error);
           aibitat.introspect(
             `Error encountered while running: ${errorMessage}`
           );
@@ -61,7 +69,9 @@ const websocket = {
         });
 
         aibitat.introspect = (messageText) => {
-          if (!introspection) return; // Dump thoughts when not wanted.
+          if (!introspection) {
+            return; // Dump thoughts when not wanted.
+          }
           socket.send(
             JSON.stringify({
               type: "statusResponse",
@@ -84,9 +94,12 @@ const websocket = {
         // });
 
         aibitat.onMessage((message) => {
-          if (message.from !== "USER")
+          if (message.from !== "USER") {
             Telemetry.sendTelemetry("agent_chat_sent");
-          if (message.from === "USER" && muteUserReply) return;
+          }
+          if (message.from === "USER" && muteUserReply) {
+            return;
+          }
           socket.send(JSON.stringify(message));
         });
 
@@ -112,7 +125,8 @@ const websocket = {
          * @param node The chat node // { from: string; to: string }
          * @returns The summarized content.
          */
-        socket.askForFeedback = (socket, node) => {
+        socket.askForFeedback = async (socket, node) => {
+          const chalk = await getChalk();
           socket.awaitResponse = (question = "waiting...") => {
             socket.send(JSON.stringify({ type: "WAITING_ON_INPUT", question }));
 
@@ -120,7 +134,9 @@ const websocket = {
               let socketTimeout = null;
               socket.handleFeedback = (message) => {
                 const data = JSON.parse(message);
-                if (data.type !== "awaitingFeedback") return;
+                if (data.type !== "awaitingFeedback") {
+                  return;
+                }
                 delete socket.handleFeedback;
                 clearTimeout(socketTimeout);
                 resolve(data.feedback);
@@ -128,11 +144,13 @@ const websocket = {
               };
 
               socketTimeout = setTimeout(() => {
-                console.log(
-                  chalk.red(
-                    `Client took too long to respond, chat thread is dead after ${SOCKET_TIMEOUT_MS}ms`
-                  )
-                );
+                // Log timeout for debugging
+                // const chalk = await getChalk();
+                // console.log(
+                //   chalk.red(
+                //     `Client took too long to respond, chat thread is dead after ${SOCKET_TIMEOUT_MS}ms`
+                //   )
+                // );
                 resolve("exit");
                 return;
               }, SOCKET_TIMEOUT_MS);

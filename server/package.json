@@ -39,6 +39,7 @@
     "@anthropic-ai/sdk": "^0.56.0",
     "@aws-sdk/client-bedrock-runtime": "^3.848.0",
     "@datastax/astra-db-ts": "^2.0.1",
+    "@elevenlabs/elevenlabs-js": "^2.6.0",
     "@ladjs/graceful": "^4.2.0",
     "@lancedb/lancedb": "^0.21.1",
     "@langchain/anthropic": "^0.3.24",
@@ -65,8 +66,8 @@
     "chromadb": "^3.0.9",
     "cohere-ai": "^7.17.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.2.0",
-    "@elevenlabs/elevenlabs-js": "^2.6.0",
     "express": "^5.1.0",
     "extract-json-from-string": "^1.0.1",
     "graphql": "^16.11.0",
@@ -96,8 +97,7 @@
     "uuid": "^11.1.0",
     "uuid-apikey": "^1.5.3",
     "weaviate-ts-client": "^2.2.0",
-    "winston": "^3.17.0",
-    "cross-env": "^7.0.3"
+    "winston": "^3.17.0"
   },
   "devDependencies": {
     "@inquirer/prompts": "^7.6.0",
