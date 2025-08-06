@@ -9,24 +9,28 @@
  * Use this script when you encounter "table public.workspaces does not exist" errors.
  */
 
-const { PrismaClient } = require('@prisma/client');
-const { execSync } = require('child_process');
+const { PrismaClient } = require("@prisma/client");
+const { execSync } = require("child_process");
 
-console.log('[SCHEMA-MIGRATE] Starting AnythingLLM schema migration...');
+// eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] Starting AnythingLLM schema migration...");
 
 async function migrateToMultiSchema() {
   const prisma = new PrismaClient();
   
   try {
-    console.log('[SCHEMA-MIGRATE] Checking database connection...');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] Checking database connection...");
     
     // Test basic connectivity
     await prisma.$queryRaw`SELECT 1 as test`;
-    console.log('[SCHEMA-MIGRATE] ✅ Database connection successful');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] ✅ Database connection successful");
     
     // Create anythingllm schema
     await prisma.$executeRaw`CREATE SCHEMA IF NOT EXISTS anythingllm;`;
-    console.log('[SCHEMA-MIGRATE] ✅ AnythingLLM schema created/verified');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] ✅ AnythingLLM schema created/verified");
     
     // Check if workspaces table exists in public schema
     const publicWorkspaces = await prisma.$queryRaw`
@@ -47,10 +51,13 @@ async function migrateToMultiSchema() {
       ) as exists;
     `;
     
-    console.log('[SCHEMA-MIGRATE] Public schema workspaces exists:', publicWorkspaces[0].exists);
-    console.log('[SCHEMA-MIGRATE] AnythingLLM schema workspaces exists:', anythingllmWorkspaces[0].exists);
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] Public schema workspaces exists:", publicWorkspaces[0].exists);
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] AnythingLLM schema workspaces exists:", anythingllmWorkspaces[0].exists);
     
-    console.log('[SCHEMA-MIGRATE] 🔄 Checking tables and moving any in public -> anythingllm...');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] 🔄 Checking tables and moving any in public -> anythingllm...");
     // List of all tables that should be in anythingllm schema
     const tables = [
       'api_keys', 'workspace_documents', 'invites', 'system_settings', 'users',
@@ -94,24 +101,28 @@ async function migrateToMultiSchema() {
       }
     }
     
-    console.log('[SCHEMA-MIGRATE] ✅ Schema migration completed');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] ✅ Schema migration completed");
     
     // Generate new Prisma client with multi-schema support
-    console.log('[SCHEMA-MIGRATE] 🔄 Regenerating Prisma client...');
-    execSync('npx prisma generate', { stdio: 'inherit' });
-    console.log('[SCHEMA-MIGRATE] ✅ Prisma client regenerated');
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] 🔄 Regenerating Prisma client...");
+    execSync("npx prisma generate", { stdio: "inherit" });
+    // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] ✅ Prisma client regenerated");
     
     // Test final connectivity to workspaces table
     try {
       await prisma.workspaces.findFirst();
-      console.log('[SCHEMA-MIGRATE] ✅ Workspaces table accessible via Prisma');
+      // eslint-disable-next-line no-console
+console.log("[SCHEMA-MIGRATE] ✅ Workspaces table accessible via Prisma");
     } catch (error) {
-      console.log('[SCHEMA-MIGRATE] ❌ Workspaces table still not accessible:', error.message);
+      console.log("[SCHEMA-MIGRATE] Workspaces table still not accessible:", error.message);
       throw error;
     }
     
   } catch (error) {
-    console.error('[SCHEMA-MIGRATE] ❌ Migration failed:', error.message);
+    console.error("[SCHEMA-MIGRATE] Migration failed:", error.message);
     throw error;
   } finally {
     await prisma.$disconnect();
@@ -121,10 +132,10 @@ async function migrateToMultiSchema() {
 // Execute migration
 migrateToMultiSchema()
   .then(() => {
-    console.log('[SCHEMA-MIGRATE] 🎉 Multi-schema migration completed successfully!');
+    console.log("[SCHEMA-MIGRATE] Multi-schema migration completed successfully!");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('[SCHEMA-MIGRATE] 💥 Migration failed:', error.message);
+    console.error("[SCHEMA-MIGRATE] Migration failed:", error.message);
     process.exit(1);
   });
