@@ -185,5 +185,6 @@
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  }
+  },
+  "jdk.advanced.disable.nbjavac": false
 }
