@@ -1,4 +1,4 @@
-import { expect, afterEach } from "vitest";
+import { expect, afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
 import * as matchers from "@testing-library/jest-dom/matchers";
 
@@ -35,6 +35,14 @@ Object.defineProperty(window, "localStorage", {
   },
   writable: true,
 });
+
+// Mock fetch API
+global.fetch = vi.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    ok: true,
+  })
+);
 
 // Mock sessionStorage
 Object.defineProperty(window, "sessionStorage", {

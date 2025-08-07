@@ -1,6 +1,5 @@
 {
   "name": "luffy-frontend",
-  "private": false,
   "license": "MIT",
   "type": "module",
   "scripts": {

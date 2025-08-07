@@ -1,119 +1,76 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import ChatBubble from "../ChatBubble";
+import React from "react";
+import { PfpProvider } from "../../PfpContext";
+import { ContextWrapper as AuthProvider } from "../../AuthContext";
 
-// Mock necessary dependencies
-vi.mock("../../models/system", () => ({
-  default: {
-    keys: vi.fn().mockResolvedValue({
-      TextToSpeechProvider: null,
-      TTSVoiceModel: null,
-      TTSChatPiperAPIKey: null,
-    }),
-  },
-}));
+// Create a simple mock for our purify utility.
+const mockPurify = {
+  sanitize: (html) => html, // It just returns the HTML as-is.
+};
 
-vi.mock("../../hooks/useUser", () => ({
-  default: () => ({
-    user: { id: 1, username: "testuser" },
-    loading: false,
-  }),
-}));
-
-// Mock markdown processing
-vi.mock("../../utils/chat/markdown", () => ({
-  default: {
-    parse: vi.fn().mockReturnValue("Test message content"),
-  },
-}));
-
-const MockedChatBubble = ({ props = {} }) => (
+// Create a wrapper that includes all necessary providers.
+const TestWrapper = ({ children }) => (
   <BrowserRouter>
-    <ChatBubble
-      message={{
-        content: "Test message content",
-        role: "user",
-        id: "1",
-        createdAt: new Date().toISOString(),
-      }}
-      type="user"
-      {...props}
-    />
+    <AuthProvider>
+      <PfpProvider>{children}</PfpProvider>
+    </AuthProvider>
   </BrowserRouter>
 );
 
 describe("ChatBubble Component", () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  it("should render a user message correctly", () => {
+    const props = {
+      fullText: "Hello, this is a user message.",
+      type: "user",
+      purify: mockPurify,
+    };
 
-  it("should render user message correctly", () => {
-    render(<MockedChatBubble />);
-    const messageElements = screen.queryAllByText(/test message/i);
-    expect(messageElements.length).toBeGreaterThanOrEqual(0);
-  });
-
-  it("should render assistant message correctly", () => {
     render(
-      <MockedChatBubble
-        props={{
-          message: {
-            content: "Assistant response",
-            role: "assistant",
-            id: "2",
-            createdAt: new Date().toISOString(),
-          },
-          type: "assistant",
-        }}
-      />
+      <TestWrapper>
+        <ChatBubble {...props} />
+      </TestWrapper>
     );
-    const assistantElements = screen.queryAllByText(/assistant/i);
-    expect(assistantElements.length).toBeGreaterThanOrEqual(0);
+
+    expect(
+      screen.getByText("Hello, this is a user message.")
+    ).toBeInTheDocument();
   });
 
-  it("should handle message actions", () => {
-    render(<MockedChatBubble />);
-    const buttons = screen.queryAllByRole("button");
-    expect(buttons.length).toBeGreaterThanOrEqual(0);
-  });
+  it("should render an assistant message correctly", () => {
+    const props = {
+      fullText: "Hello, this is an assistant message.",
+      type: "assistant",
+      purify: mockPurify,
+    };
 
-  it("should display message timestamp", () => {
-    render(<MockedChatBubble />);
-    // Check for any time-related elements
-    const timeElements = screen.queryAllByText(
-      /\d{1,2}:\d{2}|\d{1,2}\/\d{1,2}|ago|today|yesterday/i
-    );
-    expect(timeElements.length).toBeGreaterThanOrEqual(0);
-  });
-
-  it("should handle message copying", () => {
-    render(<MockedChatBubble />);
-    const copyElements = screen.queryAllByTitle(/copy/i);
-    expect(copyElements.length).toBeGreaterThanOrEqual(0);
-  });
-
-  it("should handle message editing for user messages", () => {
-    render(<MockedChatBubble />);
-    const editElements = screen.queryAllByTitle(/edit/i);
-    expect(editElements.length).toBeGreaterThanOrEqual(0);
-  });
-
-  it("should render message content with proper formatting", () => {
     render(
-      <MockedChatBubble
-        props={{
-          message: {
-            content: "**Bold text** and *italic text*",
-            role: "assistant",
-            id: "3",
-            createdAt: new Date().toISOString(),
-          },
-          type: "assistant",
-        }}
-      />
+      <TestWrapper>
+        <ChatBubble {...props} />
+      </TestWrapper>
     );
-    const contentElement = document.body;
-    expect(contentElement).toBeTruthy();
+
+    expect(
+      screen.getByText("Hello, this is an assistant message.")
+    ).toBeInTheDocument();
+  });
+
+  it("should handle empty message content gracefully", () => {
+    const props = {
+      fullText: "",
+      type: "user",
+      purify: mockPurify,
+    };
+
+    render(
+      <TestWrapper>
+        <ChatBubble {...props} />
+      </TestWrapper>
+    );
+
+    const content = screen.getByTestId("chat-bubble-content");
+    expect(content.innerHTML).toBe("");
   });
 });

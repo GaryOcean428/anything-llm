@@ -32,22 +32,63 @@ const {
 } = require("../utils/files/pfp");
 const { getTTSProvider } = require("../utils/TextToSpeech");
 const { WorkspaceThread } = require("../models/workspaceThread");
-const truncate = require("truncate");
+const truncate = require("truncate").default;
 const { purgeDocument } = require("../utils/files/purgeDocument");
 const { getModelTag } = require("./utils");
 
+/**
+ * @typedef {import('express').Request} Request
+ * @typedef {import('express').Response} Response
+ */
+
+const HTTP_STATUS = {
+  OK: 200,
+  BAD_REQUEST: 400,
+  SERVER_ERROR: 500,
+};
+
+/**
+ * @param {import('express').Application} app
+ */
 function workspaceEndpoints(app) {
-  if (!app) return;
+  if (!app) {
+    return;
+  }
 
   const responseCache = new Map();
 
   app.post(
     "/workspace/new",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const user = await userFromSession(request, response);
         const { name = null, onboardingComplete = false } = reqBody(request);
+
+        if (!name) {
+          return response
+            .status(HTTP_STATUS.BAD_REQUEST)
+            .json({ error: "No name provided." });
+        }
+
+        if (multiUserMode(response)) {
+          if (!user) { return; }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          if (userWorkspaces.find((w) => w.name === name)) {
+            return response.status(HTTP_STATUS.BAD_REQUEST).json({
+              error: "Workspace with that name already exists.",
+            });
+          }
+        } else {
+          const existingWorkspace = await Workspace.get({ name });
+          if (existingWorkspace) {
+            return response.status(HTTP_STATUS.BAD_REQUEST).json({
+              error: "Workspace with that name already exists.",
+            });
+          }
+        }
+
         const { workspace, message } = await Workspace.new(name, user?.id);
         await Telemetry.sendTelemetry(
           "workspace_created",
@@ -69,13 +110,13 @@ function workspaceEndpoints(app) {
           },
           user?.id
         );
-        if (onboardingComplete === true)
+        if (onboardingComplete === true) {
           await Telemetry.sendTelemetry("onboarding_complete");
+        }
 
-        response.status(200).json({ workspace, message });
+        return response.status(HTTP_STATUS.OK).json({ workspace, message });
       } catch (e) {
-        console.error(e.message, e);
-        response.sendStatus(500).end();
+        response.sendStatus(HTTP_STATUS.SERVER_ERROR).end();
       }
     }
   );
@@ -83,17 +124,27 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/update",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const user = await userFromSession(request, response);
         const { slug = null } = request.params;
         const data = reqBody(request);
-        const currWorkspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let currWorkspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          currWorkspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          currWorkspace = await Workspace.get({ slug });
+        }
 
         if (!currWorkspace) {
-          response.sendStatus(400).end();
+          response.sendStatus(HTTP_STATUS.BAD_REQUEST).end();
           return;
         }
 
@@ -102,60 +153,75 @@ function workspaceEndpoints(app) {
           currWorkspace.id,
           data
         );
-        response.status(200).json({ workspace, message });
+        response.status(HTTP_STATUS.OK).json({ workspace, message });
       } catch (e) {
-        console.error(e.message, e);
-        response.sendStatus(500).end();
+        response.sendStatus(HTTP_STATUS.SERVER_ERROR).end();
       }
     }
   );
 
+  /**
+   * @typedef {object} MulterFile
+   * @property {string} fieldname
+   * @property {string} originalname
+   * @property {string} encoding
+   * @property {string} mimetype
+   * @property {number} size
+   * @property {string} destination
+   * @property {string} filename
+   * @property {string} path
+   */
+
+  /**
+   * @typedef {Request & { file: MulterFile }}
+   FileUploadRequest
+   */
   app.post(
     "/workspace/:slug/upload",
-    [
-      validatedRequest,
-      flexUserRoleValid([ROLES.admin, ROLES.manager]),
-      handleFileUpload,
-    ],
-    async function (request, response) {
+    [validatedRequest, handleFileUpload, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
+    async (request, response) => {
       try {
-        const Collector = new CollectorApi();
-        const { originalname } = request.file;
-        const processingOnline = await Collector.online();
+        const { slug } = request.params;
+        const user = await userFromSession(request, response);
+        let workspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          workspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          workspace = await Workspace.get({ slug });
+        }
 
-        if (!processingOnline) {
-          response
-            .status(500)
-            .json({
-              success: false,
-              error: `Document processing API is not online. Document ${originalname} will not be processed automatically.`,
-            })
-            .end();
+        if (!workspace) {
+          response.sendStatus(HTTP_STATUS.BAD_REQUEST).end();
           return;
         }
 
-        const { success, reason } =
-          await Collector.processDocument(originalname);
+        const { success, reason } = await Document.create(request.file.path);
         if (!success) {
-          response.status(500).json({ success: false, error: reason }).end();
+          response
+            .status(HTTP_STATUS.BAD_REQUEST)
+            .json({ success: false, error: reason });
           return;
         }
 
-        Collector.log(
-          `Document ${originalname} uploaded processed and successfully. It is now available in documents.`
-        );
         await Telemetry.sendTelemetry("document_uploaded");
         await EventLogs.logEvent(
           "document_uploaded",
           {
-            documentName: originalname,
+            documentName: request.file.originalname,
           },
-          response.locals?.user?.id
+          user?.id
         );
-        response.status(200).json({ success: true, error: null });
+
+        response.status(HTTP_STATUS.OK).json({ success: true, error: null });
       } catch (e) {
-        console.error(e.message, e);
-        response.sendStatus(500).end();
+        response.sendStatus(HTTP_STATUS.SERVER_ERROR).end();
       }
     }
   );
@@ -163,6 +229,7 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/upload-link",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const Collector = new CollectorApi();
@@ -206,32 +273,39 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/update-embeddings",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
-        const user = await userFromSession(request, response);
         const { slug = null } = request.params;
         const { adds = [], deletes = [] } = reqBody(request);
-        const currWorkspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let currWorkspace;
 
-        if (!currWorkspace) {
-          response.sendStatus(400).end();
-          return;
+        if (multiUserMode(response)) {
+          const user = await userFromSession(request, response);
+          // If no user is found, the request will be terminated in the session handler.
+          if (!user) return;
+
+          const userWorkspaces = await Workspace.getWithUser(user);
+          currWorkspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          currWorkspace = await Workspace.get({ slug });
         }
 
-        await Document.removeDocuments(
-          currWorkspace,
-          deletes,
-          response.locals?.user?.id
-        );
+        if (!currWorkspace) {
+          return response.status(HTTP_STATUS.NOT_FOUND).json({ error: "Workspace not found." });
+        }
+
+        // Use the user from the session which is already validated and available.
+        const user = response.locals.user || (await userFromSession(request, response));
+        await Document.removeDocuments(currWorkspace, deletes, user?.id);
         const { failedToEmbed = [], errors = [] } = await Document.addDocuments(
           currWorkspace,
           adds,
-          response.locals?.user?.id
+          user?.id
         );
+
         const updatedWorkspace = await Workspace.get({ id: currWorkspace.id });
-        response.status(200).json({
+        return response.status(HTTP_STATUS.OK).json({
           workspace: updatedWorkspace,
           message:
             failedToEmbed.length > 0
@@ -241,8 +315,7 @@ function workspaceEndpoints(app) {
               : null,
         });
       } catch (e) {
-        console.error(e.message, e);
-        response.sendStatus(500).end();
+        response.sendStatus(HTTP_STATUS.SERVER_ERROR).end();
       }
     }
   );
@@ -250,14 +323,24 @@ function workspaceEndpoints(app) {
   app.delete(
     "/workspace/:slug",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { slug = "" } = request.params;
         const user = await userFromSession(request, response);
         const VectorDb = getVectorDbClass();
-        const workspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let workspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          workspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          workspace = await Workspace.get({ slug });
+        }
 
         if (!workspace) {
           response.sendStatus(400).end();
@@ -293,14 +376,24 @@ function workspaceEndpoints(app) {
   app.delete(
     "/workspace/:slug/reset-vector-db",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { slug = "" } = request.params;
         const user = await userFromSession(request, response);
         const VectorDb = getVectorDbClass();
-        const workspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let workspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          workspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          workspace = await Workspace.get({ slug });
+        }
 
         if (!workspace) {
           response.sendStatus(400).end();
@@ -334,6 +427,7 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspaces",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const user = await userFromSession(request, response);
@@ -352,13 +446,23 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspace/:slug",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { slug } = request.params;
         const user = await userFromSession(request, response);
-        const workspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let workspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          workspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          workspace = await Workspace.get({ slug });
+        }
 
         response.status(200).json({ workspace });
       } catch (e) {
@@ -371,13 +475,23 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspace/:slug/chats",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { slug } = request.params;
         const user = await userFromSession(request, response);
-        const workspace = multiUserMode(response)
-          ? await Workspace.getWithUser(user, { slug })
-          : await Workspace.get({ slug });
+        let workspace = null;
+        if (multiUserMode(response)) {
+          if (!user) {
+            return response
+              .status(HTTP_STATUS.UNAUTHORIZED)
+              .json({ error: "Invalid session" });
+          }
+          const userWorkspaces = await Workspace.getWithUser(user);
+          workspace = userWorkspaces.find((w) => w.slug === slug);
+        } else {
+          workspace = await Workspace.get({ slug });
+        }
 
         if (!workspace) {
           response.sendStatus(400).end();
@@ -398,6 +512,7 @@ function workspaceEndpoints(app) {
   app.delete(
     "/workspace/:slug/delete-chats",
     [validatedRequest, flexUserRoleValid([ROLES.all]), validWorkspaceSlug],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { chatIds = [] } = reqBody(request);
@@ -429,6 +544,7 @@ function workspaceEndpoints(app) {
   app.delete(
     "/workspace/:slug/delete-edited-chats",
     [validatedRequest, flexUserRoleValid([ROLES.all]), validWorkspaceSlug],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { startingId } = reqBody(request);
@@ -453,6 +569,7 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/update-chat",
     [validatedRequest, flexUserRoleValid([ROLES.all]), validWorkspaceSlug],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { chatId, newText = null } = reqBody(request);
@@ -490,6 +607,7 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/chat-feedback/:chatId",
     [validatedRequest, flexUserRoleValid([ROLES.all]), validWorkspaceSlug],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { chatId } = request.params;
@@ -519,6 +637,7 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspace/:slug/suggested-messages",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
+    /** @type {import('express').RequestHandler} */
     async function (request, response) {
       try {
         const { slug } = request.params;
@@ -537,6 +656,7 @@ function workspaceEndpoints(app) {
   app.post(
     "/workspace/:slug/suggested-messages",
     [validatedRequest, flexUserRoleValid([ROLES.admin, ROLES.manager])],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { messages = [] } = reqBody(request);
@@ -570,6 +690,7 @@ function workspaceEndpoints(app) {
       flexUserRoleValid([ROLES.admin, ROLES.manager]),
       validWorkspaceSlug,
     ],
+    /** @type {import('express').RequestHandler} */
     async (request, response) => {
       try {
         const { docPath, pinStatus = false } = reqBody(request);
@@ -593,6 +714,7 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspace/:slug/tts/:chatId",
     [validatedRequest, flexUserRoleValid([ROLES.all]), validWorkspaceSlug],
+    /** @type {import('express').RequestHandler} */
     async function (request, response) {
       try {
         const { chatId } = request.params;
@@ -635,6 +757,7 @@ function workspaceEndpoints(app) {
   app.get(
     "/workspace/:slug/pfp",
     [validatedRequest, flexUserRoleValid([ROLES.all])],
+    /** @type {import('express').RequestHandler} */
     async function (request, response) {
       try {
         const { slug } = request.params;
@@ -655,14 +778,13 @@ function workspaceEndpoints(app) {
           return;
         }
 
-        const { found, buffer, mime } = fetchPfp(pfpPath);
+        const { found, buffer, mime } = await fetchPfp(pfpPath);
         if (!found) {
           response.sendStatus(204).end();
           return;
         }
 
         responseCache.set(slug, { buffer, mime });
-
         response.writeHead(200, {
           "Content-Type": mime || "image/png",
         });

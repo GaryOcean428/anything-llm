@@ -2,14 +2,14 @@ import React from "react";
 import UserIcon from "../UserIcon";
 import { userFromStorage } from "@/utils/request";
 import renderMarkdown from "@/utils/chat/markdown";
-import DOMPurify from "@/utils/chat/purify";
 
-export default function ChatBubble({ message, type, popMsg }) {
+export default function ChatBubble({ fullText, type, purify }) {
   const isUser = type === "user";
 
   return (
     <div
       className={`flex justify-center items-end w-full bg-theme-bg-secondary`}
+      data-testid="chat-bubble"
     >
       <div className={`py-8 px-4 w-full flex gap-x-5 md:max-w-[80%] flex-col`}>
         <div className="flex gap-x-5">
@@ -21,8 +21,9 @@ export default function ChatBubble({ message, type, popMsg }) {
           <div
             className={`markdown whitespace-pre-line text-white font-normal text-sm md:text-sm flex flex-col gap-y-1 mt-2`}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(renderMarkdown(message)),
+              __html: purify.sanitize(renderMarkdown(fullText || "")),
             }}
+            data-testid="chat-bubble-content"
           />
         </div>
       </div>

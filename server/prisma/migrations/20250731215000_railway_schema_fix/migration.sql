@@ -14,27 +14,27 @@ BEGIN
 END $$;
 
 -- Function to safely move or create tables in anythingllm schema
-CREATE OR REPLACE FUNCTION ensure_table_in_anythingllm_schema(table_name text) 
+CREATE OR REPLACE FUNCTION ensure_table_in_anythingllm_schema(v_table_name text) 
 RETURNS void AS $$
 BEGIN
     -- Check if table exists in public schema but not in anythingllm schema
     IF EXISTS (
-        SELECT 1 FROM information_schema.tables 
-        WHERE table_schema = 'public' AND table_name = table_name
+        SELECT 1 FROM information_schema.tables t
+        WHERE t.table_schema = 'public' AND t.table_name = v_table_name
     ) AND NOT EXISTS (
-        SELECT 1 FROM information_schema.tables 
-        WHERE table_schema = 'anythingllm' AND table_name = table_name
+        SELECT 1 FROM information_schema.tables t2
+        WHERE t2.table_schema = 'anythingllm' AND t2.table_name = v_table_name
     ) THEN
         -- Move table from public to anythingllm schema
-        EXECUTE format('ALTER TABLE public.%I SET SCHEMA anythingllm', table_name);
-        RAISE NOTICE 'Moved table % from public to anythingllm schema', table_name;
+        EXECUTE format('ALTER TABLE public.%I SET SCHEMA anythingllm', v_table_name);
+        RAISE NOTICE 'Moved table % from public to anythingllm schema', v_table_name;
     ELSIF NOT EXISTS (
-        SELECT 1 FROM information_schema.tables 
-        WHERE table_schema = 'anythingllm' AND table_name = table_name
+        SELECT 1 FROM information_schema.tables t3
+        WHERE t3.table_schema = 'anythingllm' AND t3.table_name = v_table_name
     ) THEN
-        RAISE NOTICE 'Table % does not exist in any schema, will be created by Prisma', table_name;
+        RAISE NOTICE 'Table % does not exist in any schema, will be created by Prisma', v_table_name;
     ELSE
-        RAISE NOTICE 'Table % already exists in anythingllm schema', table_name;
+        RAISE NOTICE 'Table % already exists in anythingllm schema', v_table_name;
     END IF;
 END $$ LANGUAGE plpgsql;
 
@@ -97,46 +97,46 @@ CREATE TABLE IF NOT EXISTS anythingllm.event_logs (
 );
 
 -- Create unique constraints if they don't exist
-DO $$
-BEGIN
-    -- workspaces constraints
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint c 
-        JOIN pg_class t ON c.conrelid = t.oid 
-        JOIN pg_namespace n ON t.relnamespace = n.oid 
-        WHERE c.conname = 'workspaces_slug_key' 
-        AND n.nspname = 'anythingllm'
-    ) THEN
-        ALTER TABLE anythingllm.workspaces ADD CONSTRAINT "workspaces_slug_key" UNIQUE ("slug");
-        RAISE NOTICE 'Added unique constraint workspaces_slug_key';
-    END IF;
-    
-    -- system_settings constraints
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_constraint c 
-        JOIN pg_class t ON c.conrelid = t.oid 
-        JOIN pg_namespace n ON t.relnamespace = n.oid 
-        WHERE c.conname = 'system_settings_label_key' 
-        AND n.nspname = 'anythingllm'
-    ) THEN
-        ALTER TABLE anythingllm.system_settings ADD CONSTRAINT "system_settings_label_key" UNIQUE ("label");
-        RAISE NOTICE 'Added unique constraint system_settings_label_key';
-    END IF;
-    
-    -- event_logs index
-    IF NOT EXISTS (
-        SELECT 1 FROM pg_indexes 
-        WHERE schemaname = 'anythingllm' 
-        AND tablename = 'event_logs' 
-        AND indexname = 'event_logs_event_idx'
-    ) THEN
-        CREATE INDEX "event_logs_event_idx" ON anythingllm.event_logs("event");
-        RAISE NOTICE 'Added index event_logs_event_idx';
-    END IF;
-EXCEPTION
-    WHEN duplicate_object THEN
-        RAISE NOTICE 'Constraint already exists, skipping';
-END $$;
+-- DO $
+-- BEGIN
+--     -- workspaces constraints
+--     IF NOT EXISTS (
+--         SELECT 1 FROM pg_constraint c 
+--         JOIN pg_class t ON c.conrelid = t.oid 
+--         JOIN pg_namespace n ON t.relnamespace = n.oid 
+--         WHERE c.conname = 'workspaces_slug_key' 
+--         AND n.nspname = 'anythingllm'
+--     ) THEN
+--         ALTER TABLE anythingllm.workspaces ADD CONSTRAINT "workspaces_slug_key" UNIQUE ("slug");
+--         RAISE NOTICE 'Added unique constraint workspaces_slug_key';
+--     END IF;
+--     
+--     -- system_settings constraints
+--     IF NOT EXISTS (
+--         SELECT 1 FROM pg_constraint c 
+--         JOIN pg_class t ON c.conrelid = t.oid 
+--         JOIN pg_namespace n ON t.relnamespace = n.oid 
+--         WHERE c.conname = 'system_settings_label_key' 
+--         AND n.nspname = 'anythingllm'
+--     ) THEN
+--         ALTER TABLE anythingllm.system_settings ADD CONSTRAINT "system_settings_label_key" UNIQUE ("label");
+--         RAISE NOTICE 'Added unique constraint system_settings_label_key';
+--     END IF;
+--     
+--     -- event_logs index
+--     IF NOT EXISTS (
+--         SELECT 1 FROM pg_indexes 
+--         WHERE schemaname = 'anythingllm' 
+--         AND tablename = 'event_logs' 
+--         AND indexname = 'event_logs_event_idx'
+--     ) THEN
+--         CREATE INDEX "event_logs_event_idx" ON anythingllm.event_logs("event");
+--         RAISE NOTICE 'Added index event_logs_event_idx';
+--     END IF;
+-- EXCEPTION
+--     WHEN duplicate_object THEN
+--         RAISE NOTICE 'Constraint already exists, skipping';
+-- END $;
 
 -- Clean up the helper function
 DROP FUNCTION IF EXISTS ensure_table_in_anythingllm_schema(text);

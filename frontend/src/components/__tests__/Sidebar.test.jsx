@@ -1,20 +1,28 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import Sidebar from "../Sidebar";
+import { ContextWrapper as AuthProvider } from "../../AuthContext";
+import { PfpProvider } from "../../PfpContext";
 
-// Mock the contexts and models
-vi.mock("../../contexts/AuthContext", () => ({
-  useAuthContext: () => ({
-    user: { id: 1, username: "testuser", role: "default" },
-    logout: vi.fn(),
+// Mock the hooks and models
+vi.mock("@/hooks/useUser", () => ({
+  default: () => ({
+    user: {
+      id: 1,
+      username: "testuser",
+      role: "admin",
+      pfp: "https://example.com/pfp.png",
+    },
   }),
 }));
 
-vi.mock("../../hooks/useUser", () => ({
+vi.mock("../../hooks/useLogo", () => ({
   default: () => ({
-    user: { id: 1, username: "testuser", role: "default" },
-    loading: false,
+    logo: "/test-logo.png",
+    setLogo: vi.fn(),
+    loginLogo: "/test-login-logo.png",
+    isCustomLogo: false,
   }),
 }));
 
@@ -30,12 +38,17 @@ vi.mock("../../models/workspace", () => ({
       name: "Test Workspace",
       slug: "test-workspace",
     }),
+    orderWorkspaces: vi.fn().mockImplementation((workspaces) => workspaces),
   },
 }));
 
-const MockedSidebar = ({ props = {} }) => (
+const MockedSidebar = () => (
   <BrowserRouter>
-    <Sidebar {...props} />
+    <AuthProvider>
+      <PfpProvider>
+        <Sidebar />
+      </PfpProvider>
+    </AuthProvider>
   </BrowserRouter>
 );
 
@@ -44,42 +57,39 @@ describe("Sidebar Component", () => {
     vi.clearAllMocks();
   });
 
-  it("should render without crashing", () => {
+  it("should render without crashing", async () => {
     render(<MockedSidebar />);
-    expect(document.body).toBeTruthy();
+    expect(await screen.findByText("Test Workspace")).toBeInTheDocument();
   });
 
-  it("should handle workspace navigation", () => {
+  it("should handle workspace navigation", async () => {
     render(<MockedSidebar />);
-    const navElements = screen.queryAllByRole("link");
-    expect(navElements.length).toBeGreaterThanOrEqual(0);
+    const navElements = await screen.findAllByRole("link");
+    expect(navElements.length).toBeGreaterThan(0);
   });
 
-  it("should display workspace information", () => {
+  it("should display workspace information", async () => {
     render(<MockedSidebar />);
-    const workspaceElements = screen.queryAllByText(/workspace/i);
-    expect(workspaceElements.length).toBeGreaterThanOrEqual(0);
+    const workspaceElement = await screen.findByText("Test Workspace");
+    expect(workspaceElement).toBeInTheDocument();
   });
 
-  it("should handle sidebar toggle functionality", () => {
+  it("should handle sidebar toggle functionality", async () => {
     render(<MockedSidebar />);
+    expect(await screen.findByText("Test Workspace")).toBeInTheDocument();
     const buttons = screen.queryAllByRole("button");
     expect(buttons.length).toBeGreaterThanOrEqual(0);
   });
 
-  it("should render menu items correctly", () => {
+  it("should render menu items correctly", async () => {
     render(<MockedSidebar />);
-    const menuItems = screen.queryAllByRole("listitem");
-    expect(menuItems.length).toBeGreaterThanOrEqual(0);
+    const menuItems = await screen.findAllByRole("listitem");
+    expect(menuItems.length).toBeGreaterThan(0);
   });
 
-  it("should handle responsive behavior", () => {
+  it("should handle responsive behavior", async () => {
     render(<MockedSidebar />);
-    // Test responsive elements
-    const sidebarElement =
-      document.querySelector('[data-testid="sidebar"]') ||
-      document.querySelector(".sidebar") ||
-      document.body;
-    expect(sidebarElement).toBeTruthy();
+    const sidebarElement = await screen.findByTestId("sidebar");
+    expect(sidebarElement).toBeInTheDocument();
   });
 });

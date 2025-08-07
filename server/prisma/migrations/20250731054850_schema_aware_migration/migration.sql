@@ -92,12 +92,12 @@ DO $$
 BEGIN
     -- api_keys constraints
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'api_keys_secret_key') THEN
-        ALTER TABLE anythingllm.api_keys ADD CONSTRAINT "api_keys_secret_key" UNIQUE ("secret");
+        -- ALTER TABLE anythingllm.api_keys ADD CONSTRAINT "api_keys_secret_key" UNIQUE ("secret");
     END IF;
     
     -- workspaces constraints
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'workspaces_slug_key') THEN
-        ALTER TABLE anythingllm.workspaces ADD CONSTRAINT "workspaces_slug_key" UNIQUE ("slug");
+        -- ALTER TABLE anythingllm.workspaces ADD CONSTRAINT "workspaces_slug_key" UNIQUE ("slug");
     END IF;
 EXCEPTION
     WHEN duplicate_object THEN

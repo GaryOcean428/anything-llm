@@ -15,7 +15,6 @@
     "install:production": "npm install --omit=dev --legacy-peer-deps",
     "lint": "yarn prettier --ignore-path ../.prettierignore --write ./endpoints ./models ./utils index.js",
     "swagger": "node ./swagger/init.js",
-    "postinstall": "npx prisma generate",
     "db:migrate": "node scripts/db-migrate.js",
     "migrate:deploy": "node scripts/migrate-deploy.js",
     "migrate:baseline": "node scripts/manual-baseline.js",
@@ -30,7 +29,8 @@
     "deploy:idempotent": "node scripts/idempotent-migration.js",
     "deploy:validate": "node ../scripts/railway-deployment-validator.js",
     "health:check": "node startup-checks.js",
-    "health:startup": "node startup-checks.js"
+    "health:startup": "node startup-checks.js",
+    "typecheck": "tsc --noEmit"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
@@ -101,6 +101,7 @@
   },
   "devDependencies": {
     "@inquirer/prompts": "^7.6.0",
+    "@types/express": "^5.0.3",
     "eslint": "^9.31.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-ft-flow": "^3.0.11",

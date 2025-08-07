@@ -19,6 +19,7 @@ import useUser from "@/hooks/useUser";
 import { useTranslation, Trans } from "react-i18next";
 import Appearance from "@/models/appearance";
 import { useChatMessageAlignment } from "@/hooks/useChatMessageAlignment";
+import DOMPurify from "@/utils/chat/purify";
 
 export default function DefaultChatContainer() {
   const { getMessageAlignment } = useChatMessageAlignment();
@@ -218,13 +219,13 @@ export default function DefaultChatContainer() {
             return (
               <React.Fragment key={i}>
                 <ChatBubble
-                  message={
+                  fullText={
                     fetchedMessage.user === ""
                       ? fetchedMessage.response
                       : fetchedMessage.user
                   }
                   type={fetchedMessage.user === "" ? "response" : "user"}
-                  popMsg={popMsg}
+                  purify={DOMPurify}
                 />
               </React.Fragment>
             );

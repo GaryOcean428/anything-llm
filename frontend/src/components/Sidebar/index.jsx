@@ -28,6 +28,7 @@ export default function Sidebar() {
   return (
     <>
       <div
+        data-testid="sidebar"
         style={{
           width: showSidebar ? "292px" : "0px",
           paddingLeft: showSidebar ? "0px" : "16px",

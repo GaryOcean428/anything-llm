@@ -1,8 +1,10 @@
 const prisma = require("../utils/prisma");
 
 const WorkspaceUser = {
-  createMany: async function (userId, workspaceIds = []) {
-    if (workspaceIds.length === 0) return;
+  async createMany(userId, workspaceIds = []) {
+    if (workspaceIds.length === 0) {
+      return;
+    }
     try {
       await prisma.$transaction(
         workspaceIds.map((workspaceId) =>
@@ -11,10 +13,9 @@ const WorkspaceUser = {
           })
         )
       );
-    } catch (error) {
-      console.error(error.message);
+    } catch {
+      // ignore
     }
-    return;
   },
 
   /**
@@ -23,8 +24,10 @@ const WorkspaceUser = {
    * @param {number} workspaceId - The ID of the workspace to create workspace users for.
    * @returns {Promise<void>} A promise that resolves when the workspace users are created.
    */
-  createManyUsers: async function (userIds = [], workspaceId) {
-    if (userIds.length === 0) return;
+  async createManyUsers(userIds = [], workspaceId) {
+    if (userIds.length === 0) {
+      return;
+    }
     try {
       await prisma.$transaction(
         userIds.map((userId) =>
@@ -36,67 +39,59 @@ const WorkspaceUser = {
           })
         )
       );
-    } catch (error) {
-      console.error(error.message);
+    } catch {
+      // ignore
     }
-    return;
   },
 
-  create: async function (userId = 0, workspaceId = 0) {
+  async create(userId = 0, workspaceId = 0) {
     try {
       await prisma.workspace_users.create({
         data: { user_id: Number(userId), workspace_id: Number(workspaceId) },
       });
       return true;
-    } catch (error) {
-      console.error(
-        "FAILED TO CREATE WORKSPACE_USER RELATIONSHIP.",
-        error.message
-      );
+    } catch {
       return false;
     }
   },
 
-  get: async function (clause = {}) {
+  async get(clause = {}) {
     try {
       const result = await prisma.workspace_users.findFirst({ where: clause });
       return result || null;
-    } catch (error) {
-      console.error(error.message);
+    } catch {
       return null;
     }
   },
 
-  where: async function (clause = {}, limit = null) {
+  async where(clause = {}, limit = null, include = null) {
     try {
       const results = await prisma.workspace_users.findMany({
         where: clause,
         ...(limit !== null ? { take: limit } : {}),
+        ...(include !== null ? { include } : {}),
       });
       return results;
-    } catch (error) {
-      console.error(error.message);
+    } catch {
       return [];
     }
   },
 
-  count: async function (clause = {}) {
+  async count(clause = {}) {
     try {
       const count = await prisma.workspace_users.count({ where: clause });
       return count;
-    } catch (error) {
-      console.error(error.message);
+    } catch {
       return 0;
     }
   },
 
-  delete: async function (clause = {}) {
+  async delete(clause = {}) {
     try {
       await prisma.workspace_users.deleteMany({ where: clause });
-    } catch (error) {
-      console.error(error.message);
+    } catch {
+      // ignore
     }
-    return;
   },
 };
 

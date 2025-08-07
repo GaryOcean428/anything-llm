@@ -229,7 +229,6 @@ model workspace_agent_invocations {
   @@index([uuid])
   @@schema("anythingllm")
 }
-
 model workspace_users {
   id            Int        @id @default(autoincrement())
   user_id       Int
