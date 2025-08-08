@@ -1,7 +1,6 @@
+# syntax=docker/dockerfile:1.6
 # Railway AnythingLLM Dockerfile - Optimized for Railway with Python 3.11
 # Production-safe build: disable install scripts (husky/prepare) during image build
-
-# syntax=docker/dockerfile:1.6
 FROM node:20-slim AS base
 
 # Install Python 3.11 and build dependencies (Debian Bookworm default)
@@ -32,9 +31,9 @@ ENV HUSKY=0 \
 RUN corepack enable && corepack prepare yarn@stable --activate
 RUN yarn --version
 # Focus install for the frontend workspace (include devDeps for build)
-RUN --mount=type=cache,target=/root/.cache/yarn \
-    --mount=type=cache,target=/root/.cache/node-gyp \
-    yarn workspaces focus frontend --all --immutable --inline-builds
+RUN --mount=type=cache,id=yarn-cache,target=/root/.cache/yarn \
+    --mount=type=cache,id=node-gyp-cache,target=/root/.cache/node-gyp \
+    yarn workspaces focus luffy-frontend --all --immutable --inline-builds
 
 # Build frontend from repo root using workspace
 WORKDIR /app
