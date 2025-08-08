@@ -56,8 +56,26 @@
     "vectordbs",
     "Weaviate",
     "XAILLM",
-    "Zilliz"
+    "Zilliz",
+    "windsurf"
   ],
+
+  // Windsurf IDE specific settings
+  "windsurf.enableAIAssistant": true,
+  "windsurf.autoComplete": true,
+  "windsurf.codeGeneration": true,
+  "windsurf.contextAwareness": true,
+  "windsurf.smartSuggestions": true,
+  "windsurf.realTimeCollaboration": true,
+  "windsurf.enableCodeReview": true,
+  "windsurf.enableRefactoring": true,
+
+  // Codeium settings for enhanced AI assistance
+  "codeium.enableConfig": {
+    "*": true
+  },
+  "codeium.enableCodeLens": true,
+  "codeium.enableSearch": true,
 
   // ESLint configuration for flat config (modern ESLint)
   "eslint.useFlatConfig": true,
@@ -68,46 +86,85 @@
     "typescript",
     "typescriptreact"
   ],
+  "eslint.format.enable": true,
+  "eslint.codeAction.showDocumentation": {
+    "enable": true
+  },
 
   // Prettier configuration
   "prettier.configPath": "./.prettierrc",
   "prettier.requireConfig": true,
+  "prettier.documentSelectors": ["**/*.{js,jsx,ts,tsx,json,css,md}"],
 
   // Package manager settings for yarn 4.9.2
   "npm.packageManager": "yarn",
   "node.packageManager": "yarn",
   "corepack.enabled": true,
+  "typescript.preferences.npmLocation": "yarn",
 
-  // Editor settings
+  // Enhanced editor settings for local development
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
+    "source.organizeImports": "explicit",
+    "source.addMissingImports": "explicit"
   },
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.wordBasedSuggestions": "matchingDocuments",
+  "editor.semanticHighlighting.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active",
+  "editor.inlineSuggest.enabled": true,
+  "editor.minimap.enabled": true,
+  "editor.minimap.showSlider": "always",
 
   // TypeScript/JavaScript settings
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "javascript.preferences.includePackageJsonAutoImports": "on",
   "typescript.suggest.autoImports": true,
   "javascript.suggest.autoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "javascript.inlayHints.variableTypes.enabled": true,
 
   // React/JSX settings
   "emmet.includeLanguages": {
-    "javascript": "javascriptreact"
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
   },
+  "emmet.triggerExpansionOnTab": true,
 
   // TailwindCSS settings
   "tailwindCSS.includeLanguages": {
     "javascript": "javascript",
+    "javascriptreact": "javascriptreact",
+    "typescript": "typescript",
+    "typescriptreact": "typescriptreact",
     "html": "html"
   },
   "tailwindCSS.experimental.classRegex": [
     ["clsx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"],
-    ["className:\\s*['\"]([^'\"]*)['\"]", "([a-zA-Z0-9\\-:]+)"]
+    ["className:\\s*['\"]([^'\"]*)['\"]", "([a-zA-Z0-9\\-:]+)"],
+    ["class:\\s*['\"]([^'\"]*)['\"]", "([a-zA-Z0-9\\-:]+)"]
   ],
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
 
   // File associations
   "files.associations": {
@@ -115,9 +172,14 @@
     "*.env.example": "properties",
     "*.env.development": "properties",
     "*.env.production": "properties",
+    "*.env.local": "properties",
     "Dockerfile*": "dockerfile",
+    "docker-compose*.yml": "dockercompose",
     "*.md": "markdown",
-    "*.prisma": "prisma"
+    "*.prisma": "prisma",
+    "*.flow": "javascript",
+    "*.mjs": "javascript",
+    "*.cjs": "javascript"
   },
 
   // File exclusions for better performance
@@ -128,8 +190,12 @@
     "**/.git": true,
     "**/.DS_Store": true,
     "**/coverage": true,
+    "**/.nyc_output": true,
+    "**/tmp": true,
+    "**/temp": true,
     "server/storage/**": true,
-    "server/prisma/migrations": false
+    "server/prisma/migrations": false,
+    "**/.vscode/settings.json": false
   },
 
   // Search exclusions
@@ -139,52 +205,56 @@
     "**/build": true,
     "**/coverage": true,
     "**/*.min.js": true,
+    "**/*.min.css": true,
+    "**/.nyc_output": true,
+    "server/storage/**": true,
+    "**/yarn.lock": true,
+    "**/package-lock.json": true
+  },
+
+  // Watcher exclusions for performance
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/coverage/**": true,
     "server/storage/**": true
   },
 
   // Terminal settings
-  "terminal.integrated.defaultProfile.linux": null,
-  "terminal.integrated.cwd": "/workspaces/anything-llm",
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.defaultProfile.osx": "zsh",
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  "terminal.integrated.cwd": "${workspaceFolder}",
+  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontFamily": "Consolas, 'Courier New', monospace",
+  "terminal.integrated.cursorBlinking": true,
+  "terminal.integrated.cursorStyle": "line",
 
   // Git settings
   "git.openRepositoryInParentFolders": "always",
   "git.autofetch": true,
   "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.enableStatusBarSync": true,
+  "git.postCommitCommand": "none",
+  "git.showPushSuccessNotification": true,
 
   // Debug settings
   "debug.openDebug": "openOnDebugBreak",
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  "debug.console.fontSize": 14,
 
   // Docker settings
   "docker.languageserver.formatter.ignoreMultilineInstructions": true,
+  "docker.showStartPage": false,
 
-  // Language-specific formatters
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[javascriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[markdown]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.wordWrap": "on"
-  },
-  "[css]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[prisma]": {
-    "editor.defaultFormatter": "Prisma.prisma"
-  },
-  "jdk.advanced.disable.nbjavac": false
-}
+  // Testing settings
+  "jest.autoRun": "off",
+  "jest.showCoverageOnLoad": true,
+  "vitest.include": ["**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+  "vitest.exclude": ["**/node_modules/**", "**/dist/**", "**/cypress/**"],
+
+  // Path intellisense settings
+  "path-intellisense.autoSlashAfterDirectory": true,
+  "path-intellisense.extensionOnImport": true,

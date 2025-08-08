@@ -1,6 +1,7 @@
 # Railway AnythingLLM Dockerfile - Optimized for Railway with Python 3.11
-# Simplified build process using npm to avoid certificate issues
+# Production-safe build: disable install scripts (husky/prepare) during image build
 
+# syntax=docker/dockerfile:1.6
 FROM node:20-slim AS base
 
 # Install Python 3.11 and build dependencies (Debian Bookworm default)
@@ -23,16 +24,29 @@ COPY server/package.json ./server/
 # Copy all source files
 COPY . .
 
-# Build frontend with npm
-WORKDIR /app/frontend
-RUN npm install --legacy-peer-deps
-RUN npm run build
+# Enable Corepack and install only what's needed to build the frontend
+WORKDIR /app
+ENV HUSKY=0 \
+    YARN_NODE_LINKER=pnp \
+    YARN_ENABLE_GLOBAL_CACHE=1
+RUN corepack enable && corepack prepare yarn@stable --activate
+RUN yarn --version
+# Focus install for the frontend workspace (include devDeps for build)
+RUN --mount=type=cache,target=/root/.cache/yarn \
+    --mount=type=cache,target=/root/.cache/node-gyp \
+    yarn workspaces focus frontend --all --immutable --inline-builds
+
+# Build frontend from repo root using workspace
+WORKDIR /app
+RUN yarn -T workspace luffy-frontend run build
 
 # Setup production server
 WORKDIR /app
 RUN cp -R frontend/dist server/public
 
 WORKDIR /app/server
+# Install server production deps with npm (scripts disabled)
+ENV npm_config_ignore_scripts=true
 RUN npm run install:production
 
 # Set environment

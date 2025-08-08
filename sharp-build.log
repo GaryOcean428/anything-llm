@@ -1,0 +1,26 @@
+➤ YN0000: · Yarn 4.9.2
+➤ YN0000: ┌ Resolution step
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Post-resolution validation
+➤ YN0060: │ @datastax/astra-db-ts is listed by your project with version 2.0.2 (p467de), which doesn't satisfy what @langchain/community requests (^1.0.0).
+➤ YN0060: │ @lancedb/lancedb is listed by your project with version 0.21.2 (ped6f2), which doesn't satisfy what @langchain/community requests (~0.12.0).
+➤ YN0060: │ apache-arrow is listed by your project with version 21.0.0 (p7e5a9), which doesn't satisfy what @lancedb/lancedb requests (>=15.0.0 <=18.1.0).
+➤ YN0002: │ anything-llm-document-collector@workspace:collector doesn't provide @browserbasehq/stagehand (p0d537), requested by @langchain/community.
+➤ YN0002: │ anything-llm-document-collector@workspace:collector doesn't provide @ibm-cloud/watsonx-ai (p7da3d), requested by @langchain/community.
+➤ YN0002: │ anything-llm-document-collector@workspace:collector doesn't provide @langchain/core (pc6d86), requested by @langchain/community and other dependencies.
+➤ YN0002: │ anything-llm-document-collector@workspace:collector doesn't provide ibm-cloud-sdk-core (p6d810), requested by @langchain/community.
+➤ YN0002: │ anything-llm-server@workspace:server doesn't provide @browserbasehq/stagehand (p91efe), requested by @langchain/community.
+➤ YN0002: │ anything-llm-server@workspace:server doesn't provide @ibm-cloud/watsonx-ai (p0417c), requested by @langchain/community.
+➤ YN0002: │ anything-llm-server@workspace:server doesn't provide ibm-cloud-sdk-core (p65fd0), requested by @langchain/community.
+➤ YN0002: │ luffy-frontend@workspace:frontend doesn't provide esbuild (pb54dd), requested by @esbuild-plugins/node-globals-polyfill.
+➤ YN0086: │ Some peer dependencies are incorrectly met by your project; run yarn explain peer-requirements <hash> for details, where <hash> is the six-letter p-prefixed code.
+➤ YN0086: │ Some peer dependencies are incorrectly met by dependencies; run yarn explain peer-requirements for details.
+➤ YN0000: └ Completed
+➤ YN0000: ┌ Fetch step
+➤ YN0000: └ Completed in 2s 424ms
+➤ YN0000: ┌ Link step
+➤ YN0007: │ sharp@npm:0.32.6 must be built because it never has been before or the last one failed
+➤ YN0007: │ sharp@npm:0.33.5 must be built because it never has been before or the last one failed
+➤ YN0009: │ sharp@npm:0.33.5 couldn't be built successfully (exit code 1, logs can be found here: /tmp/xfs-6ae64c3f/build.log)
+➤ YN0000: └ Completed in 14s 109ms
+➤ YN0000: · Failed with errors in 16s 903ms

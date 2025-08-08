@@ -6,6 +6,7 @@
   "type": "module",
   "author": "Timothy Carambat (Mintplex Labs)",
   "license": "MIT",
+  "packageManager": "yarn@4.9.2",
   "workspaces": [
     "server",
     "frontend",
