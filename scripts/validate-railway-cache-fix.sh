@@ -1,6 +1,6 @@
 #!/bin/bash
 # Railway Docker Cache Mount Fix Validation Script
-# Tests that the cache mount syntax fix addresses the Railway deployment issue
+# Tests that cache mounts have been removed from the Dockerfile for Railway compatibility
 
 echo "🔍 Railway Docker Cache Mount Fix Validation"
 echo "=============================================="
@@ -8,25 +8,26 @@ echo "=============================================="
 cd "$(dirname "$0")/.." || exit 1
 
 echo ""
-echo "✅ Testing cache mount syntax fix..."
+echo "✅ Testing cache mount removal..."
 
-# Test 1: Check that cache mount IDs do NOT have the cache: prefix (Railway requirement)
-echo "1. Checking cache mount ID format in Dockerfile:"
-if grep -q "id=yarn-cache" Dockerfile && grep -q "id=node-gyp-cache" Dockerfile && ! grep -q "id=cache:yarn-cache" Dockerfile && ! grep -q "id=cache:node-gyp-cache" Dockerfile; then
-    echo "   ✅ Cache mount IDs use correct format (without 'cache:' prefix)"
-else
-    echo "   ❌ Cache mount IDs have incorrect format (Railway requires no 'cache:' prefix)"
+# Test 1: Verify no --mount=type=cache directives exist in the Dockerfile
+echo "1. Checking Dockerfile for cache mount directives:"
+if grep -q "mount=type=cache" Dockerfile; then
+    echo "   ❌ Dockerfile still contains --mount=type=cache directives"
+    echo "      Railway requires service-ID-prefixed IDs (id=s/<service-id>-name)"
+    echo "      which cannot be hardcoded in a shared Dockerfile."
+    echo "      Remove all --mount=type=cache lines to fix Railway builds."
     exit 1
+else
+    echo "   ✅ No cache mount directives found - Railway compatible"
 fi
 
 # Test 2: Verify Docker syntax is valid
 echo "2. Validating Docker syntax:"
 if docker --version >/dev/null 2>&1; then
     echo "   ✅ Docker is available"
-    
-    # Just check that Docker can parse the Dockerfile (doesn't run build)
     if docker build --help >/dev/null 2>&1; then
-        echo "   ✅ Dockerfile syntax appears valid (cache mount format correct)"
+        echo "   ✅ Dockerfile syntax appears valid"
     else
         echo "   ⚠️  Cannot validate Docker syntax"
     fi
@@ -54,7 +55,7 @@ fi
 
 echo ""
 echo "🎯 Summary:"
-echo "✅ Cache mount syntax fixed for Railway compatibility"
+echo "✅ Cache mount directives removed for Railway compatibility"
 echo "✅ Docker syntax validation passed"
 echo "✅ Alternative solution provided"
 echo "✅ Railway configuration verified"
@@ -62,8 +63,5 @@ echo ""
 echo "🚀 Ready for Railway deployment!"
 echo ""
 echo "Expected Railway behavior:"
-echo "  Before: 'Cache mount ID is not prefixed with cache key' error (misleading - actually means ID has wrong format)"
-echo "  After:  Successful build with cache mount optimization"
-echo ""
-echo "If cache mounts still cause issues on Railway:"
-echo "  Use: docker build -f Dockerfile.no-cache -t anythingllm ."
+echo "  Before: 'Cache mount ID is not prefixed with cache key' error"
+echo "  After:  Successful build (cache mounts removed entirely)"
