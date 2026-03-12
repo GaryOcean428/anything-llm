@@ -31,8 +31,8 @@ ENV HUSKY=0 \
 RUN corepack enable && corepack prepare yarn@stable --activate
 RUN yarn --version
 # Focus install for the frontend workspace (include devDeps for build)
-RUN --mount=type=cache,id=cache:yarn-cache,target=/root/.cache/yarn \
-    --mount=type=cache,id=cache:node-gyp-cache,target=/root/.cache/node-gyp \
+RUN --mount=type=cache,id=s/fa767a20-642a-4488-a3da-9afd5be74723-/root/.cache/yarn,target=/root/.cache/yarn \
+    --mount=type=cache,id=s/fa767a20-642a-4488-a3da-9afd5be74723-/root/.cache/node-gyp,target=/root/.cache/node-gyp \
     yarn workspaces focus luffy-frontend --all --immutable --inline-builds
 
 # Build frontend from repo root using workspace

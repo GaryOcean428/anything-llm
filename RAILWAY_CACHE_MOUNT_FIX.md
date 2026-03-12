@@ -4,31 +4,38 @@
 Railway deployment was failing with error: `Cache mount ID is not prefixed with cache key`
 
 ## Root Cause
-Railway's Docker infrastructure requires cache mount IDs to be prefixed with `cache:` but the original Dockerfile used bare IDs like `yarn-cache` and `node-gyp-cache`.
+Railway's Docker build system requires cache mount IDs to use a service-specific prefix format:
 
-## Solution Applied
-**File:** `Dockerfile` (lines 34-35)
-
-**Before:**
-```dockerfile
-RUN --mount=type=cache,id=yarn-cache,target=/root/.cache/yarn \
-    --mount=type=cache,id=node-gyp-cache,target=/root/.cache/node-gyp \
-    yarn workspaces focus luffy-frontend --all --immutable --inline-builds
+```
+id=s/<railway-service-id>-<target-path>
 ```
 
-**After:**
+Simple IDs like `yarn-cache` or prefixed forms like `cache:yarn-cache` are both rejected.
+
+## Solution Applied
+**File:** `Dockerfile`
+
+**Before:**
 ```dockerfile
 RUN --mount=type=cache,id=cache:yarn-cache,target=/root/.cache/yarn \
     --mount=type=cache,id=cache:node-gyp-cache,target=/root/.cache/node-gyp \
     yarn workspaces focus luffy-frontend --all --immutable --inline-builds
 ```
 
-## Alternative Solution
-If cache mounts continue to cause issues, use `Dockerfile.no-cache` which removes cache mounts entirely:
+**After:**
+```dockerfile
+RUN --mount=type=cache,id=s/fa767a20-642a-4488-a3da-9afd5be74723-/root/.cache/yarn,target=/root/.cache/yarn \
+    --mount=type=cache,id=s/fa767a20-642a-4488-a3da-9afd5be74723-/root/.cache/node-gyp,target=/root/.cache/node-gyp \
+    yarn workspaces focus luffy-frontend --all --immutable --inline-builds
+```
 
-```bash
-# In railway.toml, change:
-dockerfilePath = "Dockerfile.no-cache"
+**Change:** Updated cache mount IDs to use Railway's required `s/<service-id>-<target-path>` format with the production service ID `fa767a20-642a-4488-a3da-9afd5be74723`.
+
+## For Other Railway Deployments
+If you fork this repo and deploy to a different Railway service, update the service ID in the Dockerfile cache mount IDs. Find your service ID in the Railway dashboard under Settings → Service ID. The format is:
+
+```
+id=s/<your-service-id>-<target-path>
 ```
 
 ## Validation
@@ -39,8 +46,5 @@ Run the validation script to verify the fix:
 
 ## Expected Result
 - ✅ Railway builds complete successfully
-- ✅ Cache optimization still works
-- ✅ Deployment time improved vs no-cache approach
+- ✅ Cache optimization retained for faster builds
 - ✅ No more "Cache mount ID is not prefixed with cache key" errors
-
-This fix maintains all performance benefits of cache mounts while ensuring Railway compatibility.
